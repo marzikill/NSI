@@ -1,0 +1,15 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{mise\PYGZus{}a\PYGZus{}jour}\PYG{p}{(}\PYG{n}{t}\PYG{p}{):}
+    \PYG{c+c1}{\PYGZsh{} On ne peut pas avoir 21/20.}
+    \PYG{k}{if} \PYG{n}{t}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{\PYGZlt{}=} \PYG{l+m+mi}{19}\PYG{p}{:}
+        \PYG{n}{t}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{=} \PYG{n}{t}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{+} \PYG{l+m+mi}{1}
+    \PYG{k}{if} \PYG{n}{t}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{]} \PYG{o}{\PYGZlt{}=} \PYG{l+m+mi}{19}\PYG{p}{:}
+        \PYG{n}{t}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{]} \PYG{o}{=} \PYG{n}{t}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{]} \PYG{o}{+} \PYG{l+m+mi}{1}
+    \PYG{k}{return} \PYG{n}{t}
+
+\PYG{c+c1}{\PYGZsh{} Test}
+\PYG{n}{t} \PYG{o}{=} \PYG{p}{[}\PYG{l+m+mi}{5}\PYG{p}{,} \PYG{l+m+mi}{7}\PYG{p}{,} \PYG{l+m+mi}{6}\PYG{p}{,} \PYG{l+m+mi}{9}\PYG{p}{,} \PYG{l+m+mi}{10}\PYG{p}{,} \PYG{l+m+mi}{11}\PYG{p}{,} \PYG{l+m+mi}{10}\PYG{p}{]}
+\PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Après mise à jour des notes :\PYGZsq{}}\PYG{p}{,} \PYG{n}{mise\PYGZus{}a\PYGZus{}jour}\PYG{p}{(}\PYG{n}{t}\PYG{p}{))}
+\PYG{c+c1}{\PYGZsh{} Output :}
+\PYG{c+c1}{\PYGZsh{} Après mise à jour des notes : [6, 7, 7, 9, 10, 11, 10]}
+\end{Verbatim}

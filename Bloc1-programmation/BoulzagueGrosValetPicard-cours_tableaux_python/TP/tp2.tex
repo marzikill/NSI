@@ -1,0 +1,549 @@
+ 
+%! TEX program = xelatex
+% Nécessaire pour la compilation pstricks
+\documentclass[12pt]{article}                   % autres choix : report, book
+\usepackage[a4paper]{geometry}                  % taille correcte du papier
+\usepackage{silence}                            % Filtrer tous ces warnings ennuyeux
+\usepackage[utf8]{inputenc}                     % encodage du fichier source
+\usepackage[T1]{fontenc}                        % gestion des accents (pour les pdf)
+\usepackage[french]{babel}                    % rajouter éventuellement english, greek, etc.
+\usepackage{eurosym}                            % symbole euro
+
+\usepackage{textcomp}                           % caractères additionnels
+\usepackage{lmodern}                            % remplacer éventuellement par txfonts, fourier, etc.
+\usepackage{amsmath,amssymb, amsthm}            % tout ce qu'il faut pour écrire des maths
+\usepackage{dsfont}                             % Pour la fonction indactrice
+\usepackage{xfrac}                              % fraction d'anneau
+
+\usepackage{adforn}                             % Ornements header
+\usepackage{yfonts}                             % Fontes gothiques supplémentaires
+\usepackage{fourier-orns}                       % Ornements header
+\usepackage{mathpazo}
+\usepackage{pstricks,pst-plot,pstricks-add}     % tracer des fonctions
+\usepackage[linesnumbered, french]{algorithm2e} % mise en page des algorithmes
+\usepackage{tikz, tkz-euclide, tkz-tab}         % Dessiner aver tikz
+\usetkzobj{all}                                 % et tout plein de paquets utiles
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{automata,positioning}
+\usetikzlibrary{decorations.pathreplacing,calc}
+\usetikzlibrary{arrows}
+\usetikzlibrary{calc}
+\usetikzlibrary{decorations.fractals}           % Dessiner les fractales usuelles
+\usepackage{enumitem}                           % 1, 2, 3...
+\usepackage{pgffor}                             % Pour faire des boucles
+
+\usepackage{multicol}
+\usepackage{comment}
+\usepackage{array}                              % tableaux un peu plus paramétrables
+\usepackage{minted}
+\usepackage[makestderr]{pythontex}
+
+\usepackage{graphicx}                           % pour inclure des images
+\usepackage{xspace}                             % protection des espaces
+\usepackage{xcolor}                             % pour gérer les couleurs
+\usepackage{microtype}                          % améliorations typographiques
+\usepackage{hyperref}                           % gestion des hyperliens
+\hypersetup{
+    colorlinks = true,
+    linkcolor = blue!50!gray!100!,
+    linkbordercolor = {white},
+}
+\hypersetup{pdfstartview=XYZ}                   % Zoom hyperref
+ 
+%%%%%%%%%%%
+%% Maths %%
+%%%%%%%%%%%
+% Raccourcis pour les trucs longs à écrire. Reste d'Oxford principalement. 
+\newcommand{\Prob}[2][]{\mathbb{P}_{#1}\left( #2 \right)}
+\newcommand{\Exp}[2][]{\mathbb{E}_{#1}\left[ #2 \right]}
+\newcommand{\Lawconv}{\stackrel{\mathcal{L}}{\longrightarrow}}
+\newcommand{\Var}[1]{\mbox{Var}\left(#1 \right)}
+\newcommand{\Card}[1]{\mbox{Card}\left(#1 \right)}
+\newcommand{\Int}[4]{\int_{#1}^{#2} \! {#3} \, \mathrm{d}{#4}}
+\newcommand{\kw}{\;|\;}
+\newcommand{\im}{\textrm{Im}}
+\newcommand{\disclamer}{\textit{L’usage de toute calculatrice, téléphone portable, ordinateur est strictement interdit. Un soin tout particulier devra être porté à la qualité et à la précision de la rédaction des argument } \vspace{1.cm}}
+\newcommand{\legendeexos}{
+\paragraph{Légende des exercices.}
+\begin{center}
+\begin{tabular}{cccc}
+$\clubsuit$ : très flacile & $\varheart$ : à savoir par cœur & $\vardiamond$ : care aux calculs & $\spadesuit$ : qui s'y frotte s'y pique 
+\end{tabular}
+\end{center}
+}
+
+%%%%%%%%%%%%%%%%
+%% Structures %%
+%%%%%%%%%%%%%%%%
+
+\newcounter{dfcount}
+{\theoremstyle{definition} \newtheorem{definition}[dfcount]{Définition}}
+\newcounter{propcount}
+\newtheorem{propriete}[propcount]{Propriété}
+\newcounter{thcount}
+\newtheorem{theoreme}[thcount]{Théorème}
+\newcounter{excount}
+{\theoremstyle{definition} \newtheorem{exemple}[excount]{Exemple}}
+\renewcommand{\theexemple}{\arabic{exemple}}
+% Environnement exos
+\newcounter{exoscount}
+\newtheoremstyle{exercicestyle} % name of the style to be used
+  {20pt}                        % measure of space to leave above the theorem. E.g.: 3pt
+  {3pt}                         % measure of space to leave below the theorem. E.g.: 3pt
+  {}                            % name of font to use in the body of the theorem
+  {}                            % measure of space to indent
+  {\bfseries}                   % name of head font
+  {.}                           % punctuation between head and body
+  {.5em}                        % space after theorem head; " " = normal interword space
+  {}                            % Manually specify head
+\theoremstyle{exercicestyle}
+\newtheorem{exos}[exoscount]{Exercice}
+\newenvironment{exo}[2]
+  {
+   \begin{exos}[#1]
+   \leavevmode
+   \marginpar{\hfill $#2 $ }}
+  {\end{exos}}
+
+\newenvironment{prob}{ \begin{center}
+\Large{ \textsc{Problème}} \end{center} }{ \sepdown }
+
+ % Théorèmes/propriétés avec un retour à la ligne.
+\newtheoremstyle{break2}
+  {\topsep}%   Space before theorem
+  {\topsep}%   Space after theorem
+  {\itshape}%  Body font
+  {}%          Indent amount (empty = no indent, \parindent = para indent)
+  {\bfseries}% Thm head font   
+  {}%         Punctuation after thm head
+  {.5em }%  Space after thm head (\newline = linebreak)
+  {\thmname{#1}\thmnumber{ #2}\thmnote{ (#3)}.}% Thm head spec
+
+\theoremstyle{break2}
+\newtheorem{fbth}[thcount]{Théorème}
+\newenvironment{bth}[1][]{\begin{fbth}[#1]\item\relax}{\end{fbth}}
+
+\newtheorem{fbprop}[propcount]{Propriété}
+\newenvironment{bprop}[1][]{\begin{fbprop}[#1]\item\relax}{\end{fbprop}}
+
+ % Théorèmes/propriétés avec un retour à la ligne.
+\newtheoremstyle{break3}
+  {\topsep}%   Space before theorem
+  {\topsep}%   Space after theorem
+  {}%  Body font
+  {}%          Indent amount (empty = no indent, \parindent = para indent)
+  {\bfseries}% Thm head font   
+  {}%         Punctuation after thm head
+  {.5em }%  Space after thm head (\newline = linebreak)
+  {\thmname{#1}\thmnumber{ #2}\thmnote{ (#3)}.}% Thm head spec
+
+\theoremstyle{break3}
+\newtheorem{fbdf}[dfcount]{Définition}
+\newenvironment{bdef}[1][]{\begin{fbdf}[#1]\item\relax}{\end{fbdf}}
+
+% Répéter un exercice n fois
+\newcommand{\looped}[2]{
+	\foreach \n in {1,...,#1}{
+		#2
+	}
+}
+%%%%%%%%%%%%%%%%%%
+%% Mise en page %%
+%%%%%%%%%%%%%%%%%%
+
+\setlength{\textheight}{26.2cm}
+\setlength{\textwidth}{17.0cm}
+\setlength{\oddsidemargin}{-0.5cm}
+\setlength{\evensidemargin}{0.0cm}
+\setlength{\topmargin}{-2.0cm}
+\pagestyle{empty}
+\newif \ifnote
+\notefalse
+\reversemarginpar
+
+\usepackage{titlesec}      % Interlignes pas trop gros
+\titlespacing{\paragraph}{ %
+  0pt}{                    % left margin
+  1\baselineskip}{         % space before (vertical)
+  1em}                     % space after (horizontal)
+
+\usepackage{titlesec}
+%\titleformat
+%   {\section} % <command>
+%   {\normalfont\Large\bfseries} % <format>
+%   {\thesection} % <label>
+%   {1em} % <sep>
+%   {} % <before-code>
+%\titleformat{\section}{\bfseries\sffamily\large}{\thesection.}{\hspace{1cm}}{}%
+\titlespacing*                  % starred version: first paragraph is not indented
+    {\section}                  % <command>
+    {-22pt}                     % <left>
+    {3.5ex plus 1ex minus .2ex} % <before-sep>
+    {2.3ex plus .2ex}           % <after-sep>
+
+
+\setlength{\columnseprule}{1pt}        % Séparateur vertical dans multicol
+\def\columnseprulecolor{\color{black}} % De couleur noire.
+
+% Type de colonnes pour array
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+
+% Filtrer les messages d'erreur kisoulent 
+\WarningFilter{latex}{Marginpar on page}
+\WarningFilter{latexfont}{Size}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Faire du joli latex %% 
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Faire des cœurs et des carreaux 
+\DeclareSymbolFont{extraup}{U}{zavm}{m}{n}
+\DeclareMathSymbol{\varheart}{\mathalpha}{extraup}{86}
+\DeclareMathSymbol{\vardiamond}{\mathalpha}{extraup}{87}
+
+% Police verbatim + souligné (links)
+\usepackage[normalem]{ulem}
+\useunder{\uline}{\ulined}{}%
+\DeclareUrlCommand{\bulurl}{\def\UrlFont{\ttfamily\ulined}}
+
+\newcommand{\expandpyconc}[1]{\expandafter\reallyexpandpyconc\expandafter{#1}}
+\newcommand{\reallyexpandpyconc}[1]{\pyconc{exec(compile(open('#1', 'rb').read(), '#1', 'exec'))}}
+
+\newenvironment{pyconcodeblck}[1]%
+ {\newcommand{\snippetfile}{./pyfiles/snippet-#1.py}
+  \VerbatimEnvironment
+  \begin{VerbatimOut}{\snippetfile}}%
+ {\end{VerbatimOut}%
+  \expandpyconc{\snippetfile}}
+
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%
+%% Header tout joli %%
+%%%%%%%%%%%%%%%%%%%%%% 
+\noindent\hrulefill
+\raisebox{-2.1pt}[10pt][10pt]{\quad\decoone\quad}\hrulefill 
+
+\leftline{$\textgoth{L}$ycée \hfill $\textgoth{I}$nformatique }
+\hfill $\textgoth{P}$remière
+ \begin{center}{\adforn{64}\quad \large{\textbf{ Traveaux Pratiques : les tableaux }}\; \adforn{36}}\end{center}
+\vspace{0.5cm}
+\noindent
+\hrulefill
+\raisebox{-16.4pt}[10pt][10pt]{\begin{tikzpicture}[decoration=Koch snowflake]
+\draw decorate{ decorate{ decorate{ decorate{ (6,-0) -- (4,0) -- (2,0) -- (0,0)  }}}};
+\end{tikzpicture}}\hrulefill
+\vspace{1cm}
+
+\begin{exo}{\textit{Mise en bouche}}{  }
+    Dans l'interpréteur Python, taper l'instruction suivante :
+    \begin{center}
+        \texttt{t = [4, 2, 5, 1, 3]}.
+    \end{center}
+    \begin{enumerate}
+        \item Quelle est la taille de ce tableau ? Quel fonction Python pouvez-vous utiliser ?
+        \item Quel en est le premier élément, le dernier ? Quelle instruction Python allez-vous utiliser pour les faire afficher dans l'interpréteur ?
+        \item On tape dans l'interpréteur successivement les commandes suivantes (on appuie sur entrée entre chacunes d'entres elles) :
+            \begin{center}
+                \texttt{t[1]} \hspace{1cm} \texttt{t[4]} \hspace{1cm} \texttt{t[5]}
+            \end{center}
+            Quels résultats attendez vous pour chacune des commandes ? Vérifier vos hypothèses.
+        \item Quelle instruction Python devez vous utiliser pour transformer le tableau \texttt{t} en le tableau : \texttt{[4,2,8,1,3]}
+    \end{enumerate}
+\end{exo} 
+
+\begin{exo}{\textit{Remplacement et ajouts}}{  }
+    On décide de stocker dans un tableau \texttt{liste\_prenoms} les prénoms d'une bande d'amis. 
+    \begin{enumerate}
+        \item Dans l'interpréteur, taper l'instruction Python qui permet de créer un tableau \texttt{liste\_prenoms} de taille 4 et d'y stocker les chaînes de caractères \texttt{"Thomas"}, \texttt{"Sam"}, \texttt{"Line"}, \texttt{"Jules"}.
+        \item Jules quitte le groupe d'ami, et Kinan le remplace. Dans l'interpréteur, taper l'instruction qui permet de mettre à jour le tableau. 
+        \item Antoine, l'ami de Kinan, souhaite aussi se joindre au groupe. Dans l'interpréteur, taper l'instruction qui permet de rajouter (à la fin...) \texttt{"Antoine"} au tableau \texttt{liste\_prenoms}. 
+    \end{enumerate}
+\end{exo} 
+
+\begin{exo}{\textit{Mais que se passe-t-il ?}}{  }
+    \begin{enumerate}
+    \item Dans l'interpréteur, taper les commandes suivantes :
+        \label{ex:copie_instr}
+    \begin{minted}
+[
+frame=single,
+framesep=2mm,
+label=Console Python,
+linenos
+]
+{python}
+>>> t1 = [5, 7, 8, 2]
+>>> t2 = t1
+>>> print(t2)
+>>> t1[0] = 100
+>>> print(t2)
+    \end{minted}
+    Que s'est-il passé ? Commenter.
+        \item Dans la partie éditeur de texte de votre IDE, taper en première ligne \texttt{t1 = [5, 7, 8, 2]}. À la seconde ligne, créer une variable de type tableau \texttt{t2}, de même taille que \texttt{t1} mais ne contenant que des 0.
+        \item Recopier et compléter à la suite de votre code le code suivant pour que celui-ci recopie les valeurs présentes dans \texttt{t1} dans \texttt{t2} :
+\begin{minted}
+[
+frame=single,
+framesep=2mm,
+label=Code Source,
+linenos
+]
+{python}
+for i in .......................:
+    t2[i] = ....................
+\end{minted}
+        \item Recopier à la fin de votre fichier les instructions 3 à 5 de la question \ref{ex:copie_instr}. Exécuter votre code puis commenter.
+        \item Écrire une fonction \texttt{recopier} qui prend en entrée un tableau \texttt{t} et qui renvoie en sortie un tableau \texttt{copie} qui est une copie identique indépendante de \texttt{t}. Vous testerez votre fonction :
+\begin{pyconcodeblck}{recopier}
+def recopier(t):
+    # Recopie le tableau t dans une nouvelle variable.
+    n = len(t)
+    copie = [0]*n
+    for i in range(n):
+        copie[i] = t[i]
+    return copie
+\end{pyconcodeblck}
+\begin{pyconsole}[][numbers=left,frame=single,label=Console Python]
+t1 = [5, 7, 8, 2]
+t2 = recopier(t1)
+print(t2)
+t1[0] = 100
+print(t2)
+\end{pyconsole}
+    \end{enumerate}
+\end{exo} 
+
+\begin{exo}{}{  }
+    \begin{enumerate}
+        \item Créer un tableau \texttt{t} de taille 157 et dont le contenu de toutes les cases est égal à 0.
+        \item En utilisant une boucle \texttt{for} :
+            \begin{enumerate}
+                \item remplir le tableau avec les entiers de 1 à 157. À la fin de l'exécution de votre code \texttt{t} est le tableau :
+                    %\begin{center}
+                        \texttt{[1,2,3, ..., 157]}
+                    %\end{center}
+                \item remplir le tableau avec la liste des 157 premiers nombres pairs positifs. À la fin de l'exécution de votre code \texttt{t} est le tableau :
+                    \texttt{[0, 2, ..., 312]}
+                \item remplir le tableau avec les valeurs $+1$ et $-1$ de la manière suivante : si l'indice de la case est pair, la case contient la valeur $+1$, si l'indice de la case est impair, la case contient la valeur $-1$. À la fin de l'excécution de votre code \texttt{t} est le tableau \texttt{[1, -1, 1, ..., 1]}
+                %\item (bonus) \texttt{f} est une fonction Python définie par l'utilisateur qui prend en entrée un entier et renvoie en sortie un nombre flottant. Remplir le tableau avec la liste des 157 images des entiers 13, 14... Vous définirez une fonction \texttt{f} de votre choix pour tester votre code (restez tout de même simples).
+            \end{enumerate}
+    \end{enumerate}
+\end{exo} 
+
+\pagebreak 
+
+
+\noindent\hrulefill
+\raisebox{-2.1pt}[10pt][10pt]{\quad\decoone\quad}\hrulefill 
+
+\leftline{$\textgoth{L}$ycée \hfill $\textgoth{I}$nformatique }
+\hfill $\textgoth{P}$remière
+ \begin{center}{\adforn{64}\quad \large{\textbf{ Traveaux Pratiques : réalisation d'un module }}\; \adforn{36}}\end{center}
+\vspace{0.5cm}
+\noindent
+\hrulefill
+\raisebox{-16.4pt}[10pt][10pt]{\begin{tikzpicture}[decoration=Koch snowflake]
+\draw decorate{ decorate{ decorate{ decorate{ (6,-0) -- (4,0) -- (2,0) -- (0,0)  }}}};
+\end{tikzpicture}}\hrulefill
+\vspace{1cm}
+
+
+\paragraph{Introduction.}
+L'objectif de cette partie est la réalisation d'un module Python de manipulation de tableaux. Un module est un fichier qui contient une liste de fonctions et de variables en rapport avec un même thème. Vous connaissez déjà le module \texttt{math}, il contient des fonctions comme \texttt{cos}, \texttt{sqrt}, des variables comme \texttt{pi}, \texttt{e}, etc. 
+
+Ouvrir un nouveau fichier intitulé \texttt{tableaux.py}. La première fonction utile de ce module sera la fonction \texttt{recopier}. Copier-coller la fonction que vous avez écrite à l'intérieur de ce fichier. 
+
+\setcounter{exoscount}{0}
+\begin{exo}{\textit{Sous-tableaux}}{  }
+    Soit \texttt{t} un tableau.  On appelle \textbf{sous-tableau} de tranche \texttt{i} à \texttt{j} le tableau constitué des éléments de \texttt{t} d'indices \texttt{i}, \texttt{i+1}, ... \texttt{j-1} (\texttt{j} est \textbf{exclu}).  
+    \begin{enumerate}
+        \item \texttt{t} est le tableau \texttt{[4, 5, 8, 9, 6, 3, 56, 2, -4, 13]}. \label{ex:sstab_exp}
+            \begin{enumerate}
+            \item Écrire le sous-tableau de \texttt{t} de tranche 2 à 5.\dotfill
+            \item Écrire le sous-tableau de \texttt{t} de tranche 0 à 6. \dotfill
+            \item Écrire le sous-tableau de \texttt{t} de tranche 3 à 10. \dotfill
+        \end{enumerate}  
+        \item Donner la taille de chacun des sous-tableaux précédents. Si \texttt{n} est la taille d'un sous-tableau de \texttt{t} de tranche \texttt{i} à \texttt{j}, quelle est la relation entre \texttt{n}, \texttt{i}, et \texttt{j} ?
+        \item Écrire une fonction \texttt{sous\_tableau} qui prend en entrée un tableau \texttt{t} et deux entiers \texttt{i} et \texttt{j} et renvoie en sortie le sous-tableau de \texttt{t} de tranche \texttt{i} à \texttt{j}. Vous testerez votre fonction avec les sous-tableaux calculés en question \ref{ex:sstab_exp}.
+\begin{pyconcodeblck}{sous-tableau}
+def sous_tableau(t, i, j):
+    # Extrait le sous tableau constitué des éléments
+    # d'indice compris entre i et j (exclu) du tableau
+    # 0 < i < j <= len(t) : sinon IndexError
+    n = j - i
+    tprime = [0]*n
+    for k in range(n):
+        tprime[k] = t[k + i]
+    return tprime
+\end{pyconcodeblck}
+\begin{minted}
+[
+frame=single,
+framesep=2mm,
+label=Console Python,
+linenos
+]
+{python}
+>>> t = [4, 5, 8, 9, 6, 3, 56, 2, -4, 13]
+>>> sous_tableau(t, 2, 5)
+>>> sous_tableau(t, 0, 6)
+>>> sous_tableau(t, 3, 10)
+\end{minted}
+    \end{enumerate}
+\end{exo} 
+
+\begin{exo}{\textit{Concaténation}}{  }
+    Soient \texttt{t1} et \texttt{t2} deux tableaux. La concaténation de \texttt{t1} puis de \texttt{t2} est le tableau constitué des éléments de \texttt{t1} puis des éléments de \texttt{t2} \textbf{dans cet ordre}. 
+    \begin{enumerate}
+        \item Soient les tableaux \texttt{t1 = [1, 3, 5]} et \texttt{t2 = [2, 4, 6]}. \label{ex:concat_exp}
+            \begin{enumerate}
+                \item Écrire la concaténation de \texttt{t1} puis de \texttt{t2}. \dotfill
+                \item Écrire la concaténation de \texttt{t2} puis de \texttt{t1}. \dotfill
+                \item Écrire la concaténation de \texttt{t1} puis de \texttt{t1}. \dotfill
+                \item Écrire la concaténation de  \texttt{t2} puis de \texttt{[]}. \dotfill
+            \end{enumerate}
+        \item Donner la taille de chacunes des concaténation de tableaux précédentes. Si \texttt{n} est la taille du tableau concaténé de \texttt{t1} puis de \texttt{t2}, \texttt{n1} et \texttt{n2} les tailles respectives de \texttt{t1} et \texttt{t2}, quelle est la relation entre \texttt{n}, \texttt{n1} et \texttt{n2} ? 
+        \item Écrire une fonction \texttt{concatener} qui prend en entrée deux tableaux \texttt{t1} et \texttt{t2} et renvoie en sortie le le tableau résultant de la concaténation de \texttt{t1} puis de \texttt{t2}. Vous testerez votre fonction en comparant avec vos réponses à la question \ref{ex:concat_exp}.
+\begin{pyconcodeblck}{concatener}
+def concatener(t1, t2):
+    # Renvoie le tableau constitué des éléments de la 
+    # liste t1 puis des éléments de la liste t2.
+    # Marche aussi avec des listes vides (merci Python)
+    n1 = len(t1)
+    n2 = len(t2)
+    t = [0]*(n1 + n2)
+    for i in range(n1):
+        t[i] = t1[i]
+    for j in range(n2):
+        t[n1 + j] = t2[j]
+    return t
+\end{pyconcodeblck}
+\begin{minted}
+[
+frame=single,
+framesep=2mm,
+label=Console Python,
+linenos
+]
+{python}
+>>> t1 = [1, 3, 5]
+>>> t2 = [2, 4, 6]
+>>> concatener(t1, t2)
+>>> concatener(t2, t1)
+>>> concatener(t1, t1)
+>>> concatener(t2, [])
+\end{minted}
+\end{enumerate}
+\end{exo} 
+
+\begin{exo}{\textit{Insérer un élément}}{  }
+    Soient \texttt{t} un tableau, \texttt{i} un nombre entier inférieur ou égal à la taille du tableau, et \texttt{e} un élément. On souhaite construire un nouveau tableau \texttt{tprime} copie de \texttt{t} à ceci près qu'à l'indice \texttt{i} se trouve l'élément \texttt{e}, les éléments suivants se trouvant décalés. 
+    \begin{enumerate}
+        \item Soient le tableau \texttt{t = [5, 7, 9, 5, 3]}, et l'élément \texttt{e = 666}. \label{ex:insere_exp}
+            \begin{enumerate}
+                \item Écrire le tableau \texttt{t} dans lequel on a inséré l'élément \texttt{e} à l'indice 3. \dotfill
+                \item Écrire le tableau \texttt{t} dans lequel on a inséré l'élément \texttt{e} à l'indice 0. \dotfill
+                \item Écrire le tableau \texttt{t} dans lequel on a inséré l'élément \texttt{e} à l'indice \texttt{5} \dotfill
+            \end{enumerate}
+        \item Donner la taille de chacuns des tableau précédents. Si \texttt{n} est la taille du tableau \texttt{t}, quelle est la taille du tableau \texttt{tprime} ?
+        \item Écrire une fonction \texttt{inserer} qui prend en entrée un tableau \texttt{t}, un indice \texttt{i} et un élémént \texttt{e} et qui renvoie en sortie le tableau \texttt{tprime} dans lequel a été inséré l'élément \texttt{e} a l'indice \texttt{i}. Vous testerez vos fonctions en comparant vos réponses à celles de la question \ref{ex:insere_exp}.
+\begin{pyconcodeblck}{insere}
+def insere(t, i, e):
+    # Insère l'élément e à l'indice i dans le tableau t.
+    # i <= len(t) : sinon IndexError.
+    # i = 0 : e inséré en début de tableau
+    # i = len(t) : e inséré en fin de tableau
+    n = len(t)
+    tprime = [0]*(n+1)
+    for k in range(i):
+        tprime[k] = t[k]
+    tprime[i] = e
+    for k in range(i+1, n+1):
+        tprime[k] = t[k-1]
+    return tprime
+\end{pyconcodeblck}
+\begin{minted}
+[
+frame=single,
+framesep=2mm,
+label=Console Python,
+linenos
+]
+{python}
+>>> t = [5, 7, 9, 5, 3]
+>>> e = 666
+>>> insere(t, 3, e)
+>>> insere(t, 0, e)
+>>> insere(t, 5, e)
+\end{minted}
+\item Pouvez-vous écrire une fonction \texttt{inserer2} qui utilise les fonctions \texttt{sous\_tableau} et \texttt{concatener} qui insère l'élément \texttt{e} à l'indice \texttt{i} dans le tableau \texttt{t}. Vous testerez votre fonction. Selon vous, laquelle est la plus efficace ? La plus lisible ?
+    \end{enumerate}
+\end{exo} 
+
+\pagebreak
+
+\paragraph{Devoir Maison.}
+
+\begin{exo}{}{  }
+    \begin{enumerate}
+        \item Importer la variable \texttt{crypte} depuis le module \texttt{tp\_informatique}. Quelle est la taille de ce tableau ? Quelle est le type des éléments qui le composent ?
+            \label{q:intro}
+        \item \label{q:car2ascii} Écrire le code Python qui remplace chaque élément de ce tableau par son code ASCII correspondant. Vous utiliserez pour cela la fonction \texttt{ord} (cf. internet pour la documentation).
+        \item \begin{enumerate}
+            \item Écrire en Python la fonction \texttt{tourne} telle que pour tout \texttt{i} entier positif :
+                $$ 
+                \text{\texttt{tourne(i)}} =
+                \begin{cases}
+                    i + 3, &\text{ si } 65 \leq i \leq 87 \\
+                    i - 23, &\text{ si } 87 < i \leq 90 \\
+                    33, &\text{sinon.}
+                \end{cases}
+                $$
+            \item Écrire le code Python qui remplace chaque élément du tabeau obtenu en question \ref{q:car2ascii} par son image par \texttt{tourne}.
+                \label{q:tourne}
+        \end{enumerate}
+    \item Écrire le code Python qui remplace chaque élément du tabeau obtenu à la question \ref{q:tourne} par le caractère ASCII correspondant.Vous utiliserez pour cela la fonction \texttt{chr} (cf. internet pour la documentation)
+
+        Faites afficher le tableau. 
+    \item (Bonus) Écrire une fonction Python \texttt{decrypte} qui prend en entrée un tableau \texttt{t} chiffré avec la même méthode que le tableau \texttt{crypte} de la question \ref{q:intro} et qui renvoie en sortie le tableau correspondant au message déchiffré. 
+    \end{enumerate}
+\end{exo} 
+
+\pagebreak
+
+\paragraph{Codes.}
+\inputminted[frame=single, framesep=2mm, label=Code Source - Recopier,linenos=true]{python}{./pyfiles/snippet-recopier.py}
+\begin{pyconsole}[][numbers=left,frame=single,label=Console Python]
+t1 = [5, 7, 8, 2]
+t2 = recopier(t1)
+print(t2)
+t1[0] = 100
+print(t2)
+\end{pyconsole}
+\inputminted[frame=single, framesep=2mm, label=Code Source - Sous-tableaux,linenos=true]{python}{./pyfiles/snippet-sous-tableau.py}
+\begin{pyconsole}[][numbers=left,frame=single,label=Console Python]
+t = [4, 5, 8, 9, 6, 3, 56, 2, -4, 13]
+sous_tableau(t, 2, 5)
+sous_tableau(t, 0, 6)
+sous_tableau(t, 3, 10)
+\end{pyconsole}
+\inputminted[frame=single, framesep=2mm, label=Code Source - Concaténer,linenos=true]{python}{./pyfiles/snippet-concatener.py}
+\begin{pyconsole}[][numbers=left,frame=single,label=Console Python]
+t1 = [1, 3, 5]
+t2 = [2, 4, 6]
+concatener(t1, t2)
+concatener(t2, t1)
+concatener(t1, t1)
+concatener(t2, [])
+\end{pyconsole}
+\inputminted[frame=single, framesep=2mm, label=Code Source - Insérer,linenos=true]{python}{./pyfiles/snippet-insere.py}
+\begin{pyconsole}[][numbers=left,frame=single,label=Console Python]
+t = [5, 7, 9, 5, 3]
+e = 666
+insere(t, 3, e)
+insere(t, 0, e)
+insere(t, 5, e)
+\end{pyconsole}
+
+\end{document}

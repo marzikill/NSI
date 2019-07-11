@@ -1,0 +1,105 @@
+% !TeX document-id = {117ac6b5-8dd4-4613-9231-0768b5815107}
+%pdflatex -shell-escape cours.tex
+%pythontex cours.tex
+%pdflatex -shell-escape cours.tex
+% !TeX TXS-program:compile = txs:///pdflatex/[--shell-escape]
+
+\documentclass[12pt,french]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{array,multicol,multirow,enumerate,eurosym,latexsym,fourier,bbding,pifont}
+\usepackage{fourier}
+\usepackage{graphicx,pst-all}
+\usepackage{tabularx}
+\usepackage [alwaysadjust]{paralist}
+\usepackage{amsmath,amsfonts,amsthm,amssymb,geometry}
+\usepackage{fancyhdr}
+\usepackage{mathrsfs}  
+\usepackage{pstricks,pst-plot,pst-text,pst-tree,pstricks-add,pst-eps,pst-fill,pst-node,pst-math}
+\usepackage{euscript,amsfonts,eepic,color}
+\usepackage{ifthen,fp}
+\newcommand{\Calig}[1]{\ensuremath{\mathscr{#1}}}              
+\usepackage{babel}
+\usepackage{xcolor}
+\usepackage{minted}
+\usepackage{pythontex}
+\usepackage{multicol}
+\usepackage[most]{tcolorbox}
+\usepackage{fancyhdr}
+\setlength{\parindent}{0pt}
+\usepackage{ulem}
+\usepackage[linesnumbered, boxed,french]{algorithm2e}
+\usepackage[np]{numprint}
+\geometry{vmargin=15mm,hmargin=5mm}
+\pagestyle{empty}
+\setlength\columnsep{5mm}
+\renewcommand{\thesection}{\Roman{section}}
+\renewcommand{\thesubsection}{\Alph{subsection}}
+\renewcommand{\thesubsubsection}{\arabic{subsubsection}}
+\newcounter{npb}
+\setcounter{npb}{0}
+\newcommand{\exo}{
+    \stepcounter{npb}
+    {\textbf{$\triangleright$ \underline{Exercice \arabic{npb} }}}
+}
+\newcounter{sf}
+\setcounter{sf}{0}
+\newcommand{\s}{
+    \stepcounter{sf}
+    {\textbf{ \fbox{SF \arabic{sf} }}}
+}
+\usepackage{lscape}
+\usepackage{tikz}
+\usepackage{metalogo}
+\usepackage{hyperref}
+\begin{document}
+
+  \lhead{Lycée Jean Monnet - \textit{NSI}}
+    \chead{}
+    \rhead{\textit{Année} 2019/2020}
+      \renewcommand{\headrulewidth}{0.5pt}
+      \lfoot{                      }\cfoot{Page \thepage}\rfoot{\textsf{Aude Duhem et Patrice Nicolas}}
+    \pagestyle{fancy}
+    \renewcommand{\footrulewidth}{0.4pt}
+\begin{center}
+\textbf{\Large{Les algorithmes gloutons - Lexique }}\end{center}
+\hrule
+
+
+\begin{center}
+\begin{tabular}{|p{4cm}|p{15.5cm}|}
+\hline
+Résoudre un problème d'optimisation&rechercher la(les) solution de valeur optimale du problème\\
+\hline
+Algorithme glouton&Un algorithme glouton est un algorithme qui fait un choix optimum local à chaque étape, dans le but d'obtenir une solution optimale globale au problème. Il n'y a pas de
+retour en arrière : à chaque étape de décision dans l'algorithme, le choix effectué est définitif.\\
+\hline
+Heuristique gloutonne&stratégie pour résoudre un problème en effectuant des choix locaux optimaux dans le but d'obtenir une solution optimale globale au problème mais sans pouvoir le garantir\\
+\hline
+Algorithme du rendu de monnaie&étant donné un système de monnaie, rendre une somme donnée avec le nombre minimal de
+pièces et billets.\\
+\hline
+Système de monnaie canonique&un système de pièces pour lequel l'algorithme glouton est optimal\\
+\hline
+Algorithme du sac à dos&Étant  donné  plusieurs  objets  possédant chacun  un  poids  et  une  valeur  et  étant  donné  un  poids  maximum  pour  un  sac donné,  déterminer quels  objets, il faut  mettre  dans  le  sac  de  manière  à  maximiser  la  valeur  totale  sans  dépasser  le  poids maximal autorisé pour le sac.\\
+\hline
+recherche exhaustive & on explore systématiquement tous les choix
+possibles\\
+\hline
+\end{tabular}
+\end{center}
+Les notions de :
+\begin{itemize}
+	\item  complexité d'un algorithme
+	\item terminaison d'un algorithme
+	\item correction d'un algorithme
+\end{itemize}
+ont déjà été amendées au lexique lors des chapitres précédents.
+\end{document}
+
+
+
+
+
+
+
+

@@ -1,0 +1,338 @@
+% !TeX document-id = {117ac6b5-8dd4-4613-9231-0768b5815107}
+%pdflatex -shell-escape cours.tex
+%pythontex cours.tex
+%pdflatex -shell-escape cours.tex
+% !TeX TXS-program:compile = txs:///pdflatex/[--shell-escape]
+
+\documentclass[12pt,french]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{array,multicol,multirow,enumerate,eurosym,latexsym,fourier,bbding,pifont}
+\usepackage{fourier}
+\usepackage{graphicx,pst-all}
+\usepackage{tabularx}
+\usepackage{tabto}
+\usepackage [alwaysadjust]{paralist}
+\usepackage{amsmath,amsfonts,amsthm,amssymb,geometry}
+\usepackage{fancyhdr}
+\usepackage{mathrsfs}  
+\usepackage{pstricks,pst-plot,pst-text,pst-tree,pstricks-add,pst-eps,pst-fill,pst-node,pst-math}
+\usepackage{euscript,amsfonts,eepic,color}
+\usepackage{ifthen,fp}
+\newcommand{\Calig}[1]{\ensuremath{\mathscr{#1}}}              
+\usepackage{babel}
+\usepackage{xcolor}
+\usepackage{minted}
+\usepackage{pythontex}
+\usepackage{multicol}
+\usepackage[most]{tcolorbox}
+\usepackage{fancyhdr}
+\setlength{\parindent}{0pt}
+\usepackage{ulem}
+\usepackage[linesnumbered, boxed,french,onelanguage]{algorithm2e}
+\usepackage[np]{numprint}
+\geometry{vmargin=15mm,hmargin=5mm}
+\pagestyle{empty}
+\setlength\columnsep{5mm}
+\renewcommand{\thesection}{\Roman{section}}
+\renewcommand{\thesubsection}{\Alph{subsection}}
+\renewcommand{\thesubsubsection}{\arabic{subsubsection}}
+\newcounter{npb}
+\setcounter{npb}{0}
+\newcommand{\exo}{
+    \stepcounter{npb}
+    {\textbf{$\triangleright$ \underline{Exercice \arabic{npb} }}}
+}
+\newcounter{sf}
+\setcounter{sf}{0}
+\newcommand{\s}{
+    \stepcounter{sf}
+    {\textbf{ \fbox{SF \arabic{sf} }}}
+}
+\usepackage{lscape}
+\usepackage{tikz}
+\usepackage{metalogo}
+\usepackage{hyperref}
+\begin{document}
+
+  \lhead{Lycée Jean Monnet - \textit{NSI}}
+    \chead{}
+    \rhead{\textit{Année} 2019/2020}
+      \renewcommand{\headrulewidth}{0.5pt}
+      \lfoot{                      }\cfoot{Page \thepage}\rfoot{\textsf{Aude Duhem et Patrice Nicolas}}
+    \pagestyle{fancy}
+    \renewcommand{\footrulewidth}{0.4pt}
+\begin{center}
+\textbf{\Large{Les algorithmes gloutons  }}\end{center}
+\hrule
+
+\section{Notion de problème d'optimisation}
+
+ \textbf{Le cadre de notre étude cette année se limite à des problèmes possédant toujours au moins une solution et un nombre fini de solutions}. Dans ce contexte, nous nous interesserons ici plus particulièrement aux \textbf{problèmes d'optimisation, c'est à dire des problèmes dans lesquels, il faut minimiser ou maximiser une certaine quantité.} Il faut donc trouver la meilleure solution parmi l'ensemble des solutions possibles. Si on n'y parvient pas, nous tenterons d'estimer notre écart à la solution optimale.\\
+Pour atteindre cet objectif, il y a plusieurs méthodes au choix : méthode exhaustive ou brute , méthode diviser pour régner (vue précédemment ), programmation dynamique (vue ultérieurement) et méthode gloutonne (présentée ici)
+\normalsize
+\section{La méthode gloutonne}
+\begin{tcolorbox}[enhanced,attach boxed title to top center={yshift=-3mm,yshifttext=-1mm},
+	colback=blue!5!white,colframe=blue!75!black,colbacktitle=blue!25!black,
+	title=Définition, fonttitle=\bfseries,
+	boxed title style={size=small,colframe=blue!25!black} ]
+	Un algorithme glouton est un algorithme qui fait un choix optimum local à chaque étape, dans le but d'obtenir une solution optimale globale au problème. Il n'y a pas de
+	retour en arrière : à chaque étape de décision dans l'algorithme, le choix effectué est définitif.
+\end{tcolorbox}
+
+\begin{tcolorbox}[enhanced,attach boxed title to top center={yshift=-3mm,yshifttext=-1mm},
+	colback=blue!5!white,colframe=blue!75!black,colbacktitle=blue!25!black,
+	title=But d'un algorithme glouton , fonttitle=\bfseries,
+	boxed title style={size=small,colframe=blue!25!black} ]
+Un algorithme glouton sert donc à résoudre des
+problèmes d'optimisation. 
+\end{tcolorbox}
+\begin{tcolorbox}[enhanced,attach boxed title to top center={yshift=-3mm,yshifttext=-1mm},
+	colback=blue!5!white,colframe=blue!75!black,colbacktitle=blue!25!black,
+	title=Vocabulaire , fonttitle=\bfseries,
+	boxed title style={size=small,colframe=blue!25!black} ]
+	un algorithme glouton ne permettra pas toujours d'obtenir la solution optimale : il fait donc partie du groupe des méthodes approchées ou heuristiques gloutonnes.
+\end{tcolorbox}
+  \small     
+   \begin{tcolorbox}[enhanced,attach boxed title to top center={yshift=-3mm,yshifttext=-1mm},
+   	colback=green!5!white,colframe=green!75!black,colbacktitle=green!25!black,
+   	title=Exemple 1, fonttitle=\bfseries,
+   	boxed title style={size=small,colframe=green!25!black} ]
+   	Approche "gloutonne" pour le surveillant de baignade et problème de rendu de monnaie (activités)
+   \end{tcolorbox}
+\normalsize
+
+\section{Le problème du rendu de monnaie}
+
+\subsection{Principe}
+\begin{tcolorbox}[enhanced,attach boxed title to top center={yshift=-3mm,yshifttext=-1mm},
+	colback=blue!5!white,colframe=blue!75!black,colbacktitle=blue!25!black,
+	title=Enoncé classique du problème du rendu de monnaie, fonttitle=\bfseries,
+	boxed title style={size=small,colframe=blue!25!black} ]
+	«étant donné un système de monnaie, comment rendre une somme donnée de
+	façon optimale, c'est-à-dire avec le nombre minimal de
+	pièces et billets ?»
+\end{tcolorbox}
+	A l'issue de l'activité d'introduction, nous avons écrit
+	deux versions en pseudo-code d'une fonction \textbf{monnaie} implémentant l'algorithme  :
+	\begin{itemize}[$\bullet$]
+	\item \textbf{Pré-conditions :} \\
+	 $\star$ somme $s$ (entier positif) à rendre \\
+	 $\star$ liste P $[v_1,v_2, ..., v_n]$ des valeurs des pièces disponibles triées par valeur décroissante
+	\item \textbf{Post-condition :} résultat = liste Q $[q_1;q_2;...,q_n]$ du nombre de pièces par valeur à rendre
+	\end{itemize}
+	\begin{tabular}{lp{1cm}l}
+		\begin{minipage}{.45\linewidth}
+	\textbf{Version 1}\\
+\begin{algorithm}[H]
+	\SetKwFunction{Fn}{Fonction}
+\Fn{\textbf{ monnaie(P,s)}}
+
+{ 	$n \leftarrow$  taille de la liste P \;
+   Q $\leftarrow$  [0,.... 0]\;
+	$k \leftarrow 1$\;
+		\Tq{ $s >0$ et $k<n$}
+		{\Tq{ $s \geqslant v_k$}
+			{$q_k\leftarrow q_k+1$\;
+			 $s \leftarrow  s - v_k$}
+		k$\leftarrow$  k+1 }
+	\Retour{liste Q des pièces à rendre}
+
+}
+\end{algorithm}\end{minipage}& &\begin{minipage}{.45\linewidth}
+\textbf{Version 2}\\
+ \begin{algorithm}[H]
+		\SetKwFunction{Fn}{Fonction}
+	\Fn{\textbf{ monnaie(P,s)}}
+	
+	{$n \leftarrow$  taille de la liste P \;
+	Q $\leftarrow$  [0,.... 0]\;
+	
+		$k \leftarrow 1$\;
+		\Tq{ $s >0$ et $k<n$}
+		{\Si{ $s \geqslant v_k$}
+			{$q_k \leftarrow $ quotient de la division euclidienne de $s$ par $v_k$\;
+			$s \leftarrow $  reste de la division euclidienne de $s$ par $v_k$\;}
+		k$\leftarrow$  k+1 \;}
+		
+		\Retour{liste Q des pièces à rendre}
+	 }
+\end{algorithm}\end{minipage}
+\end{tabular}
+\small
+\begin{tcolorbox}[enhanced,attach boxed title to top center={yshift=-3mm,yshifttext=-1mm},
+	colback=green!5!white,colframe=green!75!black,colbacktitle=green!25!black,
+	title=Exemple 2, fonttitle=\bfseries,
+	boxed title style={size=small,colframe=green!25!black} ]
+	Rendre la somme de 2,43\euro\, en disposant du système de pièces de monnaie européen, à savoir (en cents) : [200,100,50,20,10,5,2,1]
+\end{tcolorbox}
+\normalsize
+\subsection{Complexité et terminaison de l'algorithme}
+La version 2 est plus efficace que la version 1, plus naturelle. Elle permet d'en déduire aisément la \textbf{complexité} de l'algorithme de rendu de monnaie :\\
+Les pièces du système de monnaie étant supposées triées par ordre décroissant de valeur et au nombre de $n$, alors la boucle Tant que correspond à une \textbf{complexité} de l'ordre de $n$.
+Par contre si la liste des pièces n'est pas triée on passe à une \textbf{complexité} de l'ordre $n \log n$.\\ 
+La \textbf{terminaison} de l'algorithme est garantie : en effet, les variants de boucle sont $s$ et $k$ \\
+$s$ est un entier positif ou nul qui décroit strictement et $k$ est un entier positif qui augmente de 1 à chaque étape jusqu'à devenir égal à $n$ qui est un nombre fini. La boucle Tant que s'arrête donc.
+
+\subsection{Correction de l'algorithme}
+\small
+\begin{tcolorbox}[enhanced,attach boxed title to top center={yshift=-3mm,yshifttext=-1mm},
+	colback=green!5!white,colframe=green!75!black,colbacktitle=green!25!black,
+	title=Exemple 3, fonttitle=\bfseries,
+	boxed title style={size=small,colframe=green!25!black} ]
+	Rendre la somme de 6$\star$\, en disposant du système de pièces de monnaie (en $\star$) : \{4,3,1\}
+\end{tcolorbox}
+
+\begin{tcolorbox}[enhanced,attach boxed title to top center={yshift=-3mm,yshifttext=-1mm},
+	colback=green!5!white,colframe=green!75!black,colbacktitle=green!25!black,
+	title=Pistes pour l'exemple 3, fonttitle=\bfseries,
+	boxed title style={size=small,colframe=green!25!black} ]
+	Le faire à la main et constater que la méthode gloutonne rendra 1 pièce de 4 $\star$ et 2 pièces de 1 $\star$ alors que la solution optimale rendra 2 pièces de 3 $\star$ 
+\end{tcolorbox}
+\normalsize
+L'algorithme glouton du rendu de monnaie ne fournit donc pas toujours la solution optimale : 
+\begin{tcolorbox}[enhanced,attach boxed title to top center={yshift=-3mm,yshifttext=-1mm},
+	colback=blue!5!white,colframe=blue!75!black,colbacktitle=blue!25!black,
+	title=Vocabulaire , fonttitle=\bfseries,
+	boxed title style={size=small,colframe=blue!25!black} ]
+On appelle canonique un système de pièces pour lequel l'algorithme glouton est optimal.
+\end{tcolorbox} 
+
+Le système de monnaie européen est canonique alors que le système anglais avant 1971 ne l'était pas.\\
+Pour montrer qu'un système de monnaie n'est pas canonique, il suffit de donner un contre-exemple, par contre démontrer la correction de l'algorithme glouton pour un système de monnaie donné est moins aisé.
+\small
+\begin{tcolorbox}[enhanced,attach boxed title to top center={yshift=-3mm,yshifttext=-1mm},
+	colback=gray!5!white,colframe=gray!75!black,colbacktitle=gray!25!black,
+	title= preuve de correction pour un système simple , fonttitle=\bfseries,
+	boxed title style={size=small,colframe=gray!25!black} ]
+	Voici une démonstration de la correction de l'algorithme du rendu de monnaie dans le cas d'un système de monnaie composé des pièces 1, 2 et 5.\\
+	La liste P est donc [5,2,1] et la somme à rendre est notée $s$\\
+	La solution produite par l'algorithme glouton est telle que :\\
+	$s = q_1 \times 5 + r_1$ avec $0\leqslant r_1<5$\\
+	$r_1=q_2\times 2 +r_2$   avec $0\leqslant r_2<2$\\
+	$r_2= q_3 \times 1 + r_3$  avec $\underbrace{0\leqslant r_3<1}_{\text{donc } r_3=0}$ d'où $r_2= q_3 \times 1$\\
+	On retrouve que :\,\,	$s=q_1 \times 5 + r_1=q_1 \times 5 + q_2\times 2 +r_2=q_1 \times 5 + q_2\times 2 +q_3 \times 1$\\
+	On vérifie ainsi que la répartition obtenue permet d'obtenir $s$. Montrons qu'elle est optimale :\\
+	Soit $o_1,o_2,o_3$ une solution optimale dans ce système canonique.\\
+	Cette solution est donc telle que $s=o_1 \times 5 + o_2\times 2 +o_3 \times 1$\\
+	$o_3<2$ sinon on pourrait remplacer 2 pièces de 1 par une pièce de 2.\\
+	De même, $o_2<3$ sinon on pourrait remplacer 3 pièces de 2 par une pièce de 5 et une de 5.\\
+	On a de plus $2\times o_2+o_1<5$ car sinon on pourrait remplacer par une pièce de 5.\\
+	On a donc $s=o_1 \times 5 + o_2\times 2 +o_3 \times 1$ avec  $2\times o_2+o_1<5$\\
+	D'où $o_1$ est le quotient $q_1$ de la division euclidienne de $s$ par 5 et $o_2\times 2 +o_3 \times 1$ est le reste $r_1$ de la division euclidienne de $s$ par 5.\\
+	De même, $o_3<2$, d'où $o_2$ est le quotient $q_2$ de la division euclidienne de $r_1$ par 2 et $o_3 \times 1$ est le reste $r_2$ de la division euclidienne de $r_1$ par 2.\\
+	et on en déduit que $o_3$ est le quotient $q_3$ de la division euclidienne de $r_2$ par 1 ;\\
+	D'où $o_1=q_1$, $o_2=q_2$ et $o_3=q_3$ \\
+	L'algorithme glouton est donc correct pour le système \{1,2,5\} et le système \{1,2,5\} est canonique.
+\end{tcolorbox}
+\normalsize
+\section{Le problème du sac à dos}
+\subsection{principe}
+Le problème du "Sac à Dos" ou KP(Knapsack Problem) peut s'énoncer de plusieurs façons, parfois même sans parler de sacs ! Néanmoins, voici un énoncé classique :
+
+\begin{tcolorbox}[enhanced,attach boxed title to top center={yshift=-3mm,yshifttext=-1mm},
+	colback=blue!5!white,colframe=blue!75!black,colbacktitle=blue!25!black,
+	title=Enoncé classique du KP, fonttitle=\bfseries,
+	boxed title style={size=small,colframe=blue!25!black} ]
+	«Étant  donné  plusieurs  objets  possédant chacun  un  poids  et  une  valeur,  et  étant  donné  un  poids  maximum  pour  le  sac,  quels  objets faut-il  mettre  dans  le  sac  de  manière  à  maximiser  la  valeur  totale  sans  dépasser  le  poids maximal autorisé ?»
+\end{tcolorbox}
+\small
+\begin{tcolorbox}[enhanced,attach boxed title to top center={yshift=-3mm,yshifttext=-1mm},
+	colback=red!5!white,colframe=red!75!black,colbacktitle=red!25!black,
+	title=Note pour l'enseignant, fonttitle=\bfseries,
+	boxed title style={size=small,colframe=red!25!black} ]
+	\textbf{Si le groupe s'y prête alors, une présentation plus formelle du problème pourra être réalisée .}
+\end{tcolorbox}
+\begin{tcolorbox}[enhanced,attach boxed title to top center={yshift=-3mm,yshifttext=-1mm},
+	colback=blue!5!white,colframe=blue!75!black,colbacktitle=blue!25!black,
+	title=Présentation formelle, fonttitle=\bfseries,
+	boxed title style={size=small,colframe=blue!25!black} ]
+	Soit un ensemble $E$  \{$(v_1;p_1), (v_2;p_2),...,(v_i;p_i),...,(v_n;p_n)$\} de n éléments et un sac à dos. On note:\\
+	$v_i$ \text{: la valeur de l'élément i}\hfill $p_i$ \text{: le poids de l'élément i}\hfill $p_{max}$ \text{le poids maximal autorisé dans le sac à dos}\\
+	Une solution au KP est un ensemble  \{$x_1, x_2,...,x_i,...,x_n$\} tel que :
+	$$x_i =
+	\left \{
+	\begin{tabular}{l}
+	1   \text{: si l'élément $(v_i;p_i)$ est placé dans le sac}\\
+	0  \text{: sinon}\\
+	\end{tabular}
+	\right .
+	\text{ 
+		et 
+	}\sum_{i=1}^{n} p_i \times x_i \quad \leqslant \quad p_{max}$$
+Une solution optimale est  une solution au KP telle que $\sum_{i=1}^{n} v_i \times x_i \text{ soit maximale}$
+\end{tcolorbox}
+\normalsize
+\subsection{Critère de décision}
+
+Pour résoudre le KP avec cette stratégie, il nous faut définir \textbf{un critère de décision} ; on rappelle qu'à chaque étape décisionnelle un choix optimal doit être réalisé sur la base d'un critère défini. Il s'agit d'un choix optimal, local.
+
+\begin{tcolorbox}[enhanced,attach boxed title to top center={yshift=-3mm,yshifttext=-1mm},
+	colback=green!5!white,colframe=green!75!black,colbacktitle=green!25!black,
+	title=Exemple 4, fonttitle=\bfseries,
+	boxed title style={size=small,colframe=blue!25!black} ]
+	\small
+	Soit un ensemble $E$  de 5 objets  \{$(1;2), (2;3), (9;4), (5;3), (4;6)$\} où chaque objet est sous la forme (valeur en €, poids) ;\\ voici quelques exemples de critères de décision triviaux:
+	\begin{itemize}
+		\item Critère n°1: priorité pour les objets les plus légers 
+		\item Critère n°2: priorité pour les objets les plus lourds
+		\item  Critère n°3: priorité pour les objets de faible valeur
+		\item  Critère n°4: priorité pour les objets de grande valeur
+		\item  ....
+	\end{itemize}
+	Le KP contiendra donc nécessairement un tri, qui peut  représenter un coût important et augmenter significativement la complexité en temps de l'algorithme.\\
+    Par exemple, si on trie la liste selon le premier critère, elle devient \{$(1;2), (2;3), (5;3), (9;4), (4;6)$\} ou \{$(1;2),(5;3), (2;3), (9;4), (4;6)$\} puisque les objets C et D ont le même poids.\\	
+	Un seul choix (poids ou valeur) peut être source d'aléas. En cas d'égalité sur le poids, il semble "naturel" de choisir comme critère secondaire "la plus grande valeur" puisque notre but est de maximiser la valeur totale du sac.\\
+	\normalsize
+	 En 1957, G.Dantzig (1914-2005) introduit un critère souvent utilisé pour le KP: 
+	\begin{itemize}
+		\item \textbf{Critère n°5: priorité pour les objets de rapport $ \frac{\text{valeur}}{\text{poids}} $ élevé}
+		
+	\end{itemize} 
+\end{tcolorbox}
+\vspace{2mm}
+
+Le choix du critère peut grandement influencer la réponse donnée (voir TP n°2) ; reprenons l'exemple précédent avec une contrainte supplémentaire inhérente au KP  : le poids maximal dans le sac. On supposera $ p_{max} =10$ :
+\begin{itemize}
+	\item Liste initiale à trier selon un critère $\rightarrow$ \{$(1;2), (2;3), (9;4), (5;3), (4;6)$\}
+	\item Critère n°1 $\rightarrow$ Liste triée \{$\textcolor{red}{(1;2)},\textcolor{red}{(5;3)}, \textcolor{red}{(2;3)}, (9;4), (4;6)$\} $\rightarrow$ Réponse \{$1,1,0,1,0$\} car $2+3+3 \le 10 < 2+3+3+4$
+	\item Critère n°5 $\rightarrow$ Liste triée \{$\textcolor{red}{(9;4)},\textcolor{red}{(5;3)},(4;6),\textcolor{red}{(2;3)}, (1;2)  $\} $\rightarrow$ Réponse \{$0,1,1,1,0$\} car $4+3+3 \le 10 < 4+3+3+2$
+\end{itemize} 
+\vspace{2mm}
+\underline{\textbf{Remarque:}} Les deux critères conduisent à des sacs avec 3 objets. La réponse indique avec des '1' la position dans la liste initiale des objets retenus et des '0' sinon. Par ailleurs, le poids total du $2^e$ sac est égale à $p_{max}$ , \textbf{on dit parfois que le sac est maximal.} Enfin, la valeur du second sac est de 16 contre seulement 8 pour le premier : néanmoins, à ce stade, nous ne savons pas si 16 correspond à la solution optimale.\\
+\vskip0.2cm
+%\begin{minipage}{p{15cm}p{4.5cm}}
+\begin{minipage}{.6\linewidth}
+\subsection{Pseudo-Code: Algorithme "glouton"}
+voici une écriture en pseudo-code d'une fonction \textbf{KP} implémentant l'algorithme  :
+	\begin{itemize}[$\bullet$]
+	\item \textbf{Pré-conditions :} \\
+	$\star$ poids max $p_{max}$ (réel positif)\\
+	$\star$ Liste "Objets" triée $[ (v_1,p_1),(v_2,p_2), ...,(v_n,p_n)  ]$
+	\item \textbf{Post-condition :} résultat = Liste "Reponse" contenant des 0 ou des 1 selon que l'objet est sélectionné ou pas 
+\end{itemize}
+On suppose ici que l'on se dote d'un critère de décision et d'une liste \textbf{L d'objets triés par ordre décroissant selon notre critère.} La réponse donne la position dans la liste triée.\\
+La complexité est d'ordre $n$ et la terminaison est assurée par le variant $i$ de la boucle \og Pour \fg.
+.\end{minipage}\hfill\begin{minipage}{.3\linewidth}
+\begin{algorithm}[H]
+	\SetAlgoLined
+	\SetKwFunction{Fn}{Fonction}
+	\Fn{\textbf{KP(P,s)}}
+	
+	{Sac $\leftarrow$ 0;\\
+		Reponse$\leftarrow [\quad ]$;\\
+		\For{i=0 \KwTo{n-1}}{
+			\eIf{$p_i$+Sac $\le p_{max}$}{Reponse[i] $\leftarrow$ 1;\\ Sac $\leftarrow$ Sac+$p_i$;}{Reponse[i] $\leftarrow$ 0;}
+		}
+		\Return{Reponse}}
+	
+\end{algorithm}
+\end{minipage}\\
+\end{document}
+
+
+
+
+
+
+
+

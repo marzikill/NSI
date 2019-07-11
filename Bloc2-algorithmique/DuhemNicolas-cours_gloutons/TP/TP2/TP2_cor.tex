@@ -1,0 +1,412 @@
+%pdflatex -shell-escape doc4.tex
+%pythontex doc4.tex
+%pdflatex -shell-escape doc4.tex
+\documentclass[a4paper,11,answers
+]{exam}
+\usepackage[left=1cm, right=1cm, top=0.5cm, bottom=2cm, textwidth=10cm]{geometry}
+\UseRawInputEncoding%https://www.latex-project.org/news/latex2e-news/ltnews28.pdf
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[frenchb]{babel}
+\usepackage{listings}
+\usepackage{pythontex}
+\usepackage{minted}
+\usepackage[table]{xcolor}
+\setlength{\arrayrulewidth}{1mm}
+\setlength{\tabcolsep}{18pt}
+\renewcommand{\arraystretch}{2.5}
+\usepackage{graphicx}
+\graphicspath{ {/Users/the_brat/Documents/Mon_Latex} }
+\usepackage{tabto}
+\usepackage{amsmath}
+\definecolor{ivory}{rgb}{1.0, 1.0, 0.94}
+\definecolor{cadetgrey}{rgb}{0.57, 0.64, 0.69}
+\usepackage{tikz,lipsum,lmodern}
+\usepackage[most]{tcolorbox}
+\shadedsolutions
+%\framedsolutions
+\usepackage[titletoc]{appendix}
+\usepackage{wrapfig}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%https://github.com/gpoore/pythontex/issues/55
+\newcommand{\expandpyconc}[1]{\expandafter\reallyexpandpyconc\expandafter{#1}}
+\newcommand{\reallyexpandpyconc}[1]{\pyconc{exec(compile(open('#1', 'rb').read(), '#1', 'exec'))}}
+
+\newenvironment{pyconcodeblck}[1]%
+ {\newcommand{\snippetfile}{snippet-#1.py}
+  \VerbatimEnvironment
+  \begin{VerbatimOut}{\snippetfile}}%
+ {\end{VerbatimOut}%
+  \expandpyconc{\snippetfile}}
+\newcommand{\typesetcode}[1]{\inputpygments{python}{snippet-#1.py}}
+
+\begin{pyconcodeblck}{temp14}
+def gloutonP(l,maxi):
+    tmp=[x for x in l]
+    tmp.sort(key=lambda tup: tup[1],reverse=True)
+    valeur=0
+    poids=0
+    i=0
+    solution=[]   
+    while i<len(tmp):
+        if (poids+tmp[i][1]) <=maxi:
+            solution.append(tmp[i])
+            poids +=tmp[i][1]
+            valeur+=tmp[i][0]
+        i+=1
+    reponse=[1 if x in solution else 0 for x in l]        
+        
+    return reponse,valeur,poids
+\end{pyconcodeblck}
+
+\begin{pyconcodeblck}{temp15}
+def gloutonV(l,maxi=30):
+    tmp=[x for x in l]
+    l.sort(key=lambda tup: tup[0],reverse=True)
+    valeur=0
+    poids=0
+    i=0
+    solution=[]
+    while i<len(tmp):
+        if (poids+tmp[i][1]) <=maxi:
+            solution.append(tmp[i])
+            poids +=tmp[i][1]
+            valeur+=tmp[i][0]
+        i+=1
+    reponse=[1 if x in solution else 0 for x in tmp]
+        
+    return reponse,valeur,poids
+\end{pyconcodeblck}
+
+\begin{pyconcodeblck}{temp16}
+def gloutonVPP(l,maxi=30):
+    tmp=[x for x in l]
+    l.sort(key=lambda tup: tup[0]/tup[1],reverse=True)
+    valeur=0
+    poids=0
+    solution=[]
+    i=0
+    while i<len(tmp):
+        if (poids+tmp[i][1]) <=maxi:
+            solution.append(tmp[i])
+            poids +=tmp[i][1]
+            valeur+=tmp[i][0]
+        i+=1
+    reponse=[1 if x in solution else 0 for x in tmp]
+        
+    return reponse,valeur,poids
+
+\end{pyconcodeblck}
+
+\begin{pyconcodeblck}{temp17}
+def possibilites(n):
+    assert n<52 #retourne une erreur si n>=52
+    alphabet=['A','B','C','D','E','F','G','H','I','J','K','L','M','N',
+              'O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b',
+              'c','d','e','f','g','h','i','j','k','l','m','n','o','p',
+              'q','r','s','t','u','v','w','x','y','z']
+    tab=[]
+    for i in range(n):
+        tab.append(alphabet[i])
+    combinaisons = ['']#initialise avec le sac vide; cas où l'objet le plus léger est plus lourd que le poids maximal
+    for loop in range(n):
+        tmp = [i for i in tab]
+        for boucle in range(loop):
+            #on compare l'élément à ajouter i avec le dernier élément ajouté x[-1]
+            #on concatène des chaines
+            tmp = [x+i for i in tab for x in tmp if ord(i)>ord(x[-1])]        
+        combinaisons += tmp
+    return len(combinaisons)#on retourne la longueur du tableau contentant toutes les combinaisons
+\end{pyconcodeblck}
+\begin{pyconcodeblck}{temp19}
+def extraire(t,n):
+    for i in range(1,len(t)):
+        v = t[i][n]
+        j = i-1
+        while(j>=0 and t[j][n]>v):
+            t[j+1],t[j] = t[j],t[j+1]
+            j = j-1
+        t[j+1][n] = v
+    return t
+\end{pyconcodeblck}
+\renewcommand{\thesection}{\Roman{section}}
+\renewcommand{\thesubsection}{\Alph{subsection}}
+\renewcommand{\thesubsubsection}{\arabic{subsubsection}}
+\title{Correction du TP n°2: Le problème du Sac à Dos}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{lmodern}
+ 
+
+
+\begin{document}
+\maketitle
+%\setcounter{chapter}{1}
+%\chapter{Un exemple d'optimisation - Les algorithmes "gloutons"}
+
+
+\section{Retour sur les Tris}
+ 
+ \begin{questions}
+
+\question Ecrire une fonction \textbf{extraire} qui accepte en paramètres, une liste de liste  \textbf{l} et un entier \textbf{n}  dans [0; 2] .La fonction doit retourner la liste triée en fonction du n-ième  élément de chaque sous-liste. On pourra choisir le tri insertion par exemple.
+ \vspace{5mm}
+\begin{tcolorbox}[enhanced,attach boxed title to top center={yshift=-3mm,yshifttext=-1mm},
+  colback=green!5!white,colframe=green!75!black,colbacktitle=green!25!black,
+  title=Console Python, fonttitle=\bfseries,
+  boxed title style={size=small,colframe=blue!25!black} ]
+\begin{pyconsole}
+L= [ [1, 5, 6], [8, 10, 2], [3, 3, 5],[4, 8, 1] ]
+extraire(L,0)
+extraire(L,1)
+extraire(L,2)
+\end{pyconsole}
+\end{tcolorbox}
+
+\begin{listing}[h]
+\begin{minted}
+[frame=leftline,
+framesep=2mm,
+baselinestretch=1.2,
+bgcolor=,
+fontsize=\footnotesize,
+linenos]{python}
+def extraire(t,n):
+    for i in range(1,len(t)):
+        v = t[i][n]
+        j = i-1
+        while(j>=0 and t[j][n]>v):
+            t[j+1],t[j] = t[j],t[j+1]
+            j = j-1
+        t[j+1][n] = v
+    return t
+
+ \end{minted} 
+\end{listing}
+
+\question Pourquoi le code précédent ne fonctionne-t-il pas (tel quel) avec une liste de tuples?
+\begin{solution}
+Le tuple est un objet que l'on ne peut pas modifier donc une instruction comme celle de la ligne 8 par exemple n'est pas autorisée. Il faudrait par exemple, copier la liste de tuples en liste de liste puis trier et retourner une liste de tuples.
+\end{solution}
+\question A l'aide de l'exercice 7, expliquer le sens de l'instruction \mintinline{python}{List.sort(key = lambda a : a[1]) }
+
+\begin{solution}
+ "list.sort() and sorted() have a key parameter to specify a function to be called on each list element prior to making comparisons." [...]accept a reverse parameter with a boolean value. This is used to flag descending sorts.\newline
+
+ Dès lors, on peut appeler une fonction lambda(nom donné à une fonction nommée "à la volée") pour trier des objets à un certain indice dans l’élément courant (si cet élément est une liste, un tuple,...) En conséquence, le tri sur a[1] signifie que l’on s’intéresse au deuxième élément du tuple. Par ailleurs, reverse=True indique qu’il s’agit d’un tri "décroissant".
+
+\end{solution}
+\section{Algorithme du sac à dos}
+\subsection{Critère de Poids} 
+Nous allons écrire un premier algorithme glouton de critère \textbf{"placer d'abord dans le sac, les objets les plus lourds."} En cas d'égalité, on prendra "au hasard" un objet parmi les indécis. On pourra utiliser la méthode \textbf{list.sort()} comme définie sur la documentation officielle \href{https://docs.python.org/fr/3/howto/sorting.html}{Python}
+\question Ecrire une fonction \textbf{gloutonP} qui accepte deux paramètres \textbf{l} et \textbf{maxi}, respectivement une liste de tuples (valeur en €, poids en kg) et un entier correspondant au poids maximal supporté par le sac. La fonction doit donc retourner un triplet \textbf{reponse, valeur, poids} comme dans l'exemple ci-dessous:
+ \vspace{5mm}
+\begin{tcolorbox}[enhanced,attach boxed title to top center={yshift=-3mm,yshifttext=-1mm},
+  colback=green!5!white,colframe=green!75!black,colbacktitle=green!25!black,
+  title=Console Python, fonttitle=\bfseries,
+  boxed title style={size=small,colframe=blue!25!black} ]
+\begin{pyconsole}
+liste=[(7,13), (4,12), (3,8), (3,10)]
+print(gloutonP(liste,30))
+\end{pyconsole}
+\end{tcolorbox}
+ \vspace{5mm}
+\begin{solution}
+(voir Annexe B) On crée une copie de la liste de tuples \textbf{lig(2 et 3)}  puis on trie la liste "temporaire" selon le 2e élément (tup[1]) dans l'ordre décroissant (reverse=True) ;  \textbf{lig(8)} on rentre dans une boucle "de la longueur" du tableau. Si le poids actuel du sac plus le poids du prochain objet est inférieur ou égal au poids maxi \textbf{lig(9)}, alors on ajoute cet objet à la solution \textbf{lig(10)}, puis on augmente le poids et la valeur du sac \textbf{lig(11 et 12)}. Enfin, on réalise une compréhension en utilisant la liste initiale pour afficher soit 1 soit 0 selon que l'élément est dans la solution ou pas.
+\end{solution}
+
+Le fichier \textbf{Datas.txt} contient un ensemble de données correspondant à 5 magasins fictifs : t4, t7, t8, t10 et t15. Chaque ligne du fichier contient, le nom du magasin, une liste d'objets et le poids maximal autorisé dans le sac du voleur.
+
+\question A l'aide de la fonction \textbf{perf\_counter} du module \textbf{time}, calculer la durée d'exécution sur les ensembles de données fournis dans le fichier Datas.txt. Les durées seront obtenues en réalisant une moyenne sur 100 appels de la fonction  \textbf{gloutonP}. Noter vos résultats dans les tableaux en annexe A (avec 4 chiffres significatifs sur le temps). 
+\begin{solution}
+(voir Annexe A) 
+\end{solution}
+ \subsection{Critère de Valeur}
+  Pour notre deuxième algorithme glouton, le critère retenu est \textbf{"placer d'abord dans le sac, les objets de plus grande valeur"}. Ecrire une fonction \textbf{gloutonV} qui accepte les mêmes paramètres que gloutonP et retourne le triplet \textbf{reponse, valeur, poids} comme dans l'exemple ci-après ; réaliser ensuite les mêmes tests à l'aide du fichier  \textbf{datas.txt} pour compléter les tableaux de l'annexe A.
+  \vspace{3mm}
+
+\begin{tcolorbox}[enhanced,attach boxed title to top center={yshift=-3mm,yshifttext=-1mm},
+  colback=green!5!white,colframe=green!75!black,colbacktitle=green!25!black,
+  title=Console Python, fonttitle=\bfseries,
+  boxed title style={size=small,colframe=blue!25!black} ]
+\begin{pyconsole}
+liste=[(7,13), (4,12), (3,8), (3,10)]
+gloutonV(liste,30)
+\end{pyconsole}
+\end{tcolorbox}
+
+\subsection{Critère de Valeur Pondérée par le Poids}
+
+Pour notre dernier algorithme glouton, le critère retenu est \textbf{"placer d'abord dans le sac, les objets dont le rapport \boldmath\( \frac{valeur}{poids} \) est le plus élevé}. Ecrire une fonction \textbf{gloutonVPP} qui accepte les mêmes paramètres que gloutonP et retourne le triplet \textbf{reponse, valeur, poids} comme dans l'exemple ci-après ; réaliser ensuite les mêmes tests à l'aide du fichier  \textbf{datas.txt} pour compléter les tableaux en annexe A.
+\begin{solution} 6. - 7.
+(voir Annexe B) Algorithmes identiques à gloutonP.  Seule la clé du tri change : la liste "temporaire"  est triée soit  selon le 1er élément (tup[0])  soit selon le rapport $\frac{tup[0]}{tup[1]}$ et dans l'ordre décroissant (reverse=True). 
+\end{solution}
+  \vspace{5mm}
+\begin{tcolorbox}[enhanced,attach boxed title to top center={yshift=-3mm,yshifttext=-1mm},
+  colback=green!5!white,colframe=green!75!black,colbacktitle=green!25!black,
+  title=Console Python, fonttitle=\bfseries,
+  boxed title style={size=small,colframe=blue!25!black} ]
+\begin{pyconsole}
+liste=[(7,13), (4,12), (3,8), (3,10)]
+print(gloutonVPP(liste,30))
+\end{pyconsole}
+\end{tcolorbox}
+\subsection{Comparaison des trois critères}
+\question Comparer les durées d'exécution des trois algorithmes gloutons. Commenter. 
+\begin{solution} 
+(voir Annexe A) gloutonP, gloutonV et gloutonVPP possèdent des durées d'exécution comparables (de l'ordre de $1\times10^{-5}s$) et ceci quel que soit n (pour notre petit échantillon). Les algorithmes gloutons semblent posséder une certaine "stabilité en temps".
+\end{solution} 
+\question Discuter du choix du critère de sélection des algorithmes gloutons en fonction de $n$.
+\begin{solution} 
+(voir Annexe A) gloutonP semble le plus mauvais des trois car il ne fait jamais mieux que les deux autres ; gloutonV semble le meilleur pour des petits échantillons mais à partir de n=10 gloutonVPP domine les deux autres. Il faudrait toutefois pouvoir réaliser des tests sur des valeurs de n bien supérieures pour "solidifier" notre hypothèse.
+\end{solution} 
+
+
+
+
+
+
+
+
+
+\end{questions}
+\pagebreak
+\appendix
+\section{Performances des différentes algorithmes}
+\begin{table}[h]
+%{\rowcolors{3}{gray!35!black!10}{green!70!yellow!40}
+\begin{tabular}{ |p{2.6cm}|p{1.3cm}|p{1.3cm}|p{1.3cm}|p{1.3cm}|p{1.3cm}| }
+\hline
+\multicolumn{6}{|c|}{Durée d'exécution ( en s)$^*$ de différents algorithme en fonction du nombre d'objets pour le KP} \\
+\hline
+Algorithme& n=4&n=7&n=8& n=10&n=15\\
+\hline
+GLOUTONP & 8.490e-6 &1.284e-5&1.967e-5 & 1.857e-5 &2.559e-5 \\
+GLOUTONV & 1.059e-5   & 8.202e-6&1.487e-5 & 1.209e-5 &3.243e-5 \\
+GLOUTONVPP &2.071e-5 & 7.543e-6 &1.990e-5 & 1.431e-5 &2.716e-5\\
+\rowcolor{red}Algorithme Naif    &1.291e-4& 2.129e-3&4.348e-3 & 2.100e-2 &1.137 \\
+\hline
+\end{tabular}
+%}
+\caption{Durée d'exécution}
+\end{table}
+ \vspace{2mm}
+  * Calculs effectués sur 1000 itérations pour chaque fonction ; MacBook Pro IntelCore i5 2.4 GHz double coeur\\
+  \vspace{5mm}
+\begin{table}[h]
+%{\rowcolors{3}{gray!35!black!10}{green!70!yellow!40}
+\begin{tabular}{ |p{2.6cm}|p{1.3cm}|p{1.3cm}|p{1.3cm}|p{1.3cm}|p{1.3cm}| }
+\hline
+\multicolumn{6}{|c|}{Réponses$^{**}$ des différents algorithmes en fonction du nombre d'objets pour le KP} \\
+\hline
+Algorithme& n=4&n=7&n=8& n=10&n=15\\
+\hline
+GLOUTONP & \tiny\cellcolor{green}([1,1,0,0],\newline 11,25) &\tiny\cellcolor{green}([0, 1, 0, 1, 0, 0, 1], \newline 1735, 169)&\tiny\cellcolor{red}([1, 0, 0, 0, 1, 0, 1, 0], \newline 65, 102) &\tiny\cellcolor{red} ([0, 0, 0, 0, 0, 0, 1, 0, 1, 0], \newline154, 152)&\tiny\cellcolor{red}([1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1], \newline 1315, 682) \\
+GLOUTONV &\tiny\cellcolor{green}([1,1,0,0], \newline11, 25) &\tiny\cellcolor{green}([0, 1, 0, 1, 0, 0, 1], \newline 1735, 169)&\tiny\cellcolor{green}([1, 1, 1, 1, 0, 1, 0, 0],\newline 280, 102) & \tiny\cellcolor{orange}([1, 0, 0, 1, 0, 0, 0, 0, 1, 0],\newline 247, 156) &\tiny\cellcolor{red}([1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1],  \newline 1315, 682) \\
+GLOUTONVPP &\tiny\cellcolor{red}([1, 0, 1, 0],\newline 10,21) & \tiny\cellcolor{red}([1, 1, 1, 0, 0, 0, 0], \newline1478, 140) &\tiny\cellcolor{orange}([1, 1, 1, 1, 0, 0, 0, 1], \newline266, 73) &\tiny \cellcolor{green}([1, 1, 1, 1, 0, 1, 0, 0, 0, 0],\newline  309, 165) &\tiny \cellcolor{green}([0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0],\newline 1441, 740)\\
+Sol. Optimale  &\tiny([1,1,0,0], \newline11, 25)&\tiny ([0, 1, 0, 1, 0, 0, 1], \newline1735, 169)&\tiny([1, 1, 1, 1, 0, 1, 0, 0],\newline 280, 102) & \tiny([1, 1, 1, 1, 0, 1, 0, 0, 0, 0], \newline309, 165) &\tiny([0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0] ,\newline1458, 749) \\
+\hline
+\end{tabular}
+%}
+\caption{Comparaison des réponses obtenues}
+\end{table}
+ \vspace{2mm}
+
+** Code couleur pour les algorithmes gloutons\\
+{\color{green} Réponse optimale ou réponse approchée la plus proche}\\
+{\color{orange} Réponse approchée "intermédiaire"}\\
+{\color{red} Réponse approchée "éloignée"}
+\pagebreak
+\section{Question 4,6,7 - Proposition d'algorithmes}
+\begin{listing}[h]
+\begin{minted}
+[frame=leftline,
+framesep=2mm,
+baselinestretch=1.2,
+bgcolor=,
+fontsize=\footnotesize,
+linenos]{python}
+def gloutonP(l,maxi):
+    tmp=[x for x in l]
+    tmp.sort(key=lambda tup: tup[1],reverse=True)
+    valeur=0
+    poids=0
+    i=0
+    solution=[]   
+    while i<len(tmp):
+        if (poids+tmp[i][1]) <=maxi:
+            solution.append(tmp[i])
+            poids +=tmp[i][1]
+            valeur+=tmp[i][0]
+        i+=1
+    reponse=[1 if x in solution else 0 for x in l]               
+    return reponse,valeur,poids
+
+ \end{minted} 
+\end{listing}
+\begin{listing}[h]
+\begin{minted}
+[frame=leftline,
+framesep=2mm,
+baselinestretch=1.2,
+bgcolor=,
+fontsize=\footnotesize,
+linenos]{python}
+
+def gloutonV(l,maxi=30):
+    tmp=[x for x in l]
+    l.sort(key=lambda tup: tup[0],reverse=True)
+    valeur=0
+    poids=0
+    solution=[]
+    i=0
+    while i<len(tmp):
+        if (poids+tmp[i][1]) <=maxi:
+            solution.append(tmp[i])
+            poids +=tmp[i][1]
+            valeur+=tmp[i][0]
+        i+=1
+    reponse=[1 if x in solution else 0 for x in tmp]       
+    return reponse,valeur,poids
+ \end{minted} 
+\end{listing}
+
+\begin{listing}[h]
+\begin{minted}
+[frame=leftline,
+framesep=2mm,
+baselinestretch=1.2,
+bgcolor=,
+fontsize=\footnotesize,
+linenos]{python}
+
+def gloutonVPP(l,maxi=30):
+    tmp=[x for x in l]
+    l.sort(key=lambda tup: tup[0]/tup[1],reverse=True)
+    valeur=0
+    poids=0
+    solution=[]
+    i=0
+    while i<len(tmp):
+        if (poids+tmp[i][1]) <=maxi:
+            solution.append(tmp[i])
+            poids +=tmp[i][1]
+            valeur+=tmp[i][0]
+        i+=1
+    reponse=[1 if x in solution else 0 for x in tmp]        
+    return reponse,valeur,poids
+ \end{minted} 
+\end{listing}
+\pagebreak
+
+\end{document}
+

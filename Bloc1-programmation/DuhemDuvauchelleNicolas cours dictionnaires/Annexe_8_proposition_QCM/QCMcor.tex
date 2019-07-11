@@ -1,0 +1,183 @@
+% !TeX document-id = {8613a224-84c8-4428-9607-d4a0352535f7}
+%pdflatex -shell-escape doc4.tex
+%pythontex doc4.tex
+%pdflatex -shell-escape doc4.tex
+% !TeX TXS-program:compile = txs:///pdflatex/[--shell-escape]
+\documentclass[a4paper,12,answers]{exam}
+\usepackage{fourier}
+\usepackage{geometry}
+\geometry{vmargin=10mm,hmargin=5mm}
+\usepackage{fourier}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\geometry{vmargin=10mm,hmargin=5mm}
+%\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[francais]{babel}
+\usepackage{listings}
+\usepackage{pythontex}
+\usepackage{minted}
+%renewcommand\listingscaption{Code Source}
+\usepackage[table]{xcolor}
+\usepackage{graphicx}
+\graphicspath{ {/Users/the_brat/Documents/Mon_Latex} }
+\usepackage{tabto}
+%\usepackage{minibox}
+\definecolor{ivory}{rgb}{1.0, 1.0, 0.94}
+\definecolor{cadetgrey}{rgb}{0.57, 0.64, 0.69}
+\usepackage{tikz,lipsum,lmodern}
+\usepackage[most]{tcolorbox}
+
+\usepackage[titletoc]{appendix}
+\usepackage{wrapfig}
+%\usepackage[many]{tcolorbox}%https://tex.stackexchange.com/questions/262052/lstlisting-framed-with-the-caption-inside-the-frame
+%\tcbuselibrary{listings}
+
+
+\newcommand{\expandpyconc}[1]{\expandafter\reallyexpandpyconc\expandafter{#1}}
+\newcommand{\reallyexpandpyconc}[1]{\pyconc{exec(compile(open('#1', 'rb').read(), '#1', 'exec'))}}
+
+   
+
+\begin{document}
+\lhead{Lycée Jean Monnet - \textit{NSI}}
+\chead{}
+\rhead{\textit{Année} 2019/2020}
+
+\lfoot{                      }\cfoot{Page \thepage}\rfoot{\textsf{Aude Duhem, Sophie Duvauchelle, Patrice Nicolas}}
+\hrule
+\begin{center}
+	\textbf{\Large{QCM - Les dictionnaires et recherche en table }}\end{center}
+\hrule
+\vskip0.5cm
+	\begin{questions}
+		\question On désire enregistrer les notes ci-sessous d'un élève par matière dans un objet de type dictionnaire : 
+		\begin{center}
+		\begin{tabular}{|c|c|c|c|}
+		\hline
+		Matière (Clé) & "maths"&"anglais"&"sport"\\
+		\hline
+		 Liste de notes (Valeur)&[13,15] &[16,12,14]&[17]\\
+		 \hline
+		\end{tabular}
+	\end{center}
+		Quelle est la succession d'instructions qui ne convient pas ?
+		Cocher la bonne réponse:
+		\begin{checkboxes}
+			\choice Réponse A : 
+\begin{pyverbatim}
+Notes={}
+Notes['maths']=[13,15]
+Notes['anglais']=[16,12,14]
+Notes['sport']=[17]
+\end{pyverbatim}
+\choice Réponse B :
+\begin{pyverbatim}
+Notes={'anglais': [16, 12, 14], 'sport': [17],'maths': [13, 15]}
+\end{pyverbatim}
+\choice Réponse C :
+\begin{pyverbatim}
+matieres=['maths','anglais','sport']
+resultats=[[13, 15],[16, 12, 14], [17]]
+Notes={}
+for i in range(len(matieres)):
+	Notes[i]=resultats[i]
+\end{pyverbatim}
+\end{checkboxes}		
+
+\begin{solution}
+C'est la réponse C, qui ne convient pas. En effet, dans la console, on obtient le résultat suivant :
+\begin{pyconsole}
+matieres=['maths','anglais','sport']
+resultats=[[13, 15],[16, 12, 14], [17]]
+Notes={}
+for i in range(len(matieres)):
+	Notes[i]=resultats[i]
+Notes
+\end{pyconsole}
+\end{solution}
+
+\question Un QCM est une liste de plusieurs questions auxquelles sont associées plusieurs réponses possibles. On peut donc coder un QCM par une liste de dictionnaires.
+On dispose d'un tel questionnaire codé en Python : \\
+\begin{tcolorbox}[enhanced,colback=blue!5!white,colframe=blue!75!black]	
+\begin{pyverbatim}
+QCM = [{'question' : "Python est un langage  ",'correcte': 'interprété', 'incorrecte':'compilé' },
+		{'question' : "En Python, l'opérateur // fait ",'correcte': 'une division entière',
+		 'incorrecte':'une division décimale' },
+		{'question' : "En Python le mot clé utilisé pour déclarer une fonction est  ",
+		'correcte': 'def', 'incorrecte':'fun' }]
+\end{pyverbatim} 
+\end{tcolorbox}
+On désire procéder à l'affichage de toutes les questions et les réponses associées possibles. Quelle est la fonction qui convient ?
+Cocher la bonne réponse:
+\begin{checkboxes}
+\choice Réponse A : 
+\begin{pyverbatim}
+def questionnaire(qs):
+	"""Pose toutes les questions du questionnaire "qs" passé en argument."""
+	for i in range(len(qs)):
+		print("Question", i+1, ":")
+		for d in  qs[i].values():
+			print(d)
+\end{pyverbatim}
+\choice Réponse B :
+\begin{pyverbatim}
+def questionnaire(qs):
+	"""Pose toutes les questions du questionnaire "qs" passé en argument."""
+	for i in range(len(qs)):
+		print("Question", i+1, ":")
+		for d in  qs[i].keys():
+			print(d)
+\end{pyverbatim}
+\choice Réponse C :
+\begin{pyverbatim}
+def questionnaire(qs):
+	"""Pose toutes les questions du questionnaire "qs" passé en argument."""
+	for i in range(len(qs)):
+		print("Question", i+1, ":")
+		for d in  qs[i].items():
+			print(d)
+\end{pyverbatim}
+\end{checkboxes}		
+\begin{solution}
+C'est la réponse A, qui convient. En effet, dans la console, on obtient les résultats suivants :
+\begin{pyconsole}
+QCM = [{'question' : "Python est un langage  ",'correcte': 'interprété', 'incorrecte':'compilé' },
+{'question' : "En Python, l'opérateur // fait ",'correcte': 'une division entière',
+	'incorrecte':'une division décimale' },
+{'question' : "En Python le mot clé utilisé pour déclarer une fonction est  ",
+	'correcte': 'def', 'incorrecte':'fun' }]
+#reponse A
+def questionnaire(qs):
+	"""Pose toutes les questions du questionnaire "qs" passé en argument."""
+	for i in range(len(qs)):
+		print("Question", i+1, ":")
+		for d in  qs[i].values():
+			print(d)
+
+questionnaire(QCM)
+#reponse B
+def questionnaire(qs):
+	"""Pose toutes les questions du questionnaire "qs" passé en argument."""
+	for i in range(len(qs)):
+		print("Question", i+1, ":")
+		for d in  qs[i].keys():
+			print(d)
+
+questionnaire(QCM)	
+#reponse C
+def questionnaire(qs):
+	"""Pose toutes les questions du questionnaire "qs" passé en argument."""
+	for i in range(len(qs)):
+		print("Question", i+1, ":")
+		for d in  qs[i].items():
+			print(d)
+
+questionnaire(QCM)	
+\end{pyconsole}
+\end{solution}
+
+\end{questions}	
+\end{document}    
+
+

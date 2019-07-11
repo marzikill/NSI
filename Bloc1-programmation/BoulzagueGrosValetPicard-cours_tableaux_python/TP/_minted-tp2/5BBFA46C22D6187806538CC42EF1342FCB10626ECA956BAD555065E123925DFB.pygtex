@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{o}{\PYGZgt{}\PYGZgt{}\PYGZgt{}} \PYG{n}{t} \PYG{o}{=} \PYG{p}{[}\PYG{l+m+mi}{5}\PYG{p}{,} \PYG{l+m+mi}{7}\PYG{p}{,} \PYG{l+m+mi}{9}\PYG{p}{,} \PYG{l+m+mi}{5}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{]}
+\PYG{o}{\PYGZgt{}\PYGZgt{}\PYGZgt{}} \PYG{n}{e} \PYG{o}{=} \PYG{l+m+mi}{666}
+\PYG{o}{\PYGZgt{}\PYGZgt{}\PYGZgt{}} \PYG{n}{insere}\PYG{p}{(}\PYG{n}{t}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{,} \PYG{n}{e}\PYG{p}{)}
+\PYG{o}{\PYGZgt{}\PYGZgt{}\PYGZgt{}} \PYG{n}{insere}\PYG{p}{(}\PYG{n}{t}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{e}\PYG{p}{)}
+\PYG{o}{\PYGZgt{}\PYGZgt{}\PYGZgt{}} \PYG{n}{insere}\PYG{p}{(}\PYG{n}{t}\PYG{p}{,} \PYG{l+m+mi}{5}\PYG{p}{,} \PYG{n}{e}\PYG{p}{)}
+\end{Verbatim}

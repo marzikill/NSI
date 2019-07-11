@@ -1,0 +1,259 @@
+%! TEX program = xelatex
+% Nécessaire pour la compilation pstricks
+\documentclass[12pt]{article}                   % autres choix : report, book
+\usepackage[a4paper]{geometry}                  % taille correcte du papier
+\usepackage{silence}                            % Filtrer tous ces warnings ennuyeux
+\usepackage[utf8]{inputenc}                     % encodage du fichier source
+\usepackage[T1]{fontenc}                        % gestion des accents (pour les pdf)
+\usepackage[french]{babel}                    % rajouter éventuellement english, greek, etc.
+\usepackage{eurosym}                            % symbole euro
+
+\usepackage{textcomp}                           % caractères additionnels
+\usepackage{lmodern}                            % remplacer éventuellement par txfonts, fourier, etc.
+\usepackage{amsmath,amssymb, amsthm}            % tout ce qu'il faut pour écrire des maths
+\usepackage{dsfont}                             % Pour la fonction indactrice
+\usepackage{xfrac}                              % fraction d'anneau
+
+\usepackage{adforn}                             % Ornements header
+\usepackage{yfonts}                             % Fontes gothiques supplémentaires
+\usepackage{fourier-orns}                       % Ornements header
+\usepackage{mathpazo}
+\usepackage{pstricks,pst-plot,pstricks-add}     % tracer des fonctions
+\usepackage[linesnumbered, french]{algorithm2e} % mise en page des algorithmes
+\usepackage{tikz, tkz-euclide, tkz-tab}         % Dessiner aver tikz
+\usetkzobj{all}                                 % et tout plein de paquets utiles
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{automata,positioning}
+\usetikzlibrary{decorations.pathreplacing,calc}
+\usetikzlibrary{arrows}
+\usetikzlibrary{calc}
+\usetikzlibrary{decorations.fractals}           % Dessiner les fractales usuelles
+\usepackage{enumitem}                           % 1, 2, 3...
+\usepackage{pgffor}                             % Pour faire des boucles
+
+\usepackage{multicol}
+\usepackage{comment}
+\usepackage{array}                              % tableaux un peu plus paramétrables
+\usepackage{minted}
+
+\usepackage{graphicx}                           % pour inclure des images
+\usepackage{xspace}                             % protection des espaces
+\usepackage{xcolor}                             % pour gérer les couleurs
+\usepackage{microtype}                          % améliorations typographiques
+\usepackage{hyperref}                           % gestion des hyperliens
+\hypersetup{
+    colorlinks = true,
+    linkcolor = blue!50!gray!100!,
+    linkbordercolor = {white},
+}
+\hypersetup{pdfstartview=XYZ}                   % Zoom hyperref
+ 
+%%%%%%%%%%%
+%% Maths %%
+%%%%%%%%%%%
+% Raccourcis pour les trucs longs à écrire. Reste d'Oxford principalement. 
+\newcommand{\Prob}[2][]{\mathbb{P}_{#1}\left( #2 \right)}
+\newcommand{\Exp}[2][]{\mathbb{E}_{#1}\left[ #2 \right]}
+\newcommand{\Lawconv}{\stackrel{\mathcal{L}}{\longrightarrow}}
+\newcommand{\Var}[1]{\mbox{Var}\left(#1 \right)}
+\newcommand{\Card}[1]{\mbox{Card}\left(#1 \right)}
+\newcommand{\Int}[4]{\int_{#1}^{#2} \! {#3} \, \mathrm{d}{#4}}
+\newcommand{\kw}{\;|\;}
+\newcommand{\im}{\textrm{Im}}
+\newcommand{\disclamer}{\textit{L’usage de toute calculatrice, téléphone portable, ordinateur est strictement interdit. Un soin tout particulier devra être porté à la qualité et à la précision de la rédaction des argument } \vspace{1.cm}}
+\newcommand{\legendeexos}{
+\paragraph{Légende des exercices.}
+\begin{center}
+\begin{tabular}{cccc}
+$\clubsuit$ : très flacile & $\varheart$ : à savoir par cœur & $\vardiamond$ : care aux calculs & $\spadesuit$ : qui s'y frotte s'y pique 
+\end{tabular}
+\end{center}
+}
+
+%%%%%%%%%%%%%%%%
+%% Structures %%
+%%%%%%%%%%%%%%%%
+
+\newcounter{dfcount}
+{\theoremstyle{definition} \newtheorem{definition}[dfcount]{Définition}}
+\newcounter{propcount}
+\newtheorem{propriete}[propcount]{Propriété}
+\newcounter{thcount}
+\newtheorem{theoreme}[thcount]{Théorème}
+\newcounter{excount}
+{\theoremstyle{definition} \newtheorem{exemple}[excount]{Exemple}}
+\renewcommand{\theexemple}{\arabic{exemple}}
+% Environnement exos
+\newcounter{exoscount}
+\newtheoremstyle{exercicestyle} % name of the style to be used
+  {20pt}                        % measure of space to leave above the theorem. E.g.: 3pt
+  {3pt}                         % measure of space to leave below the theorem. E.g.: 3pt
+  {}                            % name of font to use in the body of the theorem
+  {}                            % measure of space to indent
+  {\bfseries}                   % name of head font
+  {.}                           % punctuation between head and body
+  {.5em}                        % space after theorem head; " " = normal interword space
+  {}                            % Manually specify head
+\theoremstyle{exercicestyle}
+\newtheorem{exos}[exoscount]{Exercice}
+\newenvironment{exo}[2]
+  {
+   \begin{exos}[#1]
+   \leavevmode
+   \marginpar{\hfill $#2 $ }}
+  {\end{exos}}
+
+\newenvironment{prob}{ \begin{center}
+\Large{ \textsc{Problème}} \end{center} }{ \sepdown }
+
+ % Théorèmes/propriétés avec un retour à la ligne.
+\newtheoremstyle{break2}
+  {\topsep}%   Space before theorem
+  {\topsep}%   Space after theorem
+  {\itshape}%  Body font
+  {}%          Indent amount (empty = no indent, \parindent = para indent)
+  {\bfseries}% Thm head font   
+  {}%         Punctuation after thm head
+  {.5em }%  Space after thm head (\newline = linebreak)
+  {\thmname{#1}\thmnumber{ #2}\thmnote{ (#3)}.}% Thm head spec
+
+\theoremstyle{break2}
+\newtheorem{fbth}[thcount]{Théorème}
+\newenvironment{bth}[1][]{\begin{fbth}[#1]\item\relax}{\end{fbth}}
+
+\newtheorem{fbprop}[propcount]{Propriété}
+\newenvironment{bprop}[1][]{\begin{fbprop}[#1]\item\relax}{\end{fbprop}}
+
+ % Théorèmes/propriétés avec un retour à la ligne.
+\newtheoremstyle{break3}
+  {\topsep}%   Space before theorem
+  {\topsep}%   Space after theorem
+  {}%  Body font
+  {}%          Indent amount (empty = no indent, \parindent = para indent)
+  {\bfseries}% Thm head font   
+  {}%         Punctuation after thm head
+  {.5em }%  Space after thm head (\newline = linebreak)
+  {\thmname{#1}\thmnumber{ #2}\thmnote{ (#3)}.}% Thm head spec
+
+\theoremstyle{break3}
+\newtheorem{fbdf}[dfcount]{Définition}
+\newenvironment{bdef}[1][]{\begin{fbdf}[#1]\item\relax}{\end{fbdf}}
+
+% Répéter un exercice n fois
+\newcommand{\looped}[2]{
+	\foreach \n in {1,...,#1}{
+		#2
+	}
+}
+%%%%%%%%%%%%%%%%%%
+%% Mise en page %%
+%%%%%%%%%%%%%%%%%%
+
+\setlength{\textheight}{26.2cm}
+\setlength{\textwidth}{17.0cm}
+\setlength{\oddsidemargin}{-0.5cm}
+\setlength{\evensidemargin}{0.0cm}
+\setlength{\topmargin}{-2.0cm}
+\pagestyle{empty}
+\newif \ifnote
+\notefalse
+\reversemarginpar
+
+\usepackage{titlesec}      % Interlignes pas trop gros
+\titlespacing{\paragraph}{ %
+  0pt}{                    % left margin
+  1\baselineskip}{         % space before (vertical)
+  1em}                     % space after (horizontal)
+
+\usepackage{titlesec}
+%\titleformat
+%   {\section} % <command>
+%   {\normalfont\Large\bfseries} % <format>
+%   {\thesection} % <label>
+%   {1em} % <sep>
+%   {} % <before-code>
+%\titleformat{\section}{\bfseries\sffamily\large}{\thesection.}{\hspace{1cm}}{}%
+\titlespacing*                  % starred version: first paragraph is not indented
+    {\section}                  % <command>
+    {-22pt}                     % <left>
+    {3.5ex plus 1ex minus .2ex} % <before-sep>
+    {2.3ex plus .2ex}           % <after-sep>
+
+
+\setlength{\columnseprule}{1pt}        % Séparateur vertical dans multicol
+\def\columnseprulecolor{\color{black}} % De couleur noire.
+
+% Type de colonnes pour array
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+
+% Filtrer les messages d'erreur kisoulent 
+\WarningFilter{latex}{Marginpar on page}
+\WarningFilter{latexfont}{Size}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Faire du joli latex %% 
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Faire des cœurs et des carreaux 
+\DeclareSymbolFont{extraup}{U}{zavm}{m}{n}
+\DeclareMathSymbol{\varheart}{\mathalpha}{extraup}{86}
+\DeclareMathSymbol{\vardiamond}{\mathalpha}{extraup}{87}
+
+% Police verbatim + souligné (links)
+\usepackage[normalem]{ulem}
+\useunder{\uline}{\ulined}{}%
+\DeclareUrlCommand{\bulurl}{\def\UrlFont{\ttfamily\ulined}}
+
+\begin{document}
+\vspace{-0.5cm}
+\begin{minted}
+[
+frame=lines,
+framesep=2mm,
+linenos
+]
+{python}
+# Initialiser un tableau de taille n.
+tableau = [0]*n
+
+# Définir un tableau dont on connait les éléments.
+tableau = [3, 4, 5, 7, 12, 18]
+#          ^  ^  ^  ^   ^   ^
+# Indice   0  1  2  3   4   5
+# Taille du tableau : 6 
+
+# Éléments.
+tableau[1]              # renvoie 4
+tableau[5]              # renvoie 18
+# /!\/!\/!\/!\/!\
+tableau[6]              # IndexError
+
+# Affectation.
+t[3] = 42               # écrase la valeur 7 du tableau
+                        # et la remplace par la valeur 42.
+                        # Après exécution : tableau est 
+                        # [3, 4, 5, 42, 12, 18].
+
+# Fonctions/méthodes.
+# Taille d'un tableau :
+len(tableau)            # renvoie 6
+# /!\/!\/!\/!\/!\
+tableau[len(tableau)]   # IndexError
+# Dernier élément :
+tableau[len(tableau) - 1]
+
+# Itérer sur les indices d'un tableau.
+for i in range(len(t)):
+    # Traitement à effectuer. 
+    # Indice de la case courante : i
+    # Contenu de la case courante : t[i]
+
+# Itérer sur les éléments d'un tableau.
+for e in t:
+    # Traitement à effectuer. Case courante :
+    # Indice de la case courante : ???
+    # Contenu de la case courante : e
+\end{minted}
+\end{document}
+ 

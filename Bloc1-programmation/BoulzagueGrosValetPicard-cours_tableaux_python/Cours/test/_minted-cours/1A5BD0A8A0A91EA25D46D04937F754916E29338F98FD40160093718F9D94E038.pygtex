@@ -1,0 +1,14 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{from} \PYG{n+nn}{math} \PYG{k+kn}{import} \PYG{o}{*}
+
+\PYG{k}{def} \PYG{n+nf}{recopie}\PYG{p}{(}\PYG{n}{t}\PYG{p}{):}
+    \PYG{n}{n} \PYG{o}{=} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{t}\PYG{p}{)}
+    \PYG{n}{tc} \PYG{o}{=} \PYG{p}{[]}\PYG{o}{*}\PYG{n}{n}
+    \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{n}\PYG{p}{):}
+        \PYG{n}{tc}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{n}{t}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}
+    \PYG{k}{return} \PYG{n}{tc}
+
+\PYG{n}{t} \PYG{o}{=} \PYG{p}{[}\PYG{l+m+mi}{4}\PYG{p}{,} \PYG{l+m+mi}{5}\PYG{p}{,} \PYG{l+m+mi}{8}\PYG{p}{,} \PYG{l+m+mi}{7}\PYG{p}{]}
+\PYG{n}{tc} \PYG{o}{=} \PYG{n}{recopie}\PYG{p}{(}\PYG{n}{t}\PYG{p}{)}
+\PYG{c+c1}{\PYGZsh{}print(recopie(t))}
+\end{Verbatim}

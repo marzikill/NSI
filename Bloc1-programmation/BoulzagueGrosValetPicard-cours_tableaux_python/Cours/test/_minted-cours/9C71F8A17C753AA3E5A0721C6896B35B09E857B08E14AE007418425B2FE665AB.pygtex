@@ -1,0 +1,8 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{Traceback} \PYG{p}{(}\PYG{n}{most} \PYG{n}{recent} \PYG{n}{call} \PYG{n}{last}\PYG{p}{):}
+  \PYG{n}{File} \PYG{l+s+s2}{\PYGZdq{}py\PYGZus{}default\PYGZus{}default.py\PYGZdq{}}\PYG{p}{,} \PYG{n}{line} \PYG{l+m+mi}{12}\PYG{p}{,} \PYG{o+ow}{in} \PYG{o}{\PYGZlt{}}\PYG{n}{module}\PYG{o}{\PYGZgt{}}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Tableau recopié\PYGZsq{}}\PYG{p}{,} \PYG{n}{recopie}\PYG{p}{(}\PYG{n}{t}\PYG{p}{))}
+  \PYG{n}{File} \PYG{l+s+s2}{\PYGZdq{}py\PYGZus{}default\PYGZus{}default.py\PYGZdq{}}\PYG{p}{,} \PYG{n}{line} \PYG{l+m+mi}{7}\PYG{p}{,} \PYG{o+ow}{in} \PYG{n}{recopie}
+    \PYG{n}{tc}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{n}{t}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}
+\PYG{n+ne}{IndexError}\PYG{p}{:} \PYG{n+nb}{list} \PYG{n}{assignment} \PYG{n}{index} \PYG{n}{out} \PYG{n}{of} \PYG{n+nb}{range}
+\end{Verbatim}

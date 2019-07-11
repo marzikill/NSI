@@ -1,0 +1,37 @@
+html {
+  font-family: "Lucida Sans", sans-serif;
+  color: #OOffff;
+}
+h1 {
+	text-align: center;
+	color: #9933cc;
+	font-family: verdana;
+	font-size: 160%;
+}
+
+footer {
+  position: -webkit-sticky;
+  position: sticky;
+  bottom: 0;
+  padding: 5px;
+  border: 2px solid #4CAF50;
+  background-color: #9933cc;
+  color: #252525;
+  text-align: left;
+  padding: 15px;
+}
+
+td {
+    width: 10em;
+    height: 2em;
+    text-align: center;
+    vertical-align: middle;
+ }
+
+td.lumiere { background: #bbbbbb; }
+tr.lumiere { background: #888888; }
+
+table {
+	margin: auto;
+	
+}

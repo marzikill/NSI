@@ -1,0 +1,228 @@
+\documentclass[a4paper,12pt,dvips]{article}
+\usepackage[np]{numprint}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{fourier}
+\usepackage{array,multicol,multirow,enumerate,eurosym,colortbl,fourier}
+\usepackage{amsmath}
+\usepackage{graphicx,pst-all,color,tabularx}
+%\usepackage{lscape}
+\usepackage{tabularx}
+\usepackage{amsmath,amsfonts,amsthm,amssymb,geometry,variations,tabularx}
+%\usepackage{frcursive}
+\usepackage{fancyhdr}
+\usepackage{lscape}
+%\input tabvar.tex
+\setlength{\parindent}{0mm}
+\def\d{$\diamond \,$}
+\def\*{\times}
+\def\Euro{\textgreek{\euro}\ }
+\def\m@th{\mathsurround=0pt}
+\def\trou#1{
+    \setbox0=\hbox{\textbf{#1}} \dp0=0pt \m@th
+    \underline{\hbox{\hskip\wd0}}n
+}
+\newenvironment{listerd}%
+	{\begin{list}{\Listerd}{}}%
+	{\end{list}}
+	\newcommand{\oijk}[1][O]{\DecalV[.8pt]{#1;\vec{\imath},\vec{\jmath},\vec{k}\,}\xspace}
+\newcommand{\Q}{\mbox{\ding{114}\hspace{-.7em}\raisebox{.2ex}[1ex]{\ding{51}}}}
+
+\newcommand{\VF}{%
+	\hfill\makebox[1cm][s]{\bf V\hfill F}
+	}
+	
+\newcommand{\Rep}[1][]{%
+	\ifthenelse{\equal{#1}{v}}{%
+		\hfill\makebox[1cm][s]{\Q\hfill \ding{114}}}{%
+		\ifthenelse{\equal{#1}{f}}{%
+			\hfill\makebox[1cm][s]{\ding{114} \hfill\Q}}{%
+			\hfill\makebox[1cm][s]{\ding{114} \hfill\ding{114}}}}}
+
+\newcommand{\MaGrille}[5][10]{%
+	\psgrid[gridlabels=0,%
+	        subgriddiv=0,%
+			gridwidth=0.5pt,%
+			griddots=#1](0,0)(#2,#3)(#4,#5)}
+
+\newcommand{\MesAxes}[5][.6pt]{%
+	{\footnotesize
+	\psaxes[labelsep=3pt,ticksize=2pt,linewidth=#1]{->}(0,0)(#2,#3)(#4,#5)
+	\pnode(#4,0){XX}\pnode(0,#5){YY}}}
+
+\newcommand{\machine}[4]{
+        \begin{pspicture}
+        \rput(0,0){\rnode{A}{#1}}
+        \rput(3,0.11){\rnode{B}{#2}}
+        \psset{nodesep=5pt}
+        \ncarc[arcangleA=25,arcangleB=25]{->}{A}{B}\mput*{\ovalnode{m}{#3}}
+        \ncarc[arcangleA=25,arcangleB=25]{->}{B}{A}\mput*{\ovalnode{d}{#4}}
+        \end{pspicture}
+        \hskip 3.1cm}
+\newcommand{\cylindre}[5]{
+\pstGeonode[PointSymbol=*,PointName=#2](0,0){#1}
+\pstGeonode[PointSymbol=none,PointName=none](10,0){Aamoi}
+\pstGeonode[PointSymbol=none,PointName=none](#4,#3){HG}
+\pstGeonode[PointSymbol=none,PointName=none](-#4,#3){HD}
+\pstGeonode[PointSymbol=none,PointName=none](#4,0){BG}
+\pstGeonode[PointSymbol=none,PointName=none](-#4,0){BD}
+\pstLineAB{HG}{BG}
+\pstLineAB{HD}{BD}
+
+\psplot[linestyle=dashed]{-#4}{#4}{#4 2 exp x 2 exp sub .5 exp #5 mul}
+\psplot{-#4}{#4}{#4 2 exp x 2 exp sub .5 exp -#5 mul}
+\psplot{-#4}{#4}{#4 2 exp x 2 exp sub .5 exp #5 mul #3 add}
+\psplot{-#4}{#4}{#4 2 exp x 2 exp sub .5 exp -#5 mul #3 add}
+}
+
+\newcommand{\cone}[7]{
+\pstGeonode[PointSymbol=*,PointName=#2](0,0){#1}
+\pstGeonode[PointSymbol=none,PointName=none](10,0){Aamoi}
+\pstGeonode[PointSymbol=none,PointName=none](0,#3){Hsommet}
+\pstMiddleAB[PointSymbol=none,PointName=none]{#1}{Hsommet}{Milieuu}
+\pstInterCC[PointSymbol=none,PointName=none,RadiusA=\pstDistVal{#6}]{#1}{}{Milieuu}{Hsommet}{Ibidon}{Jbidon}
+\pstProjection[PointSymbol=none,PointName=none]{#1}{Aamoi}{Jbidon}{Jbidon'}
+\pstProjection[PointSymbol=none,PointName=none]{#1}{Aamoi}{Ibidon}{Ibidon'}
+
+\psplot[linestyle=dashed]{-#6}{#6}{#6 2 exp x 2 exp sub .5 exp #7 mul}
+\psplot{-#6}{#6}{#6 2 exp x 2 exp sub .5 exp -#7 mul}
+\pstHomO[HomCoef=#7,PointSymbol=none,PointName=#5]{#1}{Hsommet}{#4}
+\pstHomO[HomCoef=#7,PointSymbol=none,PointName=none]{Jbidon'}{Jbidon}{T1}
+\pstHomO[HomCoef=#7,PointSymbol=none,PointName=none]{Ibidon'}{Ibidon}{T2}
+\pstLineAB{#4}{T1}
+\pstLineAB{#4}{T2}
+}
+
+\newcommand{\rapporteur}{
+\SpecialCoor
+\pscircle{5}
+\multido{\i=0+1}{181}{\psline(5;\i)}
+\pscircle[fillcolor=white,fillstyle=solid,linestyle=none]{4.5}
+\multido{\i=0+10}{19}{\psline(5;\i)}
+\pscircle[fillcolor=white,fillstyle=solid,linestyle=none]{4}
+\pscircle[fillcolor=white,fillstyle=solid]{3}
+\psframe[fillcolor=white,fillstyle=solid,linestyle=none](5,-5.1)(-5,-1.75)
+\pscircle[fillcolor=white,fillstyle=solid]{.5}
+\psframe[fillcolor=white,fillstyle=solid](-5,-1.75)(5,0)
+\psline[linecolor=white](-.5,0)(.5,0)
+\psline[linecolor=white](-3,0)(-4,0)
+\psline[linecolor=white](3,0)(4,0)
+\pscircle[fillcolor=white,fillstyle=solid]{.05}
+\NormalCoor
+}
+
+\newcommand{\QCM}[4]{
+    \begin{tabular}[t]{p{13cm}c}
+    #1 & \psset{xunit=1 cm}
+    \begin{pspicture}(-0.3,0)(1.5,0.5)
+    \pspolygon(0,0)(1.5,0)(1.5,-.5)(0,-.5)
+    \psline(.5,0)(.5,-.5) \psline(1,0)(1,-.5)
+    \uput[90](0.25,0){A}  \uput[90](0.75,0){B} \uput[90](1.25,0){C}
+    \end{pspicture} \\
+    A: #2 \qquad B: #3 \qquad C: #4 & \\
+    \end{tabular}}
+
+\newcommand{\smallbox}{
+    \begin{pspicture}(.5,.5)
+    \pspolygon(0,0)(.25,0)(.25,.25)(0,.25)
+    \end{pspicture}}
+
+\renewcommand{\vec}[1]
+{\mathord{\setbox0\hbox{$#1$} \mathop{\smash{#1}\setbox1\copy0\ht1 0.8\ht0
+\vphantom{\copy1}\mskip0.8\thinmuskip}
+\limits^{\hbox to\wd0{$\mskip0.8\thinmuskip$\rightarrowfill}}\mskip-0.8\thinmuskip}}
+
+\newcommand{\system}[2]{
+\left\{
+\begin{array}{l}
+#1\\
+#2
+\end{array}
+\right.
+}
+
+\newcolumntype{I}{!{\vrule width 1.5pt}}
+\newlength\savedwidth
+\newcommand\whline{\noalign{\global\savedwidth\arrayrulewidth\global\arrayrulewidth
+1.5pt} \hline \noalign{\global\arrayrulewidth\savedwidth}}
+% Marges
+\geometry{ hmargin=0.5cm, vmargin=1.5cm }
+\usepackage{mathrsfs}   % Police de maths joli caligraphie
+\newcommand{\Calig}[1]{\ensuremath{\mathscr{#1}}}
+% Exo
+\newcommand{\MonRepereij}[1][3pt 3]{%
+	\psline[arrowsize=#1,linewidth=1.2pt]{<->}(1,0)(0,0)(0,1)
+	\uput{.2cm}[270](0.5,0){$\vec{\imath}$}
+	\uput{.25cm}[180](0,0.5){$\vec{\jmath}$}}
+	\newcommand{\vecteur}[1]{%
+	\overrightarrow{\rule{0em}{1.8ex} #1 \rule{0.15em}{0ex}}}
+\newcounter{nexo}
+\setcounter{nexo}{0}
+\newcommand{\exo}{
+    \stepcounter{nexo}
+    {\textbf{$\triangleright$ \underline{Exercice \arabic{nexo} :}}}
+}% Questions
+\newenvironment{questions}{\begin{enumerate}[1 $\, \diamond$]}{\end{enumerate}}
+
+    \lhead{\textsf{Lycée } - \textit{NSI}}
+    \chead{Dictionnaires et recherche en table}
+    \rhead{\textit{Année} 2019/2020}
+    \rfoot{\textsf{Aude Duhem, Sophie Duvauchelle, Patrice Nicolas}}
+    \pagestyle{fancy}
+  \renewcommand{\headrulewidth}{0.5pt}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Début du document %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+%\begin{landscape}
+ \begin{center}
+\large\textbf{Dictionnaires et recherche en table - TP - Compléments pédagogiques}
+\end{center}
+ \hrule\vspace{\baselineskip}
+ \normalsize
+ Pré-requis : \\
+  $\ast$ les mêmes que ceux de la feuille d'exercices 
+ $\ast$ + boucle while, avoir fait des recherche en table sur des listes et une fusion sur les listes, module random (exercice pour aller plus loin)\\
+
+
+intérêt :\\
+$\ast$ exercices variés : débranché ou pas\\
+$\ast$ difficulté croissante\\
+$\ast$ plus ou moins guidé \\
+
+Compétences attendues :\\
+$\ast$ Approfondissement  : des types dictionnaire et liste, méthode par compréhension, recherche en table\\
+$\ast$ savoir distinguer les différents types tuple, list et dictionnaire et comprendre l'intérêt au recours d'un dictionnaire dans le cas d'un travail sur des données en table : recherche ou fusion \\
+$\ast$ première sensibilisation à la notion de complexité\\
+\hrule
+\setcounter{nexo}{0}
+\exo - 
+recodage des fonctions/methodes dict, clear, get , copy\\
+L'élève doit proposer des tests pertinents pour les fonctions proposées.
+Correction au fur et à mesure selon l’avancement des élèves 
+et explication de l’intérêt d’une fonction copy (avec un exemple pertinent)\\
+Cet exercice va permettre de prendre conscience du coût de l'utilisation d'une telle fonction.\\
+\hrule
+\exo réactivation/approfondissement du principe d'une recherche dans une table \\
+comparaison complexité de la recherche en table dans une liste et dans un dictionnaire et première sensibilisation à la notion de complexité\\
+Cet exercice était initialement plus approfondi, on voulait également comparer une boucle for et une boucle while dans le cas d'une recherche en table. Les résultats obtenus ne se sont pas avérés significatifs.\\
+\hrule
+\exo - Gestion des données en tables via un exemple de gestion de bibliothèque.\\
+intérêt :\\
+$\bullet$ Recherche de données et extraction de données sous forme de listes et ou de dictionnaire : recours aux methodes  append et par compréhension\\
+$\bullet$ Création de dictionnaires résultant des valeurs contenues dans le dictionnaire (et implicitement fusion également) ou d'une fusion de deux dictionnaire \\
+\hrule
+\begin{center}
+	Ces exercices s'adressent aux élèves voulant aller plus loin, permettant aux élèves à l'aise d'approfondir les notions
+\end{center}
+\exo\\
+création d'un dictionnaire en inversant les clef/valeur\\
+création d'un dictionnaire à partir de deux dictionnaire par composition\\
+\hrule
+\vskip0.1cm
+\exo - Des anagrammes \\
+exercice portant sur la notion d'anagrammes et création d'un dictionnaire d'anagrammes pour une liste de mots donnés\\
+
+
+\end{document}

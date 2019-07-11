@@ -1,0 +1,427 @@
+%! TEX program = xelatex
+% Nécessaire pour la compilation pstricks
+\documentclass[10pt]{article}                   % autres choix : report, book
+\usepackage[a4paper]{geometry}                  % taille correcte du papier
+\usepackage{silence}                            % Filtrer tous ces warnings ennuyeux
+\usepackage[utf8]{inputenc}                     % encodage du fichier source
+\usepackage[T1]{fontenc}                        % gestion des accents (pour les pdf)
+\usepackage[french]{babel}                    % rajouter éventuellement english, greek, etc.
+\usepackage{eurosym}                            % symbole euro
+
+\usepackage{textcomp}                           % caractères additionnels
+\usepackage{lmodern}                            % remplacer éventuellement par txfonts, fourier, etc.
+\usepackage{amsmath,amssymb, amsthm}            % tout ce qu'il faut pour écrire des maths
+\usepackage{dsfont}                             % Pour la fonction indactrice
+\usepackage{xfrac}                              % fraction d'anneau
+
+\usepackage{adforn}                             % Ornements header
+\usepackage{yfonts}                             % Fontes gothiques supplémentaires
+\usepackage{fourier-orns}                       % Ornements header
+\usepackage{mathpazo}
+\usepackage{pstricks,pst-plot,pstricks-add}     % tracer des fonctions
+\usepackage[linesnumbered, french]{algorithm2e} % mise en page des algorithmes
+\usepackage{tikz, tkz-euclide, tkz-tab}         % Dessiner aver tikz
+\usetkzobj{all}                                 % et tout plein de paquets utiles
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{automata,positioning}
+\usetikzlibrary{decorations.pathreplacing,calc}
+\usetikzlibrary{arrows}
+\usetikzlibrary{calc}
+\usetikzlibrary{decorations.fractals}           % Dessiner les fractales usuelles
+\usepackage{enumitem}                           % 1, 2, 3...
+\usepackage{pgffor}                             % Pour faire des boucles
+
+\usepackage{multicol}
+\usepackage{comment}
+\usepackage{array}                              % tableaux un peu plus paramétrables
+%\usepackage[makestderr]{pythontex}             % lors d'un qcm, désactiver pythontex
+\usepackage[bloc, completemulti, nowatermark]{automultiplechoice}
+\usepackage{minted}
+
+\usepackage{graphicx}                           % pour inclure des images
+\usepackage{xspace}                             % protection des espaces
+\usepackage{xcolor}                             % pour gérer les couleurs
+\usepackage{microtype}                          % améliorations typographiques
+\usepackage{hyperref}                           % gestion des hyperliens
+\hypersetup{
+    colorlinks = true,
+    linkcolor = blue!50!gray!100!,
+    linkbordercolor = {white},
+}
+\hypersetup{pdfstartview=XYZ}                   % Zoom hyperref
+ 
+%%%%%%%%%%%
+%% Maths %%
+%%%%%%%%%%%
+% Raccourcis pour les trucs longs à écrire. Reste d'Oxford principalement. 
+\newcommand{\Prob}[2][]{\mathbb{P}_{#1}\left( #2 \right)}
+\newcommand{\Exp}[2][]{\mathbb{E}_{#1}\left[ #2 \right]}
+\newcommand{\Lawconv}{\stackrel{\mathcal{L}}{\longrightarrow}}
+\newcommand{\Var}[1]{\mbox{Var}\left(#1 \right)}
+\newcommand{\Card}[1]{\mbox{Card}\left(#1 \right)}
+\newcommand{\Int}[4]{\int_{#1}^{#2} \! {#3} \, \mathrm{d}{#4}}
+\newcommand{\kw}{\;|\;}
+\newcommand{\im}{\textrm{Im}}
+\newcommand{\disclamer}{\textit{L’usage de toute calculatrice, téléphone portable, ordinateur est strictement interdit. Un soin tout particulier devra être porté à la qualité et à la précision de la rédaction des argument } \vspace{1.cm}}
+\newcommand{\legendeexos}{
+\paragraph{Légende des exercices.}
+\begin{center}
+\begin{tabular}{cccc}
+$\clubsuit$ : très flacile & $\varheart$ : à savoir par cœur & $\vardiamond$ : care aux calculs & $\spadesuit$ : qui s'y frotte s'y pique 
+\end{tabular}
+\end{center}
+}
+
+%%%%%%%%%%%%%%%%
+%% Structures %%
+%%%%%%%%%%%%%%%%
+
+\newcounter{dfcount}
+{\theoremstyle{definition} \newtheorem{definition}[dfcount]{Définition}}
+\newcounter{propcount}
+\newtheorem{propriete}[propcount]{Propriété}
+\newcounter{thcount}
+\newtheorem{theoreme}[thcount]{Théorème}
+\newcounter{excount}
+{\theoremstyle{definition} \newtheorem{exemple}[excount]{Exemple}}
+\renewcommand{\theexemple}{\arabic{exemple}}
+% Environnement exos
+\newcounter{exoscount}
+\newtheoremstyle{exercicestyle} % name of the style to be used
+  {20pt}                        % measure of space to leave above the theorem. E.g.: 3pt
+  {3pt}                         % measure of space to leave below the theorem. E.g.: 3pt
+  {}                            % name of font to use in the body of the theorem
+  {}                            % measure of space to indent
+  {\bfseries}                   % name of head font
+  {.}                           % punctuation between head and body
+  {.5em}                        % space after theorem head; " " = normal interword space
+  {}                            % Manually specify head
+\theoremstyle{exercicestyle}
+\newtheorem{exos}[exoscount]{Exercice}
+\newenvironment{exo}[2]
+  {
+   \begin{exos}[#1]
+   \leavevmode
+   \marginpar{\hfill $#2 $ }}
+  {\end{exos}}
+
+\newenvironment{prob}{ \begin{center}
+\Large{ \textsc{Problème}} \end{center} }{ \sepdown }
+
+ % Théorèmes/propriétés avec un retour à la ligne.
+\newtheoremstyle{break2}
+  {\topsep}%   Space before theorem
+  {\topsep}%   Space after theorem
+  {\itshape}%  Body font
+  {}%          Indent amount (empty = no indent, \parindent = para indent)
+  {\bfseries}% Thm head font   
+  {}%         Punctuation after thm head
+  {.5em }%  Space after thm head (\newline = linebreak)
+  {\thmname{#1}\thmnumber{ #2}\thmnote{ (#3)}.}% Thm head spec
+
+\theoremstyle{break2}
+\newtheorem{fbth}[thcount]{Théorème}
+\newenvironment{bth}[1][]{\begin{fbth}[#1]\item\relax}{\end{fbth}}
+
+\newtheorem{fbprop}[propcount]{Propriété}
+\newenvironment{bprop}[1][]{\begin{fbprop}[#1]\item\relax}{\end{fbprop}}
+
+ % Théorèmes/propriétés avec un retour à la ligne.
+\newtheoremstyle{break3}
+  {\topsep}%   Space before theorem
+  {\topsep}%   Space after theorem
+  {}%  Body font
+  {}%          Indent amount (empty = no indent, \parindent = para indent)
+  {\bfseries}% Thm head font   
+  {}%         Punctuation after thm head
+  {.5em }%  Space after thm head (\newline = linebreak)
+  {\thmname{#1}\thmnumber{ #2}\thmnote{ (#3)}.}% Thm head spec
+
+\theoremstyle{break3}
+\newtheorem{fbdf}[dfcount]{Définition}
+\newenvironment{bdef}[1][]{\begin{fbdf}[#1]\item\relax}{\end{fbdf}}
+
+% Répéter un exercice n fois
+\newcommand{\looped}[2]{
+	\foreach \n in {1,...,#1}{
+		#2
+	}
+}
+%%%%%%%%%%%%%%%%%%
+%% Mise en page %%
+%%%%%%%%%%%%%%%%%%
+
+%\setlength{\textheight}{26.2cm}
+%\setlength{\textwidth}{17.0cm}
+%\setlength{\oddsidemargin}{-0.5cm}
+%\setlength{\evensidemargin}{0.0cm}
+%\setlength{\topmargin}{-2.0cm}
+%\pagestyle{empty}
+%\newif \ifnote
+%\notefalse
+%\reversemarginpar
+
+\usepackage{titlesec}      % Interlignes pas trop gros
+\titlespacing{\paragraph}{ %
+  0pt}{                    % left margin
+  1\baselineskip}{         % space before (vertical)
+  1em}                     % space after (horizontal)
+
+\usepackage{titlesec}
+%\titleformat
+%   {\section} % <command>
+%   {\normalfont\Large\bfseries} % <format>
+%   {\thesection} % <label>
+%   {1em} % <sep>
+%   {} % <before-code>
+%\titleformat{\section}{\bfseries\sffamily\large}{\thesection.}{\hspace{1cm}}{}%
+\titlespacing*                  % starred version: first paragraph is not indented
+    {\section}                  % <command>
+    {-22pt}                     % <left>
+    {3.5ex plus 1ex minus .2ex} % <before-sep>
+    {2.3ex plus .2ex}           % <after-sep>
+
+
+\setlength{\columnseprule}{1pt}        % Séparateur vertical dans multicol
+\def\columnseprulecolor{\color{black}} % De couleur noire.
+
+% Type de colonnes pour array
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+
+% Filtrer les messages d'erreur kisoulent 
+\WarningFilter{latex}{Marginpar on page}
+\WarningFilter{latexfont}{Size}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Faire du joli latex %% 
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Faire des cœurs et des carreaux 
+\DeclareSymbolFont{extraup}{U}{zavm}{m}{n}
+\DeclareMathSymbol{\varheart}{\mathalpha}{extraup}{86}
+\DeclareMathSymbol{\vardiamond}{\mathalpha}{extraup}{87}
+
+% Police verbatim + souligné (links)
+\usepackage[normalem]{ulem}
+\useunder{\uline}{\ulined}{}%
+\DeclareUrlCommand{\bulurl}{\def\UrlFont{\ttfamily\ulined}}
+
+% Console Python. Les fichiers sont stockés dans ./pyfiles
+\newcommand{\expandpyconc}[1]{\expandafter\reallyexpandpyconc\expandafter{#1}}
+\newcommand{\reallyexpandpyconc}[1]{\pyconc{exec(compile(open('#1', 'rb').read(), '#1', 'exec'))}}
+
+\newenvironment{pyconcodeblck}[1]%
+ {\newcommand{\snippetfile}{./pyfiles/snippet-#1.py}
+  \VerbatimEnvironment
+  \begin{VerbatimOut}{\snippetfile}}%
+ {\end{VerbatimOut}%
+  \expandpyconc{\snippetfile}}
+
+
+\begin{document}
+\AMCrandomseed{1237893}
+
+\element{amc}{
+  \begin{questionmult}{contenu liste}\bareme{b=1, m=0.5}
+    Un tableau peut contenir :
+    \begin{multicols}{2}
+      \begin{reponses}
+        \bonne{Une valeur}
+        \bonne{Plusieurs valeurs}
+        \bonne{Aucune valeur}
+        \bonne{La valeur 0}
+      \end{reponses}
+    \end{multicols}
+  \end{questionmult}
+}
+
+\element{amc}{
+    \begin{question}{append}\bareme{b=1, m=0.5}
+        On tape dans la console les deux instructions suivantes : 
+        \inputminted[frame=single, framesep=2mm, label=Console Python,linenos=true]{python}{./pyfiles/append.py}
+       Que renvoie la console ?
+        \begin{multicols}{2}
+            \begin{reponses}
+                \mauvaise{\texttt{[6,5,9,3,7,10,2,15]}}
+                \bonne{\texttt{[5,9,3,7,10,2,15,6]}}
+                \mauvaise{\texttt{[5,9,3,7,6,10,2,15]}}
+                \mauvaise{\texttt{[6]}}
+            \end{reponses}
+        \end{multicols}
+    \end{question}
+}
+
+\element{amc}{
+    \begin{question}{taille}\bareme{b=1, m=0.5}
+        Le tableau \texttt{t = [5, 9, 3, 7, 10, 2, 15]} contient :
+        \begin{multicols}{2}
+            \begin{reponses}
+                \bonne{7 valeurs}
+                \mauvaise{6 valeurs}
+                \mauvaise{15 valeurs}
+                \mauvaise{8 valeurs}
+            \end{reponses}
+        \end{multicols}
+    \end{question}
+}
+
+\element{amc}{
+    \begin{questionmult}{remplacer}\bareme{b=1, m=0.5}
+        Soit le tableau \texttt{t = [5, 9, 3, 7, 10, 2, 15]}. On souhaite remplacer la valeur 7 par 20. En Python, on utilise pour cela l'instruction :
+        \begin{multicols}{2}
+            \begin{reponses}
+                \mauvaise{\texttt{L(7<>20)}}
+                \mauvaise{\texttt{L[4]=20}}
+                \bonne{\texttt{L[3]=20}}
+                \mauvaise{\texttt{L[3]==20}}
+            \end{reponses}
+        \end{multicols}
+    \end{questionmult}
+}
+
+\element{amc}{
+    \begin{question}{rajouter}\bareme{b=1, m=0.5}
+        Soit le tableau \texttt{t = [5, 9, 3, 7, 10, 2, 15]}. On souhaite ajouter 2 à tous les éléments du tableau. Le code Python effectuant cette tâche est :
+        \begin{multicols}{2}
+            \begin{reponses}
+                \mauvaise{\inputminted[frame=single, framesep=2mm, label=Code Source]{python}{./pyfiles/ajout1.py}}
+                \mauvaise{\inputminted[frame=single, framesep=2mm, label=Code Source]{python}{./pyfiles/ajout2.py}}
+                \mauvaise{\inputminted[frame=single, framesep=2mm, label=Code Source]{python}{./pyfiles/ajout3.py}}
+                \bonne{\inputminted[frame=single, framesep=2mm, label=Code Source]{python}{./pyfiles/ajout4.py}}
+            \end{reponses}
+        \end{multicols}
+    \end{question}
+}
+
+
+\element{amc}{
+    \begin{question}{len}\bareme{b=1, m=0.5}
+        On tape dans la console les deux instructions suivantes : 
+        \inputminted[frame=single, framesep=2mm, label=Console Python,linenos=true]{python}{./pyfiles/taille.py}
+       Que renvoie la console ?
+        \begin{multicols}{2}
+            \begin{reponses}
+                \mauvaise{6}
+                \mauvaise{15}
+                \bonne{7}
+                \mauvaise{5}
+            \end{reponses}
+        \end{multicols}
+    \end{question}
+}
+
+\element{amc}{
+    \begin{question}{print}\bareme{b=1, m=0.5}
+        On tape dans la console les deux instructions suivantes : 
+        \inputminted[frame=single, framesep=2mm, label=Console Python,linenos=true]{python}{./pyfiles/affiche.py}
+       Que renvoie la console ?
+        \begin{multicols}{2}
+            \begin{reponses}
+                \mauvaise{\texttt{[9 3 7 10 2 15]}}
+                \mauvaise{\texttt{[15 2 10 7 3 9 5]}}
+                \bonne{\texttt{5 9 3 7 10 2 15 }}
+                \mauvaise{\texttt{[2 10 7 3 9 5]}}
+            \end{reponses}
+        \end{multicols}
+    \end{question}
+}
+
+\element{amc}{
+    \begin{question}{print}\bareme{b=1, m=0.5}
+        On tape dans la console les deux instructions suivantes : 
+        \inputminted[frame=single, framesep=2mm, label=Console Python,linenos=true]{python}{./pyfiles/insert.py}
+       Que renvoie la console ?
+        \begin{multicols}{2}
+            \begin{reponses}
+                \mauvaise{\texttt{ [100, 9, 2,7 ,10 ,1,15]}}
+                \bonne{\texttt{[ 15, 1 ,10,100, 7, 3 ,9 ,5] }}
+                \mauvaise{\texttt{[5,9, 2,100,7, 10 ,2 ,15 ] }}
+                \mauvaise{\texttt{[5,9,100,2,7,10,1,15]}}
+            \end{reponses}
+        \end{multicols}
+    \end{question}
+}
+
+\element{amc}{
+    \begin{question}{print}\bareme{b=1, m=0.5}
+        On tape dans la console le code suivant : 
+        \inputminted[frame=single, framesep=2mm, label=Console Python,linenos=true]{python}{./pyfiles/mystere.py}
+       Que renvoie la console ?
+        \begin{multicols}{2}
+            \begin{reponses}
+                \mauvaise{La somme des indices du tableau}
+                \mauvaise{La moyenne des indices du tableau}
+                \bonne{La moyenne des éléments du tableau}
+                \mauvaise{La somme des éléments du tableau}
+            \end{reponses}
+        \end{multicols}
+    \end{question}
+}
+\element{amc}{
+    \begin{question}{print}\bareme{b=1, m=0.5}
+        On tape dans la console le code suivant : 
+        \inputminted[frame=single, framesep=2mm, label=Console Python,linenos=true]{python}{./pyfiles/mystere2.py}
+       Que renvoie la console ?
+        \begin{multicols}{2}
+            \begin{reponses}
+                \bonne{15}
+                \mauvaise{7}
+                \mauvaise{5}
+                \mauvaise{49}
+            \end{reponses}
+        \end{multicols}
+    \end{question}
+}
+
+
+\exemplaire{1}{    
+
+%%% debut de l'en-tête des copies :    
+
+\noindent{\bf NSI - Contrôle de connaissances : les tableaux  \hfill Examen du 01/01/2020}
+
+ \paragraph{Pour les profs :} QCM à correction automatique réalisé à l'aide de \textbf{ACM} : 
+ \begin{center}
+ \bulurl{https://www.auto-multiple-choice.net/}
+ \end{center}
+ Utiliser ACM et \texttt{minted} est un peu pénible : à cause de conflits avec \texttt{verbatim} il faut utiliser la commande \texttt{\textbackslash{}inputminted\{python\}\{python\_file.py\}} pour chaque morceau de code...
+%\vspace{3ex}
+
+\begin{minipage}{0.5\textwidth}
+\noindent\AMCcode{etu}{8}\hspace*{\fill}
+\end{minipage}
+\begin{minipage}{.5\linewidth}
+$\longleftarrow{}$ codez votre numéro d'élève ci-contre, et écrivez votre nom et prénom ci-dessous.
+
+\vspace{3ex}
+
+\champnom{\fbox{    
+    \begin{minipage}{.9\linewidth}
+      Nom et prénom :
+      
+      \vspace*{.5cm}\dotfill
+      \vspace*{1mm}
+    \end{minipage}
+  }}\end{minipage}
+
+\vspace{1ex}
+
+\noindent\hrulefill
+\begin{center}
+  Les questions faisant apparaître le symbole \multiSymbole{} peuvent
+  présenter zéro, une ou plusieurs bonnes réponses. Les autres ont une
+  unique bonne réponse. Un point sera accordé par réponse correcte, un demi point enlevé par réponse incorrecte.
+\end{center}
+\noindent\hrulefill
+
+\vspace{2ex}
+%%% fin de l'en-tête
+
+%\melangegroupe{amc}
+\restituegroupe{amc}
+
+}
+
+
+\end{document}

@@ -1,0 +1,7 @@
+Tableau à recopier [4, 5, 8, 7]
+Traceback (most recent call last):
+  File "snippet-recopier.py", line 12, in <module>
+    tc2 = recopie2(t2)
+  File "snippet-recopier.py", line 7, in recopie2
+    tc[i] = t[i]
+IndexError: list assignment index out of range

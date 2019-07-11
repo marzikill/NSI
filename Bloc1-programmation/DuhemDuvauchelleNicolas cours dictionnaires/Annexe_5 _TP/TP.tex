@@ -1,0 +1,197 @@
+% !TeX document-id = {117ac6b5-8dd4-4613-9231-0768b5815107}
+%pdflatex -shell-escape tp.tex
+%pythontex tp.tex
+%pdflatex -shell-escape tp.tex
+% !TeX TXS-program:compile = txs:///pdflatex/[--shell-escape]
+
+\documentclass[12pt,french]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{array,multicol,multirow,enumerate,eurosym,latexsym,fourier,bbding,pifont}
+\usepackage{fourier}
+\usepackage{graphicx,pst-all}
+\usepackage{tabularx}
+\usepackage [alwaysadjust]{paralist}
+\usepackage{amsmath,amsfonts,amsthm,amssymb,geometry}
+\usepackage{fancyhdr}
+\usepackage{mathrsfs}  
+\usepackage{pstricks,pst-plot,pst-text,pst-tree,pstricks-add,pst-eps,pst-fill,pst-node,pst-math}
+\usepackage{euscript,amsfonts,eepic,color}
+\usepackage{ifthen,fp}
+\newcommand{\Calig}[1]{\ensuremath{\mathscr{#1}}}              
+\usepackage{babel}
+\usepackage{xcolor}
+\usepackage{minted}
+\usepackage{pythontex}
+\usepackage{multicol}
+\usepackage[most]{tcolorbox}
+\usepackage{fancyhdr}
+\setlength{\parindent}{0pt}
+\usepackage{ulem}
+\usepackage[np]{numprint}
+\geometry{vmargin=15mm,hmargin=5mm}
+\pagestyle{empty}
+\setlength\columnsep{5mm}
+\renewcommand{\thesection}{\Roman{section}}
+\renewcommand{\thesubsection}{\Alph{subsection}}
+\renewcommand{\thesubsubsection}{\arabic{subsubsection}}
+\newcounter{npb}
+\setcounter{npb}{0}
+\newcommand{\exo}{
+    \stepcounter{npb}
+    {\textbf{$\triangleright$ \underline{Exercice \arabic{npb} }}}
+}
+\newcounter{sf}
+\setcounter{sf}{0}
+\newcommand{\s}{
+    \stepcounter{sf}
+    {\textbf{ \fbox{SF \arabic{sf} }}}
+}
+\usepackage{lscape}
+\usepackage{tikz}
+\usepackage{metalogo}
+\usepackage{hyperref}
+\begin{document}
+
+  \lhead{Lycée Jean Monnet - \textit{NSI}}
+    \chead{}
+    \rhead{\textit{Année} 2019/2020}
+      \renewcommand{\headrulewidth}{0.5pt}
+      \lfoot{                      }\cfoot{Page \thepage}\rfoot{\textsf{Aude Duhem, Sophie Duvauchelle, Patrice Nicolas}}
+    \pagestyle{fancy}
+    \renewcommand{\footrulewidth}{0.4pt}
+\begin{center}
+\textbf{\Large{Les dictionnaires et recherche en table - TP}}\end{center}
+\hrule
+\vskip0.1cm
+\exo\\
+Comme pour les tableaux de données, le type dictionnaire dispose d'un grande nombre de méthodes et fonctions.\\ Plus particulièrement :
+\begin{itemize}[$\bullet$]
+\item Le constructeur \textbf{\textsl{dict() }} fabrique un dictionnaire directement à partir d'une \textbf{\textsl{liste de paires clé-valeur}} stockées sous la forme de tuples.\\
+\begin{tcolorbox}[enhanced,colback=blue!5!white,colframe=blue!75!black]	
+\begin{pyconsole}
+dict([('sape', 4139), ('guido', 4127), ('jack', 4098)])
+\end{pyconsole}
+\end{tcolorbox}
+\item \textbf{\textsl{dic.clear()}} supprime tous les éléments du dictionnaire \textbf{\textsl{dic}} et renvoie le dictionnaire actualisé
+\item \textbf{\textsl{ dic.copy() }} renvoie une copie indépendante du dictionnaire \textbf{\textsl{dic}}.
+\item \textbf{\textsl{dic.get(key[, default]) } } renvoie la valeur de \textbf{\textsl{key}} si \textbf{\textsl{key}} est dans le dictionnaire \textbf{\textsl{dic}}, sinon default. Si default n'est pas donné, il vaut None par défaut, de manière à ce que cette méthode ne lève jamais KeyError.
+\end{itemize}
+\textbf{Le but de cet exercice est de recoder ces procédés sous la forme de quatre fonctions nommées :}
+\begin{center}
+\textbf{\textsl{dict\_, clear, copy}} et \textbf{\textsl{get}}
+\end{center}
+On veillera à spécifier chaque fonction écrite et à choisir des tests pertinents.\\
+
+\exo \textbf{- Recherche en table}\\
+On peut pour un même ensemble de données, utiliser des types de données différents : les tableaux (listes) et les dictionnaires, par exemple. On va dans cet exercice, comparer l'efficacité de recherche dans ces deux types de données.\\
+Voici l'exemple d'un tableau annuaire qui stocke des prénoms et le numéro de télephone associé :
+\begin{tcolorbox}[enhanced,colback=blue!5!white,colframe=blue!75!black]	
+\begin{pyverbatim}
+annuairetableau=[('sophie', '0622602799'), ('cecile', '058178235'),...]
+\end{pyverbatim}
+\end{tcolorbox}
+\begin{enumerate}
+	\item Programmer une fonction \textbf{\textsl{recherche1}} de paramètres un prenom \textbf{\textsl{p}} et une liste de couple prenom, numero \textbf{\textsl{t}} et qui renvoie le numero de téléphone s'il est présent et None sinon.
+	(on utilisera une boucle )
+	\item En utilisant la fonction \textbf{\textsl{dict\_}} vue dans l'exercice 1, générer un dictionnaire contenant les associations prenom, numero.
+	\item Ecrire une fonction \textbf{\textsl{recherche2}} de paramètres un prenom \textbf{\textsl{p}} et  un dictionnaire \textbf{\textsl{d}} contenant les associations prenom, numero et qui renvoie le numero de téléphone s'il est présent et None sinon.
+	\item A l'aide du module \textbf{\textsl{time}} et des instructions suivantes, comparer et commenter les durées d'éxécution des deux fonctions.\\ 
+\begin{tcolorbox}[enhanced,colback=blue!5!white,colframe=blue!75!black]	
+\begin{pyverbatim}
+import time
+ti = time.perf_counter()
+recherche1('Pauline',annuairetableau)
+ts = time.perf_counter()
+print("Recherche1 du prénom :", 'Pauline', ", temps de calcul:", ts - ti)	
+\end{pyverbatim}
+\end{tcolorbox}
+\end{enumerate}
+\exo\textbf{ - Gestion de bibliothèque $\star \star $}\\
+Dans cet exercice, nous illustrons les compréhensions et les recherches en tables en travaillant sur une base de données de livres empruntables dans une bibliothèque.
+La base de données que nous allons utiliser en exemple est la suivante :
+\small
+\begin{tcolorbox}[enhanced,colback=blue!5!white,colframe=blue!75!black]	
+\begin{pyverbatim}
+stock={
+9788806222093:{'auteur':'Victor Hugo','titre':"Les misérables",'nombre':5},
+9780671201821:{'auteur':'Robert Merle','titre':'Un animal doué de raison','nombre':6},
+9783518399989:{'auteur':'Alain Fournier','titre':'Le grand Meaulnes','nombre':1},
+9782072864537:{'auteur':'Victor Hugo','titre':'Notre dame de Paris','nombre':4},
+9781976166471:{'auteur':'Victor Hugo','titre':'Notre dame de Paris','nombre':3},               
+9782070518425: {'auteur':'J.K. Rowling','titre':"Harry Potter à l'école des sorciers",'nombre':3},
+9782070643059: {'auteur':'J.K. Rowling','titre':"Harry Potter et la coupe de feu",'nombre':0} 
+}
+\end{pyverbatim}
+\end{tcolorbox}
+\normalsize
+La base va nous permettre de rechercher rapidement un livre à partir de son numéro ISBN. On obtient alors l'auteur du livre, le titre de l'ouvrage ainsi que le nombre d'exemplaire(s) empruntable(s) en stock.
+\begin{enumerate}
+\item Ecrire une fonction \textbf{\textsl{auteurs}} qui prend en paramètre une base de livres \textbf{\textsl{b}} et qui retourne la liste des noms des auteurs de cette base.\\
+On donnera dans cette question d'abord une définition sans utiliser de compréhension, puis une définition avec compréhension.
+\item Ecrire une fonction \textbf{\textsl{livresempruntables}} qui prend en paramètre une base de livres \textbf{\textsl{b}} et qui retourne la liste des titres empruntables
+\item Ecrire une fonction \textbf{\textsl{titres\_auteurs}} qui prend en paramètre une base de livres \textbf{\textsl{b}} et un nom d'auteur \textbf{\textsl{n}} et qui retourne un dictionnaire comportant les associations cle/valeur avec le titre comme clef et nombre comme valeur.
+\item La bibliothèque reçoit une nouveau lot de livres donné par la table suivante :\\
+\begin{tabular}{|l|l|l|l|}
+	\hline
+	Numéro ISBN& 	Auteur &	Titre &	Nombre\\
+	\hline
+	9782070643059 &	J.K. Rowling &	Harry Potter et la coupe de feu &	10\\
+	\hline
+	9782070556854 &	J.K. Rowling &	Harry Potter et l'Ordre du phénix &	7\\
+	\hline
+	9782070615360 &	J.K. Rowling &	Harry Potter et les Reliques de la Mort &	15\\
+	\hline
+\end{tabular}\\
+Créer un dictionnaire nommé \textbf{\textsl{nouveau]}} correspondant à la table précédente.
+Ecrire une fonction \textbf{\textsl{fusion}} qui prend en paramètre deux bases de livres \textbf{\textsl{b1}} et \textbf{\textsl{b2}} et qui retourne un dictionnaire correspondant au nouveau stock de la bibliothèque.
+\end{enumerate}
+\hrule
+\begin{center}
+	\textbf{\textsl{Pour aller plus loin ...}}
+\end{center}
+\exo - Traduction $\star \star $\\
+Comme son nom l'évoque, une des fonctionnalités d'un dictionnaire est de s'en servir comme outil de traduction. Nous allons voir ici quelques manipulations simples de dictionnaires de langues.\\
+Dans la suite, on prendra, en exemple, les dictionnaires anglais-français et français-allemand suivants :\\
+\small
+\begin{tcolorbox}[enhanced,colback=blue!5!white,colframe=blue!75!black]	
+\begin{pyverbatim}
+#dictionnaire anglais vers français 
+danfr={
+'one':'un','two':'deux','three':'trois','four':'quatre','five':'cinq','six':'six','seven':'sept'
+}
+#dictionnaire français vers allemand
+dfral={
+'un':'eins','deux':'zwei','trois':'drei','quatre':'vier','cinq':'fünf','six':'sechs','sept':'sieben'
+}	
+\end{pyverbatim}
+\end{tcolorbox}
+\normalsize
+\begin{enumerate}
+	\item Ecrire une fonction \textbf{\textsl{traduction}} qui prend en paramètres une liste de mots \textbf{\textsl{l}} et un dictionnaire \textbf{\textsl{d}} et qui retourne la liste des mots de \textbf{\textsl{l}} traduits à partir du dictionnaire \textbf{\textsl{d}} . On supposera que tous les mots de \textbf{\textsl{l}} sont une cle du dictionnaire.
+	\item Ecrire une fonction \textbf{\textsl{inverse}} qui prend en paramètre un dictionnaire \textbf{\textsl{d}} et qui retourne le dictionnaire inverse.\\
+	On suppose ici qu'une même valeur n'apparaît pas plusieurs fois dans le dictionnaire \textbf{\textsl{d}}.
+	\item Ecrire une fonction \textbf{\textsl{composition}} qui prend en paramètres deux dictionnaires \textbf{\textsl{d1}} et \textbf{\textsl{d2}} et qui retourne le dictionnaire correspondant à la composition des traductions.\\
+	On suppose ici que toutes les valeurs de \textbf{\textsl{d1}} sont des clés de \textbf{\textsl{d2}} .
+	Par exemple,  \mintinline{python}{composition(danfr,dfral)} doit retourner un dictionnaire comportant toutes les associations cle/valeur suivantes :\\
+	\{'one': 'eins', 'two': 'zwei', 'three': 'three', 'four': 'vier', 'five': 'fünf', 'six': 'sechs', 'seven': 'sieben'\}
+	
+	
+\end{enumerate}
+\exo -  Des Anagrammes $\star\star\star$\\
+Deux mots sont des anagrammes s'ils ont les mêmes lettres, mais dans des ordres différents. Par exemple, CRIME et MERCI sont des anagrammes.\\
+L'indice d'un mot est la suite ordonnée de ses lettres. Par exemple l'indice du mot KAYAK est AAKKY.\\
+Deux mots forment donc des anagrammes lorsqu'ils ont des indices identiques. Par exemple, CRIME et MERCI ont bien le même indice CEIMR.
+\begin{enumerate}
+	\item Ecrire une fonction \textbf{\textsl{calculer\_indice}} qui prend en paramètre un mot \textbf{\textsl{m}} et qui retourne l'indice  du mot \textbf{\textsl{m}}.
+	\item Ecrire une fonction \textbf{\textsl{anagrammes}} qui prend en paramètre deux mots \textbf{\textsl{m1}} et \textbf{\textsl{m2}} et qui teste si les deux mots donnés sont des anagrammes
+	\item Ecrire une fonction \textbf{\textsl{dicoindice}} qui prend en paramètre une liste de mots \textbf{\textsl{l}} et qui retourne un dictionnaire. Dans ce dictionnaire, les clés sont les indices, et à chaque indice est associé la liste des mots correspondants. 
+\end{enumerate}
+\end{document}
+
+
+
+
+
+
+
+

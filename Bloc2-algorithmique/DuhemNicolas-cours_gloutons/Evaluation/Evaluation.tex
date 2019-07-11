@@ -1,0 +1,144 @@
+% !TeX document-id = {8613a224-84c8-4428-9607-d4a0352535f7}
+%pdflatex -shell-escape doc4.tex
+%pythontex doc4.tex
+%pdflatex -shell-escape doc4.tex
+% !TeX TXS-program:compile = txs:///pdflatex/[--shell-escape]
+\documentclass[a4paper,12,%answers
+]{exam}
+\usepackage{fourier}
+\usepackage{geometry}
+\usepackage{array,multicol,multirow,enumerate,eurosym,latexsym,fourier,bbding,pifont}
+
+\geometry{vmargin=10mm,hmargin=5mm}
+\usepackage{fourier}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\geometry{vmargin=10mm,hmargin=5mm}
+%\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[francais]{babel}
+\usepackage{listings}
+\usepackage{pythontex}
+\usepackage{minted}
+%renewcommand\listingscaption{Code Source}
+\usepackage[table]{xcolor}
+\usepackage{graphicx}
+\graphicspath{ {/Users/the_brat/Documents/Mon_Latex} }
+\usepackage{tabto}
+%\usepackage{minibox}
+\definecolor{ivory}{rgb}{1.0, 1.0, 0.94}
+\definecolor{cadetgrey}{rgb}{0.57, 0.64, 0.69}
+\usepackage{tikz,lipsum,lmodern}
+\usepackage[most]{tcolorbox}
+
+\usepackage[titletoc]{appendix}
+\usepackage{wrapfig}
+%\usepackage[many]{tcolorbox}%https://tex.stackexchange.com/questions/262052/lstlisting-framed-with-the-caption-inside-the-frame
+%\tcbuselibrary{listings}
+
+
+\newcommand{\expandpyconc}[1]{\expandafter\reallyexpandpyconc\expandafter{#1}}
+\newcommand{\reallyexpandpyconc}[1]{\pyconc{exec(compile(open('#1', 'rb').read(), '#1', 'exec'))}}
+
+   
+
+\begin{document}
+\lhead{Lycée Jean Monnet - \textit{NSI}}
+\chead{}
+\rhead{\textit{Année} 2019/2020}
+
+\lfoot{                      }\cfoot{Page \thepage}\rfoot{\textsf{Aude Duhem et Patrice Nicolas}}
+NOM : .................. \hfill PRENOM : ............................ \hfill Classe : .............\\
+\hrule
+
+\begin{center}
+	\textbf{\Large{Evaluation - Les algorithmes gloutons }}\end{center}
+\hrule
+\vskip0.5cm
+	\begin{questions}
+	\question On suppose dans cette question, que l'on dispose des pièces de monnaie suivantes (sans limite d'effectif) : 5 \euro,\,2 \euro, 1 \euro,\,50 centimes, \,20 centimes,\,10 centimes,\,5 centimes, \,2 centimes et 1 centime.\\
+	Pour 11,67 \euro\, payé avec un billet de 20 \euro, le rendu de monnaie en pièces obtenu à l'aide d'un algorithme glouton est : \\
+	Cocher la bonne réponse:
+			\begin{checkboxes}
+			\choice Réponse A :\\
+			2 pièces de 5 \euro, \,1 pièce de 1 \euro,\,1 pièce de 50 centimes, 1 pièce de 10 centimes, 1 pièce de 5 centimes et 1 pièce de 2 centimes.
+			\choice Réponse B :\\
+			1 pièce de 5 \euro, \,3 pièces de 1 \euro,\,1 pièce de 20 centimes, 1 pièce de 10 centimes, 1 pièce de 2 centimes et 1 pièce de 1 centime.
+			\choice Réponse C : \\
+			1 pièce de 5 \euro, \,1 pièce de 1 \euro,\,2 pièce de 2 \euro,\,3 pièces de 10 centimes, 1 pièce de 2 centimes et 1 pièce de 1 centime.
+			\choice Réponse D :\\ 1 pièce de 5 \euro, \,1 pièce de 1 \euro,\,2 pièce de 2 \euro,\,1 pièce de 20 centimes, 1 pièce de 10 centimes,  1 pièce de 2 centimes et 1 pièce de 1 centime.
+		\end{checkboxes}	
+
+\begin{solution}
+C'est la réponse D qui  convient.
+
+\end{solution}
+\medskip
+	\question On dispose d'un système de monnaie (sans limite d'effectif) de 4$\star$, 3$\star$ et 1$\star$, on cherche la façon de payer 6 $\star$ selon le principe glouton. La répartion est : \\
+Cocher la bonne réponse:
+\begin{checkboxes}
+	\choice Réponse A : 3 $\star$ , 3 $\star$
+	\choice Réponse B : 3 $\star$ , 1 $\star$, 1 $\star$, 1 $\star$
+	\choice Réponse C : 4 $\star$ , 1 $\star$, 1 $\star$
+		\choice Réponse D : 1 $\star$, 1 $\star$, 1 $\star$, 1 $\star$,1 $\star$, 1 $\star$
+\end{checkboxes}		
+
+\begin{solution}
+	C'est la réponse C qui  convient.
+	
+\end{solution}
+\medskip
+
+
+\question L'algorithme glouton ( Cocher la bonne réponse) :
+
+\begin{checkboxes}
+\choice Réponse A :  assure de trouver une solution optimale
+\choice Réponse B : entraîne un coût en temps exponentiel
+\choice Réponse B : donne parfois une solution optimale
+\end{checkboxes}
+\begin{solution}
+	C
+\end{solution}
+\medskip
+\question Soit une liste L=[(7,13),(4,12),(3,8),(3,10)] ; en python, l'instruction \textbf{L.sort(key = lambda a : a[1], reverse=True) }:\\
+Cocher la bonne réponse:
+\begin{checkboxes}
+\choice Réponse A :  trie  les tuples par ordre décroissant en fonction de l'élément d'indice1
+\choice Réponse B :  trie à partir premier élément de la liste
+\choice Réponse C :  trie  les tuples par ordre croissant en fonction de l'élément d'indice 0
+\end{checkboxes}
+\begin{solution}
+	A
+\end{solution}
+\medskip
+\question Quels mots complètent (dans l'ordre) la définition du problème du sac à dos : \\
+\medskip
+\textbf{«Étant  donné  plusieurs  objets  possédant chacun  un  ....................  et  une ..............  et  étant  donné  un  poids ..............  pour  le  sac,  quels  objets faut-il  mettre  dans  le  sac  de  manière  à  .....................  la  valeur  totale  sans  dépasser  le  poids maximal autorisé pour le sac?»}\\
+\medskip
+Cocher la bonne réponse:
+
+\begin{checkboxes}
+	\choice Réponse A : indice, liste, minimal, minimiser
+\choice Réponse B :  poids, valeur, minimal, maximiser
+\choice Réponse C :  poids, valeur, maximal, maximiser
+\end{checkboxes}
+\begin{solution}
+	C
+\end{solution}
+\medskip
+\question Soit une liste de tuples (valeur,poids) L=[(15, 2),(100, 20),(90, 20),(60, 30),(40, 40),(15, 30),(10, 60),(1, 1)] . On dispose d'un sac de poids maximal autorisé $p_{max}$ = 90 et on utilise l'algorithme glouton avec un critère sur la valeur. L'algorithme propose une solution avec un sac de valeur totale :\\
+Cocher la bonne réponse:
+\begin{checkboxes}
+	\choice Réponse A : 245\\
+\choice Réponse B : 265\\
+\choice Réponse C : 266
+\end{checkboxes}
+\begin{solution}
+	C
+\end{solution}
+
+\end{questions}
+\end{document}    
+
+

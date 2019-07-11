@@ -1,0 +1,15 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{insere}\PYG{p}{(}\PYG{n}{t}\PYG{p}{,} \PYG{n}{i}\PYG{p}{,} \PYG{n}{e}\PYG{p}{):}
+    \PYG{c+c1}{\PYGZsh{} Insère l\PYGZsq{}élément e à l\PYGZsq{}indice i dans le tableau t.}
+    \PYG{c+c1}{\PYGZsh{} i \PYGZlt{}= len(t) : sinon IndexError.}
+    \PYG{c+c1}{\PYGZsh{} i = 0 : e inséré en début de tableau}
+    \PYG{c+c1}{\PYGZsh{} i = len(t) : e inséré en fin de tableau}
+    \PYG{n}{n} \PYG{o}{=} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{t}\PYG{p}{)}
+    \PYG{n}{tprime} \PYG{o}{=} \PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{*}\PYG{p}{(}\PYG{n}{n}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{p}{)}
+    \PYG{k}{for} \PYG{n}{k} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{i}\PYG{p}{):}
+        \PYG{n}{tprime}\PYG{p}{[}\PYG{n}{k}\PYG{p}{]} \PYG{o}{=} \PYG{n}{t}\PYG{p}{[}\PYG{n}{k}\PYG{p}{]}
+    \PYG{n}{tprime}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{n}{e}
+    \PYG{k}{for} \PYG{n}{k} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{i}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{n}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{p}{):}
+        \PYG{n}{tprime}\PYG{p}{[}\PYG{n}{k}\PYG{p}{]} \PYG{o}{=} \PYG{n}{t}\PYG{p}{[}\PYG{n}{k}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]}
+    \PYG{k}{return} \PYG{n}{tprime}
+\end{Verbatim}

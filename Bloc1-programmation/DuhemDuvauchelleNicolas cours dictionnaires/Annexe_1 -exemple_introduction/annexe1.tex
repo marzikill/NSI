@@ -1,0 +1,137 @@
+% !TeX document-id = {63dff02d-570f-4893-a051-d8fff41185c6}
+%pdflatex -shell-escape annexe1.tex
+%pythontex annexe1.tex
+%pdflatex -shell-escape doc5.tex
+% !TeX TXS-program:compile = txs:///pdflatex/[--shell-escape]
+\documentclass[12pt,french]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc} 
+\usepackage{lmodern}
+\usepackage{babel}
+\usepackage{xcolor}
+\usepackage{minted}
+\usepackage{array,multicol,multirow,enumerate,eurosym,latexsym,fourier,bbding,pifont}
+\usepackage{pythontex}
+\usepackage{array,multicol,multirow,enumerate,eurosym,latexsym,fourier,bbding,pifont}
+\usepackage{fourier}
+\usepackage{graphicx,pst-all}
+\usepackage{tabularx}
+\usepackage [alwaysadjust]{paralist}
+\usepackage{amsmath,amsfonts,amsthm,amssymb,geometry}
+\usepackage{fancyhdr}
+\usepackage{mathrsfs}  
+\usepackage{pstricks,pst-plot,pst-text,pst-tree,pstricks-add,pst-eps,pst-fill,pst-node,pst-math}
+\usepackage{euscript,amsfonts,eepic,color}
+\usepackage{ifthen,fp}
+\newcommand{\Calig}[1]{\ensuremath{\mathscr{#1}}}              
+\usepackage{babel}
+\usepackage{xcolor}
+\usepackage{minted}
+\usepackage{pythontex}
+\usepackage{multicol}
+\usepackage[most]{tcolorbox}
+\usepackage{fancyhdr}
+\setlength{\parindent}{0pt}
+\usepackage{ulem}
+\geometry{vmargin=15mm,hmargin=5mm}
+\usepackage[most]{tcolorbox}
+\setlength{\parindent}{0pt}
+\begin{document}
+
+\lhead{Lycée Jean Monnet - \textit{NSI}}
+\chead{}
+\rhead{\textit{Année} 2019/2020}
+\renewcommand{\headrulewidth}{0.5pt}
+\lfoot{                      }\cfoot{Page \thepage}\rfoot{\textsf{Aude Duhem, Sophie Duvauchelle, Patrice Nicolas}}
+\pagestyle{fancy}
+\renewcommand{\footrulewidth}{0.4pt}
+\begin{center}
+	\large{\textbf{Annexe 1 : exemple d'introduction à la notion de dictionnaire}}
+\end{center} 
+\hrule
+\begin{center}
+Le professeur projette l'énoncé suivant et lance un IDLE.\\
+\end{center} 
+\hrule
+\vskip0.1cm 
+\textbf{Enoncé :}\\
+Un restaurant réputé parisien 3 $\star$ propose à la carte, les entrées suivantes : \\
+\begin{tabular}{c|c}
+Asperges blanches&89 \euro\\
+Langoustes royales&145 \euro\\	
+Foie de gras de canard&95 \euro\\
+Ventrèche de thon&92 \euro\\
+Tomates bio&87 \euro\\
+\end{tabular}
+\hrule
+\vskip0.1cm 
+\textbf{Déroulé envisagé :}
+\begin{enumerate}
+\item Questionnement possible : 
+\begin{itemize}[$\bullet$]
+\item Comment coder ces informations avec un tableau de données ?
+\item Comment accéder au prix des asperges blanches ?
+\end{itemize}
+\item A partir de la notion introduite à l'oral, le professeur propose un codage possible des données sous la forme d'un dictionnaire et introduit les délimiteurs.
+\item Le professeur montre les commandes possibles pour répondre aux questions suivantes :
+\begin{itemize}[$\bullet$]
+\item  Comment accéder au prix des asperges dans le dictionnaire ?
+\item Comment modifier le prix des asperges ?
+\item Comment ajouter ou supprimer une entrée dans le dictionnaire ?
+\end{itemize}
+\end{enumerate}
+\hrule
+\vskip0.1cm
+\textbf{Intérêt} : fixer sur un exemple simple l'intérêt et une des principales différences d'un dictionnaire par rapport à un tableau de données.\\
+\hrule
+\vskip0.1cm 
+\hrule
+\textbf{Solutions :}\\
+\begin{enumerate}
+	\item Faire conclure que c'est possible de coder ce tableau sous la forme d'un tableau de données mais qu'il est alors difficile d'accéder au prix d'un plat si on ne connaît pas son index. La seule alternative est dans ce cas, de faire une recherche sur la table pour trouver le plat.
+\begin{tcolorbox}[enhanced,attach boxed title to top center={yshift=-3mm,yshifttext=-1mm},
+	colback=green!5!white,colframe=green!75!black,colbacktitle=green!25!black,
+	title=question 1, fonttitle=\bfseries,
+	boxed title style={size=small,colframe=green!25!black} ]
+\begin{pyconsole}
+#On peut coder ces informations avec le tableau de données suivant:	
+carte=[('Asperges_blanches',89),
+	('Langoustes_royales',145),
+	('Foie_de_gras_de_canard',95),
+	('Ventreche_de_thon',92),
+	('Tomates_bio',87)]
+#Pour accéder au prix des asperges blanches, saisir dans l'interpréteur :
+carte[0]
+\end{pyconsole}
+\end{tcolorbox}
+\item Dans ce cas, on crée un dictionnaire avec les délimiteurs \{ \}
+\begin{tcolorbox}[enhanced,attach boxed title to top center={yshift=-3mm,yshifttext=-1mm},
+	colback=green!5!white,colframe=green!75!black,colbacktitle=green!25!black,
+	title=questions 2 et 3, fonttitle=\bfseries,
+	boxed title style={size=small,colframe=green!25!black} ]
+\begin{pyconsole}
+#déclaration du dictionnaire carte
+carte ={ 'Asperges_blanches':89,
+		'Langoustes_royales':145,
+		'Foie_de_gras_de_canard':95,
+		'Ventreche_de_thon':92,
+		'Tomates_bio':87}
+carte
+#Pour accéder au prix des asperges blanches, saisir dans l'interpréteur :
+carte['Asperges_blanches']
+
+#Pour modifier le prix des asperges blanches, saisir dans l'interpréteur :
+carte['Asperges_blanches']=80
+carte
+#Pour ajouter une entrée, saisir dans l'interpréteur, par exemple :
+carte['Coquilles_saint_jacques']=90
+carte
+#Pour supprimer une entrée, saisir dans l'interpréteur, par exemple :
+del carte['Asperges_blanches']
+carte
+\end{pyconsole}
+
+\end{tcolorbox}
+
+\end{enumerate}
+\end{document}

@@ -1,0 +1,189 @@
+%pdflatex -shell-escape doc4.tex
+%pythontex doc4.tex
+%pdflatex -shell-escape doc4.tex
+\documentclass[a4paper,11,answers
+]{exam}
+\usepackage[left=1cm, right=1cm, top=0.5cm, bottom=2cm, textwidth=10cm]{geometry}
+\UseRawInputEncoding%https://www.latex-project.org/news/latex2e-news/ltnews28.pdf
+%\usepackage[latin1]{inputenc}
+%\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[francais]{babel}
+\usepackage{listings}
+\usepackage{pythontex}
+\usepackage{minted}
+%renewcommand\listingscaption{Code Source}
+\usepackage[table]{xcolor}
+\usepackage{graphicx}
+\graphicspath{ {/Users/the_brat/Documents/Mon_Latex} }
+\usepackage{tabto}
+%\usepackage{minibox}
+\definecolor{ivory}{rgb}{1.0, 1.0, 0.94}
+\definecolor{cadetgrey}{rgb}{0.57, 0.64, 0.69}
+\usepackage{tikz,lipsum,lmodern}
+\usepackage[most]{tcolorbox}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[titletoc]{appendix}
+\usepackage{wrapfig}
+%\usepackage[many]{tcolorbox}%https://tex.stackexchange.com/questions/262052/lstlisting-framed-with-the-caption-inside-the-frame
+%\tcbuselibrary{listings}
+
+
+\newcommand{\expandpyconc}[1]{\expandafter\reallyexpandpyconc\expandafter{#1}}
+\newcommand{\reallyexpandpyconc}[1]{\pyconc{exec(compile(open('#1', 'rb').read(), '#1', 'exec'))}}
+
+\newenvironment{pyconcodeblck}[1]%
+ {\newcommand{\snippetfile}{snippet-#1.py}
+  \VerbatimEnvironment
+  \begin{VerbatimOut}{\snippetfile}}%
+ {\end{VerbatimOut}%
+  \expandpyconc{\snippetfile}}
+\newcommand{\typesetcode}[1]{\inputpygments{python}{snippet-#1.py}}
+
+\begin{pyconcodeblck}{temp3}
+D1 = { 'Aude': 'Paris', 'Patrice': 'Rennes', 'Sophie': 'Lyon' }
+\end{pyconcodeblck}
+
+\begin{pyconcodeblck}{temp1}
+D2={
+	'1234567890G' :
+	{'nom' : 'Nicolas', 'classe': '1ere A', 'specialites' : ['Maths','Physique','NSI']} ,
+	'1357986420F' :
+	{'nom' : 'Lucie', 'classe': '1ere B', 'specialites' : ['Maths','SES','HG']}
+	}
+\end{pyconcodeblck}
+
+
+
+
+\lstset
+{ %Formatting for code 
+    language=Python,
+    basicstyle=\footnotesize,
+    numbers=left,
+    stepnumber=1,
+    showstringspaces=false,
+    tabsize=1,
+    breaklines=true,
+    breakatwhitespace=false,}
+    
+\title{Exemple d'évaluation (formative) sur les dictionnaires du langage Python }
+ 
+\begin{document}
+	\maketitle
+	\begin{questions}
+		\question[1] Donner une définition de l'objet "dictionnaire" du langage Python. On rappellera la syntaxe générale.
+		\begin{solution}
+		En python, un dictionnaire est un tableau associatif entre des clés et des valeurs de sorte que chaque clé soit unique. 
+		La syntaxe est : \textbf { \{ clé1 : valeur1, clé2 : valeur2, ...\}}
+		\end{solution}
+		\question[2] On considère le dictionnaire suivant:\typesetcode{temp3}
+
+\begin{parts}
+\part Ecrire une commande permettant de supprimer la valeur 'Rennes'.
+\begin{solution}
+
+\begin{pyconsole}
+print(D1)
+del D1['Patrice']
+print(D1)
+\end{pyconsole}
+\end {solution}
+\part Qu'affiche la console si on exécute la commande suivante: 
+\begin{pyverbatim}
+del D1[ 'Isabelle' ] 
+\end{pyverbatim}
+\begin{solution}
+\begin{pyconsole}
+del D1[ 'Isabelle' ] 
+\end{pyconsole}
+\end {solution} 
+\part Qu'affiche la console  si on exécute les commandes suivantes: 
+\begin{pyverbatim}
+D1['Aude']='Versailles'
+print(D1)
+\end{pyverbatim}
+\begin{solution}
+\begin{pyconsole}
+D1['Aude']='Versailles'
+print(D1)
+\end{pyconsole}
+\end {solution} 
+ \end{parts} 
+
+\question[1]Citer une propriété remarquable des clés d'un dictionnaire en Python.
+\begin{solution}
+Chaque clé est unique.
+Certains types d'objet ne peuvent pas être des clés de dictionnaires: les objet du type \textbf {list} et du type \textbf {dict} en particulier.
+\end{solution}
+
+\question[1]On considère l'instruction suivante permettant de créer l'objet L1:
+\begin{pyverbatim}
+L1 = [v for c,v in D1.items( ) if len(v)<6]
+\end{pyverbatim} 
+Cocher la (les) bonne(s) réponse(s):\\
+\tabto{1cm}$\square$ L1 est un dictionnaire\\
+\tabto{1cm}$\text{\rlap{$\checkmark$}}\square$ L1 est crée par compréhension\\
+\tabto{1cm}$\square$ La "longueur" de L1 est égale à 6\\
+\tabto{1cm}$\text{\rlap{$\checkmark$}}\square$ L1==['Paris', 'Lyon'] renvoie True\\
+%\begin{checkboxes}
+%\choice L1 est un dictionnaire
+%\choice L1 est crée par compréhension
+%\choice La "longueur" de L1 est égale à 6
+%\choice L1==['Paris', 'Lyon'] renvoie True
+%\end{checkboxes}		
+
+\question[5] Considérons des élèves de classe de première. On souhaite alimenter un dictionnaire  D2 dans lequel:
+\begin{itemize}
+\item Chaque élève est identifié par un "numéro" unique de 11 caractères ; ce numéro constitue la clé principale du dictionnaire.
+\item Chaque valeur est un dictionnaire dont les clés sont 'nom', 'classe' et 'specialites'.
+\end{itemize}
+Voici le contenu du dictionnaire D2 :
+\typesetcode{temp1}
+\begin{parts}
+\part Ecrire une ligne de commande afin d'afficher le nombre d'élèves présents dans le dictionnaire
+\begin{solution}
+
+\begin{pyconsole}
+print(len(D2))
+\end{pyconsole}
+\end {solution}
+\part Que renvoient les commandes suivantes ?
+
+\begin{itemize}
+\item  
+\begin{pyverbatim} 
+D2['1234567890G'] ['Nicolas']
+\end{pyverbatim}
+\item  
+\begin{pyverbatim} 
+D2['1234567890G'] ['nom']
+\end{pyverbatim}
+\item  
+\begin{pyverbatim} 
+D2['1357986420F'] ['specialites'] [1]
+\end{pyverbatim}
+\end{itemize}
+
+\begin{solution}
+\begin{pyconsole}
+D2['1234567890G'] ['Nicolas']
+D2['1234567890G'] ['nom']
+D2['1357986420F'] ['specialites'] [1]
+\end{pyconsole}
+\end {solution}
+\part En réalité, Nicolas est en '1ereB' . Quelle commande peut-on exécuter pour mettre à jour le dictionnaire D2 ?
+\begin{solution}
+\begin{pyconsole}
+print(D2)
+D2['1234567890G'] ['classe'] = '1ereB'
+print(D2)
+\end{pyconsole}
+\end {solution}
+\end{parts}
+
+\end{questions}	
+\end{document}    
+
+

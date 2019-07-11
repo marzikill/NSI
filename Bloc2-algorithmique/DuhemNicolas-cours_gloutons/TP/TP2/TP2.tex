@@ -1,0 +1,289 @@
+
+% !TeX document-id = {117ac6b5-8dd4-4613-9231-0768b5815107}
+%pdflatex -shell-escape TP2.tex
+%pythontex TP2.tex
+%pdflatex -shell-escape tp.tex
+% !TeX TXS-program:compile = txs:///pdflatex/[--shell-escape]
+
+\documentclass[12pt,french]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{array,multicol,multirow,enumerate,eurosym,latexsym,fourier,bbding,pifont}
+\usepackage{fourier}
+\usepackage{graphicx,pst-all}
+\usepackage{tabularx}
+\usepackage [alwaysadjust]{paralist}
+\usepackage{amsmath,amsfonts,amsthm,amssymb,geometry}
+\usepackage{fancyhdr}
+\usepackage{mathrsfs}  
+\usepackage{pstricks,pst-plot,pst-text,pst-tree,pstricks-add,pst-eps,pst-fill,pst-node,pst-math}
+\usepackage{euscript,amsfonts,eepic,color}
+\usepackage{ifthen,fp}
+\newcommand{\Calig}[1]{\ensuremath{\mathscr{#1}}}              
+\usepackage{babel}
+\usepackage{xcolor}
+\usepackage{minted}
+\usepackage{pythontex}
+\usepackage{multicol}
+\usepackage[most]{tcolorbox}
+\usepackage{fancyhdr}
+\setlength{\parindent}{0pt}
+\usepackage{ulem}
+\usepackage[np]{numprint}
+\geometry{vmargin=15mm,hmargin=5mm}
+\pagestyle{empty}
+\setlength\columnsep{5mm}
+\renewcommand{\thesection}{\Roman{section}}
+\renewcommand{\thesubsection}{\Alph{subsection}}
+\renewcommand{\thesubsubsection}{\arabic{subsubsection}}
+\newcounter{npb}
+\setcounter{npb}{0}
+\newcommand{\exo}{
+    \stepcounter{npb}
+    {\textbf{$\triangleright$ \underline{Exercice \arabic{npb} }}}
+}
+\newcounter{sf}
+\setcounter{sf}{0}
+\newcommand{\s}{
+    \stepcounter{sf}
+    {\textbf{ \fbox{SF \arabic{sf} }}}
+}
+\usepackage{lscape}
+\usepackage{tikz}
+\usepackage{metalogo}
+\usepackage{hyperref}
+\newcommand{\expandpyconc}[1]{\expandafter\reallyexpandpyconc\expandafter{#1}}
+\newcommand{\reallyexpandpyconc}[1]{\pyconc{exec(compile(open('#1', 'rb').read(), '#1', 'exec'))}}
+
+\newenvironment{pyconcodeblck}[1]%
+{\newcommand{\snippetfile}{snippet-#1.py}
+	\VerbatimEnvironment
+	\begin{VerbatimOut}{\snippetfile}}%
+	{\end{VerbatimOut}%
+	\expandpyconc{\snippetfile}}
+\newcommand{\typesetcode}[1]{\inputpygments{python}{snippet-#1.py}}
+
+
+\begin{pyconcodeblck}{temp19}
+def extraire(t,n):
+	for i in range(1,len(t)):
+		v = t[i][n]
+		j = i-1
+		while(j>=0 and t[j][n]>v):
+			t[j+1],t[j] = t[j],t[j+1]
+			j = j-1
+		t[j+1][n] = v
+	return t
+\end{pyconcodeblck}
+\begin{pyconcodeblck}{temp14}
+def gloutonP(l,maxi):
+	tmp=[x for x in l]
+	tmp.sort(key=lambda tup: tup[1],reverse=True)
+	valeur=0
+	poids=0
+	i=0
+	solution=[]   
+	while i<len(tmp):
+		if (poids+tmp[i][1]) <=maxi:
+			solution.append(tmp[i])
+			poids +=tmp[i][1]
+			valeur+=tmp[i][0]
+		i+=1
+	reponse=[1 if x in solution else 0 for x in l]        
+	
+	return reponse,valeur,poids
+\end{pyconcodeblck}
+
+\begin{pyconcodeblck}{temp15}
+def gloutonV(l,maxi=30):
+	tmp=[x for x in l]
+	l.sort(key=lambda tup: tup[0],reverse=True)
+	valeur=0
+	poids=0
+	i=0
+	solution=[]
+	while i<len(tmp):
+		if (poids+tmp[i][1]) <=maxi:
+			solution.append(tmp[i])
+			poids +=tmp[i][1]
+			valeur+=tmp[i][0]
+		i+=1
+	reponse=[1 if x in solution else 0 for x in tmp]
+	
+	return reponse,valeur,poids
+\end{pyconcodeblck}
+
+\begin{pyconcodeblck}{temp16}
+def gloutonVPP(l,maxi=30):
+	tmp=[x for x in l]
+	l.sort(key=lambda tup: tup[0]/tup[1],reverse=True)
+	valeur=0
+	poids=0
+	solution=[]
+	i=0
+	while i<len(tmp):
+		if (poids+tmp[i][1]) <=maxi:
+			solution.append(tmp[i])
+			poids +=tmp[i][1]
+			valeur+=tmp[i][0]
+		i+=1
+	reponse=[1 if x in solution else 0 for x in tmp]
+	
+	return reponse,valeur,poids
+	
+\end{pyconcodeblck}
+\begin{document}
+
+  \lhead{Lycée Jean Monnet - \textit{NSI}}
+    \chead{}
+    \rhead{\textit{Année} 2019/2020}
+      \renewcommand{\headrulewidth}{0.5pt}
+      \lfoot{                      }\cfoot{Page \thepage}\rfoot{\textsf{Aude Duhem et Patrice Nicolas}}
+    \pagestyle{fancy}
+    \renewcommand{\footrulewidth}{0.4pt}
+\begin{center}
+\textbf{\Large{TP2 - Le problème du rendu de monnaie}}\end{center}
+\hrule
+\medskip
+\section{Retour sur les Tris}
+\begin{enumerate}
+	
+	\item Ecrire une fonction \textbf{extraire} qui accepte en paramètres, une liste de liste  \textbf{l} et un entier \textbf{n}  dans [0; 2] .La fonction doit retourner la liste triée en fonction du n-ième  élément de chaque sous-liste. On pourra choisir le tri insertion par exemple.
+	\begin{tcolorbox}[enhanced,attach boxed title to top center={yshift=-3mm,yshifttext=-1mm},
+		colback=green!5!white,colframe=green!75!black,colbacktitle=green!25!black,
+		title=Console Python, fonttitle=\bfseries,
+		boxed title style={size=small,colframe=blue!25!black} ]
+		\begin{pyconsole}
+L= [ [1, 5, 6], [8, 10, 2], [3, 3, 5],[4, 8, 1] ]
+extraire(L,1)
+extraire(L,2)
+		\end{pyconsole}
+	\end{tcolorbox}
+	
+	
+	
+	\item Pourquoi le code précédent ne fonctionne-t-il pas (tel quel) avec une liste de tuples?
+
+	\item A l'aide de l'exercice 7, expliquer le sens de l'instruction \mintinline{python}{List.sort(key = lambda a : a[1]) }
+\end{enumerate}	
+
+\section{Algorithme du sac à dos}
+	\subsection{Critère de Poids}
+	
+	Nous allons écrire un premier algorithme glouton de critère \textbf{"placer d'abord dans le sac, les objets les plus lourds."} En cas d'égalité, on prendra "au hasard" un objet parmi les indécis. On pourra utiliser la méthode \textbf{list.sort()} comme définie sur la documentation officielle \href{https://docs.python.org/fr/3/howto/sorting.html}{Python}	
+	\begin{enumerate}
+	\item Ecrire une fonction \textbf{gloutonP} de paramètres \textbf{l} et \textbf{maxi}, respectivement une liste de tuples (valeur en €, poids en kg) et un entier correspondant au poids maximal supporté par le sac.  La fonction doit retourner un triplet \textbf{reponse, valeur, poids} comme dans l'exemple ci-dessous:
+	\begin{tcolorbox}[enhanced,attach boxed title to top center={yshift=-3mm,yshifttext=-1mm},
+		colback=green!5!white,colframe=green!75!black,colbacktitle=green!25!black,
+		title=Console Python, fonttitle=\bfseries,
+		boxed title style={size=small,colframe=blue!25!black} ]
+\begin{pyconsole}
+liste=[(7,13), (4,12), (3,8), (3,10)]
+gloutonP(liste,30)
+		\end{pyconsole}
+	\end{tcolorbox}
+	Le fichier \textbf{Datas.txt} contient un ensemble de données correspondant à 5 magasins fictifs : t4, t7, t8, t10 et t15. Chaque ligne du fichier contient, le nom du magasin, une liste d'objets et le poids maximal autorisé dans le sac du voleur.	
+	\item A l'aide de la fonction \textbf{perf\_counter} du module \textbf{time}, calculer la durée d'exécution sur les ensembles de données fournis dans le fichier Datas.txt. Les durées seront obtenues en réalisant une moyenne sur 100 appels de la fonction \textbf{gloutonP}. Noter vos résultats dans les tableaux en annexe A (avec 4 chiffres significatifs sur le temps). 
+\end{enumerate}
+	\subsection{Critère de Valeur}
+	
+	Pour notre deuxième algorithme glouton, le critère retenu est \textbf{"placer d'abord dans le sac, les objets de plus grande valeur"}. Ecrire une fonction \textbf{gloutonV} qui accepte les mêmes paramètres que gloutonP et qui retourne le triplet \textbf{reponse, valeur, poids} comme dans l'exemple ci-après ; réaliser ensuite les mêmes tests à l'aide du fichier  \textbf{datas.txt} pour compléter les tableaux de l'annexe A.
+	\begin{tcolorbox}[enhanced,attach boxed title to top center={yshift=-3mm,yshifttext=-1mm},
+		colback=green!5!white,colframe=green!75!black,colbacktitle=green!25!black,
+		title=Console Python, fonttitle=\bfseries,
+		boxed title style={size=small,colframe=blue!25!black} ]
+\begin{pyconsole}
+liste=[(7,13), (4,12), (3,8), (3,10)]
+gloutonV(liste,30)
+		\end{pyconsole}
+	\end{tcolorbox}
+	
+	
+	\subsection{Critère de Valeur Pondérée par le Poids}
+	
+	Pour notre dernier algorithme glouton, le critère retenu est \textbf{"placer d'abord dans le sac, les objets dont le rapport \boldmath\( \frac{\text{valeur}}{\text{poids}} \) est le plus élevé}.  Ecrire une fonction \textbf{gloutonVPP} qui accepte les mêmes paramètres que gloutonP et retourne le triplet \textbf{reponse, valeur, poids} comme dans l'exemple ci-après ; réaliser ensuite les mêmes tests à l'aide du fichier  \textbf{datas.txt} pour compléter les tableaux en annexe A.
+	\begin{tcolorbox}[enhanced,attach boxed title to top center={yshift=-3mm,yshifttext=-1mm},
+		colback=green!5!white,colframe=green!75!black,colbacktitle=green!25!black,
+		title=Console Python, fonttitle=\bfseries,
+		boxed title style={size=small,colframe=blue!25!black} ]
+\begin{pyconsole}
+liste=[(7,13), (4,12), (3,8), (3,10)]
+gloutonVPP(liste,30)
+\end{pyconsole}
+	\end{tcolorbox}
+	\subsection{Comparaison des trois critères}
+	\begin{enumerate}
+\item  Comparer les durées d'exécution des trois algorithmes gloutons. Commenter. 	
+	\item Discuter du choix du critère de sélection des algorithmes gloutons en fonction de $n$.
+	\end{enumerate}
+\hrule
+\small	
+	\begin{center}
+		\textbf{Annexe A : comparaison des performances des différents algorithmes}
+	\end{center}
+
+
+	%{\rowcolors{3}{gray!35!black!10}{green!70!yellow!40}
+	\begin{tabular}{ |p{2.6cm}|p{2.6cm}|p{2.6cm}|p{2.6cm}|p{2.6cm}|p{2.6cm}| }
+		\hline
+		\multicolumn{6}{|c|}{Durée d'exécution ( en s)$^*$ de différents algorithme en fonction du nombre d'objets pour le KP} \\
+		\hline
+		Algorithme& n=4&n=7&n=8& n=10&n=15\\
+		\hline
+		GLOUTONP &&&&& \\
+		&&&&&\\
+		\hline
+		GLOUTONV &&&&& \\
+		&&&&&\\
+		\hline
+		GLOUTONVPP &&&&&\\
+		&&&&&\\
+		\hline
+	Algorithme Naif    &1.291e-4& 2.129e-3&4.348e-3 & 2.100e-2 &1.137 \\
+		\hline
+	\end{tabular}
+	%}
+	
+
+\vspace{2mm}
+* Calculs effectués sur 1000 itérations pour chaque fonction ; MacBook Pro IntelCore i5 2.4 GHz double coeur
+\begin{table}[h]
+	%{\rowcolors{3}{gray!35!black!10}{green!70!yellow!40}
+	\begin{tabular}{ |p{2.5cm}|p{1.5cm}|p{2.8cm}|p{3.2cm}|p{3.6cm}|p{4,5cm}| }
+		\hline
+		\multicolumn{6}{|c|}{Réponses$^{**}$ des différents algorithmes en fonction du nombre d'objets pour le KP} \\
+		\hline
+		Algorithme& n=4&n=7&n=8& n=10&n=15\\
+		\hline
+		GLOUTONP &&&&& \\
+		&&&&& \\
+		\hline
+		GLOUTONV &&&&& \\
+			&&&&& \\
+		\hline
+		GLOUTONVPP &&&&&\\
+			&&&&& \\
+		\hline
+		Sol. Optimale  &\small([1,1,0,0],\newline11, 25)&\small ([0, 1, 0, 1, 0, 0, 1], \newline1735, 169)&\small([1, 1, 1, 1, 0, 1, 0, 0],\newline 280, 102) & \small([1, 1, 1, 1, 0, 1, 0, 0, 0, 0], 309, 165) &\small([0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0] ,1458, 749) \\
+		\hline
+	\end{tabular}
+	%}
+	
+\end{table}
+ 
+\normalsize
+\hrule
+\medskip
+\begin{center} 
+\textbf{Pour aller plus loin ... : exercice 8 de la feuille d'exercices} \end{center}
+
+
+
+\end{document}
+
+
+
+
+
+
+
+

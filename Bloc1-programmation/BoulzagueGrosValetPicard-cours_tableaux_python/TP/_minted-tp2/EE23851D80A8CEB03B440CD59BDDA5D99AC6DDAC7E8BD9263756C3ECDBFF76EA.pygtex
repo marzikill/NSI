@@ -1,0 +1,11 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{sous\PYGZus{}tableau}\PYG{p}{(}\PYG{n}{t}\PYG{p}{,} \PYG{n}{i}\PYG{p}{,} \PYG{n}{j}\PYG{p}{):}
+    \PYG{c+c1}{\PYGZsh{} Extrait le sous tableau constitué des éléments}
+    \PYG{c+c1}{\PYGZsh{} d\PYGZsq{}indice compris entre i et j (exclu) du tableau}
+    \PYG{c+c1}{\PYGZsh{} 0 \PYGZlt{} i \PYGZlt{} j \PYGZlt{}= len(t) : sinon IndexError}
+    \PYG{n}{n} \PYG{o}{=} \PYG{n}{j} \PYG{o}{\PYGZhy{}} \PYG{n}{i}
+    \PYG{n}{tprime} \PYG{o}{=} \PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{*}\PYG{n}{n}
+    \PYG{k}{for} \PYG{n}{k} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{n}\PYG{p}{):}
+        \PYG{n}{tprime}\PYG{p}{[}\PYG{n}{k}\PYG{p}{]} \PYG{o}{=} \PYG{n}{t}\PYG{p}{[}\PYG{n}{k} \PYG{o}{+} \PYG{n}{i}\PYG{p}{]}
+    \PYG{k}{return} \PYG{n}{tprime}
+\end{Verbatim}

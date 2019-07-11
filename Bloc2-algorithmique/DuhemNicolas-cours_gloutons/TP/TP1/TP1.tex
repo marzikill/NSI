@@ -1,0 +1,123 @@
+
+% !TeX document-id = {117ac6b5-8dd4-4613-9231-0768b5815107}
+%pdflatex -shell-escape tp.tex
+%pythontex tp.tex
+%pdflatex -shell-escape tp.tex
+% !TeX TXS-program:compile = txs:///pdflatex/[--shell-escape]
+
+\documentclass[12pt,french]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{array,multicol,multirow,enumerate,eurosym,latexsym,fourier,bbding,pifont}
+\usepackage{fourier}
+\usepackage{graphicx,pst-all}
+\usepackage{tabularx}
+\usepackage [alwaysadjust]{paralist}
+\usepackage{amsmath,amsfonts,amsthm,amssymb,geometry}
+\usepackage{fancyhdr}
+\usepackage{mathrsfs}  
+\usepackage{pstricks,pst-plot,pst-text,pst-tree,pstricks-add,pst-eps,pst-fill,pst-node,pst-math}
+\usepackage{euscript,amsfonts,eepic,color}
+\usepackage{ifthen,fp}
+\newcommand{\Calig}[1]{\ensuremath{\mathscr{#1}}}              
+\usepackage{babel}
+\usepackage{xcolor}
+\usepackage{minted}
+\usepackage{pythontex}
+\usepackage{multicol}
+\usepackage[most]{tcolorbox}
+\usepackage{fancyhdr}
+\setlength{\parindent}{0pt}
+\usepackage{ulem}
+\usepackage[np]{numprint}
+\geometry{vmargin=15mm,hmargin=5mm}
+\pagestyle{empty}
+\setlength\columnsep{5mm}
+\renewcommand{\thesection}{\Roman{section}}
+\renewcommand{\thesubsection}{\Alph{subsection}}
+\renewcommand{\thesubsubsection}{\arabic{subsubsection}}
+\newcounter{npb}
+\setcounter{npb}{0}
+\newcommand{\exo}{
+    \stepcounter{npb}
+    {\textbf{$\triangleright$ \underline{Exercice \arabic{npb} }}}
+}
+\newcounter{sf}
+\setcounter{sf}{0}
+\newcommand{\s}{
+    \stepcounter{sf}
+    {\textbf{ \fbox{SF \arabic{sf} }}}
+}
+\usepackage{lscape}
+\usepackage{tikz}
+\usepackage{metalogo}
+\usepackage{hyperref}
+\begin{document}
+
+  \lhead{Lycée Jean Monnet - \textit{NSI}}
+    \chead{}
+    \rhead{\textit{Année} 2019/2020}
+      \renewcommand{\headrulewidth}{0.5pt}
+      \lfoot{                      }\cfoot{Page \thepage}\rfoot{\textsf{Aude Duhem et Patrice Nicolas}}
+    \pagestyle{fancy}
+    \renewcommand{\footrulewidth}{0.4pt}
+\begin{center}
+\textbf{\Large{TP1 - Le problème du rendu de monnaie}}\end{center}
+\hrule
+\medskip
+\begin{center}
+Le but de ce TP est de programmer un appareil qui rend automatiquement la monnaie avec des pièces. \\
+Pour ce faire, on aura recours à l'algorithme de rendu de monnaie vu la séance précédente.
+\end{center}
+On considère dans les parties I et II que l'on dispose d'autant de pièces que l'on veut.
+ 
+\section{Une première approche}
+On se propose de coder en Python l'algorithme de rendu de monnaie vu la séance précédente. Pour faciliter les calculs, on va exprimer les valeurs de toutes les pièces en centimes que l'on stockera dans une liste.
+\begin{enumerate}
+	\item Ecrire sous forme d'une liste nommée \textbf{\textsl{caisse}} contenant les valeurs par ordre décroissant.
+	\item Ecrire une fonction \textbf{\textsl{rendmonnaie}} qui prend en paramètre la somme à rendre \textbf{\textsl{s}} en \euro\, et une caisse \textbf{\textsl{c}} de type list et qui renvoie une liste contenant la quantité de monnaie à rendre pour chaque valeur.\\
+	Par exemple,  \mintinline{python}{rendmonnaie(2.34,caisse)}
+	doit afficher: [1, 0, 0, 1, 1, 0, 2, 0]\\
+	où [1, 0, 0, 1, 1, 0, 2, 0] indique que l'on a rendu une pièce de 2 \euro, une pièce de 20 centimes, une pièce de 10 centimes et deux pièces de 2 centimes.
+	
+\end{enumerate}
+\section{Une première amélioration}
+ Ecrire une fonction \textbf{\textsl{rendmonnaie2}} qui prend en paramètre la somme à rendre \textbf{\textsl{s}} en \euro\, et une caisse \textbf{\textsl{c}} de type list et qui renvoie une liste constituée par les coupes [pièces,quantité rendue]\\
+Par exemple,  \mintinline{python}{rendmonnaie2(2.34,caisse)}
+doit afficher: [[200, 1], [100, 0], [50, 0], [20, 1], [10, 1], [5, 0], [2, 2], [1, 0]]\\
+
+ A partir de la partie III, on disposera pour chaque pièce d'une certaine quantité.
+
+\section{Avec un dictionnaire}
+
+\begin{enumerate}
+	\item On représente maintenant le contenu contenu dans le monnayeur par un dictionnaire :
+	\begin{itemize}[$\bullet$]
+		\item la valeur faciale de la pièce comme cle
+		\item le nombre de pièces de cette valeur contenue dans le monnayeur
+	\end{itemize}
+	Créer un dictionnaire nommé \textbf{\textsl{caisse2}} répondant à ces conditions.\\
+	La quantité prise par la pièce sera générée aléatoirement avec le module random.
+	\item Ecrire une fonction \textbf{\textsl{rendmonnaie3}} qui prend en paramètre la somme à rendre \textbf{\textsl{s}} en \euro\, et une caisse \textbf{\textsl{c}} de type dictionnaire et qui renvoie un dictionnaire constituée par les couples [pièces,quantité rendue] si c'est possible et le message 'il n'y a plus de monnaie disponible' si le rendu est impossible\\
+	Par exemple,  \mintinline{python}{rendmonnaie3(2.34,caisse2)}
+	doit afficher: \\
+	\{200: 1, 100: 0, 50: 0, 20: 1, 10: 1, 5: 0, 2: 2, 1: 0\}\\
+	si la caisse avait la répartition \{200: 6, 100: 0, 50: 1, 20: 9, 10: 1, 5: 8, 2: 9, 1: 6\}\\
+	il n'y a plus assez de monnaie si la caisse avait la répartition suivante \{200: 0, 100: 1, 50: 1, 20: 1, 10: 2, 5: 2, 2: 0, 1: 1\}.\\
+\end{enumerate}	
+\hrule
+\medskip
+\begin{center} 
+Pour aller plus loin ... \end{center}
+\begin{center} Faire l'exercice 4 de la feuille d'exercices \end{center}
+
+
+
+\end{document}
+
+
+
+
+
+
+
+

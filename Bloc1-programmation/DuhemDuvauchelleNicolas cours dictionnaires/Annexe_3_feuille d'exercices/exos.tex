@@ -1,0 +1,303 @@
+% !TeX document-id = {117ac6b5-8dd4-4613-9231-0768b5815107}
+%pdflatex -shell-escape exos.tex
+%pythontex exos.tex
+%pdflatex -shell-escape exos.tex
+% !TeX TXS-program:compile = txs:///pdflatex/[--shell-escape]
+
+\documentclass[12pt,french]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{array,multicol,multirow,enumerate,eurosym,latexsym,fourier,bbding,pifont}
+\usepackage{fourier}
+\usepackage{graphicx,pst-all}
+\usepackage{tabularx}
+\usepackage [alwaysadjust]{paralist}
+\usepackage{amsmath,amsfonts,amsthm,amssymb,geometry}
+\usepackage{fancyhdr}
+\usepackage{mathrsfs}  
+\usepackage{pstricks,pst-plot,pst-text,pst-tree,pstricks-add,pst-eps,pst-fill,pst-node,pst-math}
+\usepackage{euscript,amsfonts,eepic,color}
+\usepackage{ifthen,fp}
+\newcommand{\Calig}[1]{\ensuremath{\mathscr{#1}}}              
+\usepackage{babel}
+\usepackage{xcolor}
+\usepackage{minted}
+\usepackage{pythontex}
+\usepackage{multicol}
+\usepackage[most]{tcolorbox}
+\usepackage{fancyhdr}
+\setlength{\parindent}{0pt}
+\usepackage{ulem}
+\usepackage[np]{numprint}
+\geometry{vmargin=15mm,hmargin=5mm}
+\pagestyle{empty}
+\setlength\columnsep{5mm}
+\renewcommand{\thesection}{\Roman{section}}
+\renewcommand{\thesubsection}{\Alph{subsection}}
+\renewcommand{\thesubsubsection}{\arabic{subsubsection}}
+\newcounter{npb}
+\setcounter{npb}{0}
+\newcommand{\exo}{
+    \stepcounter{npb}
+    {\textbf{$\triangleright$ \underline{Exercice \arabic{npb} }}}
+}
+\newcounter{sf}
+\setcounter{sf}{0}
+\newcommand{\s}{
+    \stepcounter{sf}
+    {\textbf{ \fbox{SF \arabic{sf} }}}
+}
+\usepackage{lscape}
+\usepackage{tikz}
+\usepackage{metalogo}
+\usepackage{hyperref}
+\begin{document}
+
+  \lhead{Lycée Jean Monnet - \textit{NSI}}
+    \chead{}
+    \rhead{\textit{Année} 2019/2020}
+      \renewcommand{\headrulewidth}{0.5pt}
+      \lfoot{                      }\cfoot{Page \thepage}\rfoot{\textsf{Aude Duhem, Sophie Duvauchelle, Patrice Nicolas}}
+    \pagestyle{fancy}
+    \renewcommand{\footrulewidth}{0.4pt}
+\begin{center}
+\textbf{\Large{Les dictionnaires et recherche en table - Feuille d'exercices   }}\end{center}
+\hrule
+\vskip0.1cm
+\exo - Exercice débranché - $\star$ 
+\begin{enumerate}
+	\item On considère les scripts ci-dessous. Pour chacune des expressions, l'associer au(x) tableau(x) associatif(s) correspondant(s) : \\
+\end{enumerate}
+	\small
+\begin{tabular}{p{6cm}p{6.8cm}p{6.8cm}}
+
+\begin{tcolorbox}[enhanced,width=6cm,
+		colback=blue!5!white,colframe=blue!75!black]	
+\begin{pyverbatim}[width=5.7cm]
+dico={
+ 'keyboard': 'clavier',
+ 'souris': 'mouse'
+ 'computer':'ordinateur' }	
+\end{pyverbatim}
+\end{tcolorbox}
+& \begin{tcolorbox}[enhanced,width=6.8cm,
+	colback=blue!5!white,colframe=blue!75!black]	
+\begin{pyverbatim}
+dico = {}
+dico['keyboard'] ='clavier'
+dico['mouse'] ='souris'
+dico['computer'] = 'ordinateur'	
+\end{pyverbatim}
+\end{tcolorbox}
+&\begin{tcolorbox}[enhanced,width=6.8cm,
+	colback=blue!5!white,colframe=blue!75!black]	
+\begin{pyverbatim}
+dico = {}
+dico['mouse'] ='souris'
+dico['keyboard'] ='clavier'
+dico['computer'] = 'ordinateur'		
+\end{pyverbatim}
+\end{tcolorbox}\\
+
+	\begin{tabular}{|c|c|c|}
+			\hline
+		'keyboard'&'mouse'&'computer'\\
+		\hline
+		'clavier'&'souris'&'ordinateur'\\
+		\hline
+		\end{tabular}&\begin{tabular}{|c|c|c|}
+		\hline
+		'keyboard'&'souris'&'computer'\\
+		\hline
+		'clavier'&'mouse'&'ordinateur'\\
+		\hline
+	\end{tabular}&\begin{tabular}{|c|c|c|}
+\hline
+'mouse'&'keyboard'&'computer'\\
+\hline
+'souris'&'clavier'&'ordinateur'\\
+\hline
+\end{tabular}
+	
+\end{tabular}
+\normalsize
+\begin{enumerate}
+\item[2.] On considère dans cette question, le dictionnaire capitales déclaré ainsi :\\
+\mintinline{python}{ capitales={'France':'Paris',"Allemagne":"Berlin",'Belgique':"Bruxelles","France":"Marseille"}}\\ 
+Après éxécution de l'instruction  \mintinline{python}{ capitales} dans la boucle d'interaction, on obtient (choisir la bonne réponse) :\\
+Réponse a : \{'France': 'Marseille', 'Allemagne': 'Berlin', 'Belgique': 'Bruxelles'\}\\
+Réponse b : \{'France': 'Paris', 'Allemagne': 'Berlin', 'Belgique': 'Bruxelles'\}\\
+Réponse c : \{'France': 'Paris', 'Allemagne': 'Berlin', 'Belgique': 'Bruxelles','France': 'Marseille'\}
+\item[3.] On considère le script donné ci-dessous :
+\definecolor{bg}{rgb}{0.95,0.95,0.95}
+\begin{minted}[frame=lines,framesep=2mm,baselinestretch=1.2,bgcolor=bg,fontsize=\normalsize,linenos
+]{python}
+capitaleseuro={'France':'Paris','Suisse':'Berne','Belgique':'Bruxelles','Espagne':'Madrid'}
+capitaleseuro['Islande']='Reykjavik'
+print(capitaleseuro)
+print(len(capitaleseuro))
+print(capitaleseuro['France'])
+del(capitaleseuro['Belgique'])
+print(capitaleseuro)
+print(list(capitaleseuro.keys()))
+print(capitaleseuro['Italie'])
+print(capitaleseuro[0])
+\end{minted}
+Pour chacune des lignes d'instructions du script ci-dessus, dire quelle est la réponse obtenue dans la boucle d'interaction après son interprétation :
+\begin{multicols}{4}
+\begin{enumerate}[(a)]
+\item ligne 3 
+\item ligne 4
+\item ligne 5
+\item ligne 7
+\item  ligne 8
+\item ligne 9
+\item ligne 10 
+\end{enumerate}
+\end{multicols}
+\end{enumerate}
+\exo - débranché en grande partie - $\star$\\
+On considère le dictionnaire suivant saisi dans la boucle d'interaction :
+\begin{tcolorbox}[enhanced,
+	colback=blue!5!white,colframe=blue!75!black]	
+\begin{pyconsole}
+valise={"Pantalon":3,"Cravate":0,"Chemise":2,"T-Shirt":5,"Caleçon":7,"pull":3,
+	"paire de chaussettes":7}
+\end{pyconsole}
+\end{tcolorbox}
+Ce dictionnaire symbolise le contenu de la valise de Max pour partir en vacances pendant une semaine.
+\begin{enumerate}
+	\item A quel tableau associatif correspond ce  dictionnaire valise ? \\
+	Pour répondre à cette question, on complétera un tableau de ce type :\\
+	\begin{tabular}{|c|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|}
+	\hline
+	Clef&...&...&...&......&...&...\\
+	\hline
+	Valeur&...&...&...&......&...&...\\
+	\hline
+	\end{tabular}
+	\item Quelle instruction doit-on saisir dans la boucle d'interaction (console) pour obtenir la valeur associée à la cle 'Cravate' ?
+	\item Max a acheté un chapeau et veut l'ajouter à sa valise. Quelle instruction doit on saisir dans la boucle d'interaction pour mettre à jour sa valise ? 
+	\item La valeur associée à la cle 'Cravate' étant nulle, on désire retirer du dictionnaire le couple (clé,valeur) correspondant. Quelle instruction doit-on saisir dans la boucle d'interaction ?
+	\item Question facultative : Max veut partir finalement en vacances pour deux semaines. Il doit donc amener le double de chaque sorte de vêtements. Quelles instructions doit-on saisir pout obtenir le dictionnaire valise mis à jour avec les nouvelles quantités ? 
+	\item Vérifier les réponses à l'aide d'un IDLE et les corriger si besoin. 
+\end{enumerate}
+\exo - Affichages $\star$
+\begin{enumerate}
+	\item Ecrire une fonction \textbf{\textsl{affiche}} qui prend en paramètre un dictionnaire \textbf{\textsl{d}} et qui affiche toutes les associations clés/valeurs du dictionnaire \textbf{\textsl{d}}.\\
+Par exemple,  \mintinline{python}{ affiche({'pommes': 430, 'bananes': 312, 'oranges' : -274})}
+ doit afficher:\\
+pommes 430\\
+bananes 312\\
+oranges -274
+\item Ecrire une fonction \textbf{\textsl{test}} qui prend en paramètre un dictionnaire \textbf{\textsl{d}} et une valeur \textbf{\textsl{v}}  et qui affiche toutes les clés du dictionnaire \textbf{\textsl{d}} associées à une valeur supérieure ou égale à \textbf{\textsl{v}}.\\
+Par exemple,  \mintinline{python}{test({'pommes': 430, 'bananes': 312, 'oranges' : -274},350)}
+doit afficher:\\
+pommes 430
+\end{enumerate}
+
+\exo\\
+Dans cet exercice, nous nous familiarisons avec les manipulations sur les dictionnaires sur une thématique d'un magasin en ligne.\\
+La base des prix des produits du magasin en ligne considérée est donnée par la table suivante :
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+	\hline
+	Nom du produit&Clavier&Souris&Ecran&Tour PC&Casque&Casque VR&Cle USB\\
+	\hline
+	Prix en \euro (TTC)&38,99&11,59&125,00&379,89&17,84&350,69&16,99\\
+	\hline
+\end{tabular}
+\end{center}
+\begin{enumerate}
+	\item Créer un dictionnaire nommé \textbf{\textsl{base\_prix}} correspondant à la table précédente.
+	\item Ecrire une fonction \textbf{\textsl{disponibilite}} qui prend en paramètre un dictionnaire de base de prix \textbf{\textsl{b}} et un nom de produit \textbf{\textsl{p}} et qui renvoie True si le produit \textbf{\textsl{p}} est dans la base et False sinon. 
+	\item Ecrire une fonction \textbf{\textsl{prix\_moyen}} qui prend en paramètre un dictionnaire de base de prix \textbf{\textsl{b}} et qui renvoie le prix moyen des produits présents dans la base. 
+	\item Ecrire une fonction \textbf{\textsl{fourchette\_prix}} qui prend en paramètres un prix minimum \textbf{\textsl{mini}} , un prix maximum \textbf{\textsl{maxi}} et un dictionnaire de base de prix \textbf{\textsl{b}} et qui affiche les produits disponibles dans cette fourchette de prix. 
+	\item Le panier est un concept important dans les magasins en ligne. On représentera le panier par un dictionnaire :
+	\begin{itemize}[$\bullet$]
+	\item les noms de produit comme cles
+	\item une quantité d'achat comme valeurs associées
+\end{itemize}
+	Créer un dictionnaire nommé \textbf{\textsl{panier}} correspondant à l'achat de trois clés usb, d'une souris gaming et d'un clavier gaming. 
+	\item Ecrire une fonction \textsl{stock} qui prend en paramètres un dictionnaire de panier d'achat \textbf{\textsl{p}} et un dictionnaire de base de prix \textbf{\textsl{b}} et qui retourne True si tous les produits sont disponibles ou False sinon.\\
+	Remarques :
+	\begin{itemize}
+	\item On suppose que si un article du panier est présent dans la base de prix, il est également disponible dans la quantité demandée.
+	\item La fonction \textbf{\textsl{stock}} devra appeler la fonction \textbf{\textsl{disponibilite}} .
+	\end{itemize}
+\item Ecrire une fonction \textbf{\textsl{facture}} qui prend en paramètres un dictionnaire de panier d'achat \textbf{\textsl{p}} et un dictionnaire de base de prix \textbf{\textsl{b}} et qui retourne le montant total de la facture à payer.\\
+Remarque : on suppose que tous les articles du panier sont tous disponibles dans les quantités demandées dans la base de prix 
+\end{enumerate}
+\exo - Compréhension en vrac - $\star \star $\\
+Cet exercice propose d'approfondir les expressions de compréhension de listes et de dictionnaire.\\
+Soient les variables suivantes :\\
+\begin{tcolorbox}[enhanced,colback=blue!5!white,colframe=blue!75!black]	
+\begin{pyverbatim}
+Liste=[2,5,12,31,2,17,31,42,2]
+Dico={'xx':'bli','yzy':'blo','cuicui':'toutou','miaou':'toutou'}
+\end{pyverbatim}
+\end{tcolorbox}
+\begin{enumerate}
+	\item Question débranchée : Donner le résultat d'évaluation des expressions suivantes :\\
+	\begin{tcolorbox}[enhanced,colback=blue!5!white,colframe=blue!75!black]	
+	\begin{pyverbatim}
+	expression1=[(k,Dico[k]) for k in Dico ]
+	expression2=[(k,v) for (k,v) in Dico.items() ]
+	expression3=[Dico[k] for k in Dico ]
+	expression4=[v for (k,v) in Dico.items() ]
+	expression5={ k:Dico[k] for k in Dico }
+	expression6={ Dico[k]:k for k in Dico }
+	expression7={ (v+v):k for (k,v) in Dico.items() }
+	\end{pyverbatim}
+	\end{tcolorbox}	
+	\item Vérifier les réponses à l'aide d'un IDLE et les corriger si besoin. 
+	
+\end{enumerate}
+\exo - Site WEB
+\begin{enumerate}
+	\item Pour créer un compte sur un site WEB, un utilisateur doit donner un nom, un login et un mot de passe. Ensuite, pour accéder au site, l'utilisateur ne doit fournir que le couple (login,mdp) afin de s’identifier ; Par ailleurs, le site stocke tous
+	les identifiants et la date de dernière connexion dans un dictionnaire D1 au format :
+	\begin{center}
+	\{ \textbf{login} : \{’nom’ : \textbf{nom} ,’mdp’ : \textbf{mdp}, ’date’ : date \} \} où les champs en gras sont entrés par l’utilisateur.
+	\end{center}
+	Voici le contenu du dictionnaire D1 aujourd’hui :\\
+	\begin{tcolorbox}[enhanced,colback=blue!5!white,colframe=blue!75!black]	
+	\begin{pyverbatim}
+	{'LouLouCMoi': {'nom':'Lou','mdp':'3juillet2005@!','date':'16/12/2018' },
+	'oznE': {'nom':'Enzo','mdp':'Mbappe78','date':'23/2/2019'}}
+	\end{pyverbatim}
+	\end{tcolorbox}	
+\begin{enumerate}
+	\item Ecrire une ligne de code permettant d’afficher le nombre d’utilisateurs inscrits aujourd’hui.
+	\item Ecrire une fonction \textbf{\textsl{auth}} qui accepte trois paramètres : \textbf{\textsl{d}} (type dict), \textbf{\textsl{login}} (type str) et \textbf{\textsl{mdp}} (type str) telle que : 
+	\begin{itemize}
+		\item si le couple (login,mdp) existe, elle retourne le message : "Bonjour \textbf{\textsl{nom}} ! Quoi de neuf depuis le \textbf{\textsl{date}} ?" où
+	\textbf{\textsl{nom}} et \textbf{\textsl{date}} sont les valeurs associées aux clés login et mdp
+	\item  si le login existe mais le mdp ne correspond pas, elle retourne : "Mot de passe INCORRECT"
+	\item si le login n’existe pas, elle retourne :"Identifiant Inconnu, veuillez créer un compte"
+	\end{itemize}
+	\end{enumerate}
+\item Que renvoie l’instruction suivante ?
+\begin{tcolorbox}[enhanced,colback=blue!5!white,colframe=blue!75!black]	
+\begin{pyverbatim}
+print(D1 ['LouLouCMoi'] ['mdp'])
+\end{pyverbatim}
+\end{tcolorbox}	
+\item Ecrire une fonction \textbf{\textsl{creation}} qui accepte quatre paramètres : \textbf{\textsl{d}} (type dict), \textbf{\textsl{login}} (type str),\textbf{\textsl{ mdp}} (type str) et \textbf{\textsl{nom}} (type
+str). On suppose que l’on dispose d’une fonction \textbf{\textsl{jour}} qui est appelée sans arguments et renvoie la date du jour au format
+’JJ/MM/AAAA’.
+\begin{itemize}
+\item Si la clé \textbf{\textsl{login}} est déjà présente alors \textbf{\textsl{creation}} retourne le message : "Login existant, veuillez choisir un autre
+identifiant"
+\item  Sinon \textbf{\textsl{creation}} retourne le dictionnaire \textbf{\textsl{d}} actualisé
+\end{itemize}
+	\end{enumerate}
+
+\end{document}
+
+
+
+
+
+
+
+

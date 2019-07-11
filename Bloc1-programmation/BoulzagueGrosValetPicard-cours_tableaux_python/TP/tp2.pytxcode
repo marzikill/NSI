@@ -1,0 +1,63 @@
+=>PYTHONTEX#pycon#default#default#0#c#####306#
+exec(compile(open('./pyfiles/snippet-recopier.py', 'rb').read(), './pyfiles/snippet-recopier.py', 'exec'))
+=>PYTHONTEX#pycon#default#default#1#console#####307#
+t1 = [5, 7, 8, 2]
+t2 = recopier(t1)
+print(t2)
+t1[0] = 100
+print(t2)
+=>PYTHONTEX#pycon#default#default#2#c#####379#
+exec(compile(open('./pyfiles/snippet-sous-tableau.py', 'rb').read(), './pyfiles/snippet-sous-tableau.py', 'exec'))
+=>PYTHONTEX#pycon#default#default#3#c#####421#
+exec(compile(open('./pyfiles/snippet-concatener.py', 'rb').read(), './pyfiles/snippet-concatener.py', 'exec'))
+=>PYTHONTEX#pycon#default#default#4#c#####465#
+exec(compile(open('./pyfiles/snippet-insere.py', 'rb').read(), './pyfiles/snippet-insere.py', 'exec'))
+=>PYTHONTEX#pycon#default#default#5#console#####517#
+t1 = [5, 7, 8, 2]
+t2 = recopier(t1)
+print(t2)
+t1[0] = 100
+print(t2)
+=>PYTHONTEX#pycon#default#default#6#console#####525#
+t = [4, 5, 8, 9, 6, 3, 56, 2, -4, 13]
+sous_tableau(t, 2, 5)
+sous_tableau(t, 0, 6)
+sous_tableau(t, 3, 10)
+=>PYTHONTEX#pycon#default#default#7#console#####532#
+t1 = [1, 3, 5]
+t2 = [2, 4, 6]
+concatener(t1, t2)
+concatener(t2, t1)
+concatener(t1, t1)
+concatener(t2, [])
+=>PYTHONTEX#pycon#default#default#8#console#####541#
+t = [5, 7, 9, 5, 3]
+e = 666
+insere(t, 3, e)
+insere(t, 0, e)
+insere(t, 5, e)
+=>PYTHONTEX:SETTINGS#
+version=0.16
+outputdir=pythontex-files-tp2
+workingdir=.
+workingdirset=false
+gobble=none
+rerun=default
+hashdependencies=default
+makestderr=true
+stderrfilename=full
+keeptemps=none
+pyfuture=default
+pyconfuture=none
+pygments=true
+pygglobal=:GLOBAL||
+fvextfile=-1
+pyconbanner=none
+pyconfilename=stdin
+depythontex=false
+pygfamily=py|python|
+pygfamily=pycon|pycon|
+pygfamily=sympy|python|
+pygfamily=sympycon|pycon|
+pygfamily=pylab|python|
+pygfamily=pylabcon|pycon|

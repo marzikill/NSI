@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{foobar}\PYG{p}{(}\PYG{n}{x}\PYG{p}{):}
+    \PYG{k}{return} \PYG{n}{foo}\PYG{p}{(}\PYG{n}{foo}\PYG{p}{(}\PYG{n}{x}\PYG{p}{))}
+\end{Verbatim}

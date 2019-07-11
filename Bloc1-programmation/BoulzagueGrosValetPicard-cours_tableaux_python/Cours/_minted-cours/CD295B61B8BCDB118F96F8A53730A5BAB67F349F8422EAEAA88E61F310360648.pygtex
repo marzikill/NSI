@@ -1,0 +1,9 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{sarah\PYGZus{}note1} \PYG{o}{=} \PYG{l+m+mi}{10}
+\PYG{n}{sarah\PYGZus{}note2} \PYG{o}{=} \PYG{l+m+mi}{15}
+\PYG{n}{sarah\PYGZus{}note3} \PYG{o}{=} \PYG{l+m+mi}{11}
+\PYG{n}{sarah\PYGZus{}note4} \PYG{o}{=} \PYG{l+m+mi}{12}
+\PYG{n}{sarah\PYGZus{}note5} \PYG{o}{=} \PYG{l+m+mi}{18}
+\PYG{n}{sarah\PYGZus{}note6} \PYG{o}{=} \PYG{l+m+mi}{5}
+\PYG{n}{sarah\PYGZus{}note7} \PYG{o}{=} \PYG{l+m+mi}{20}
+\end{Verbatim}

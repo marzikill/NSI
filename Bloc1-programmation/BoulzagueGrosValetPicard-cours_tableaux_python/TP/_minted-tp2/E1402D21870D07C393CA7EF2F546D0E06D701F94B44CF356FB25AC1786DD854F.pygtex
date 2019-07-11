@@ -1,0 +1,14 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{concatener}\PYG{p}{(}\PYG{n}{t1}\PYG{p}{,} \PYG{n}{t2}\PYG{p}{):}
+    \PYG{c+c1}{\PYGZsh{} Renvoie le tableau constitué des éléments de la}
+    \PYG{c+c1}{\PYGZsh{} liste t1 puis des éléments de la liste t2.}
+    \PYG{c+c1}{\PYGZsh{} Marche aussi avec des listes vides (merci Python)}
+    \PYG{n}{n1} \PYG{o}{=} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{t1}\PYG{p}{)}
+    \PYG{n}{n2} \PYG{o}{=} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{t2}\PYG{p}{)}
+    \PYG{n}{t} \PYG{o}{=} \PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{*}\PYG{p}{(}\PYG{n}{n1} \PYG{o}{+} \PYG{n}{n2}\PYG{p}{)}
+    \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{n1}\PYG{p}{):}
+        \PYG{n}{t}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{n}{t1}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}
+    \PYG{k}{for} \PYG{n}{j} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{n2}\PYG{p}{):}
+        \PYG{n}{t}\PYG{p}{[}\PYG{n}{n1} \PYG{o}{+} \PYG{n}{j}\PYG{p}{]} \PYG{o}{=} \PYG{n}{t2}\PYG{p}{[}\PYG{n}{j}\PYG{p}{]}
+    \PYG{k}{return} \PYG{n}{t}
+\end{Verbatim}

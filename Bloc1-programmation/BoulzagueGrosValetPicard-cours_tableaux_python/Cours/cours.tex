@@ -1,0 +1,401 @@
+%! TEX program = xelatex
+% Nécessaire pour la compilation pstricks
+\documentclass[12pt]{article}                   % autres choix : report, book
+\usepackage[a4paper]{geometry}                  % taille correcte du papier
+\usepackage{silence}                            % Filtrer tous ces warnings ennuyeux
+\usepackage[utf8]{inputenc}                     % encodage du fichier source
+\usepackage[T1]{fontenc}                        % gestion des accents (pour les pdf)
+\usepackage[french]{babel}                    % rajouter éventuellement english, greek, etc.
+\usepackage{eurosym}                            % symbole euro
+
+\usepackage{textcomp}                           % caractères additionnels
+\usepackage{lmodern}                            % remplacer éventuellement par txfonts, fourier, etc.
+\usepackage{amsmath,amssymb, amsthm}            % tout ce qu'il faut pour écrire des maths
+\usepackage{dsfont}                             % Pour la fonction indactrice
+\usepackage{xfrac}                              % fraction d'anneau
+
+\usepackage{adforn}                             % Ornements header
+\usepackage{yfonts}                             % Fontes gothiques supplémentaires
+\usepackage{fourier-orns}                       % Ornements header
+\usepackage{mathpazo}
+\usepackage{pstricks,pst-plot,pstricks-add}     % tracer des fonctions
+\usepackage[linesnumbered, french]{algorithm2e} % mise en page des algorithmes
+\usepackage{tikz, tkz-euclide, tkz-tab}         % Dessiner aver tikz
+\usetkzobj{all}                                 % et tout plein de paquets utiles
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{automata,positioning}
+\usetikzlibrary{decorations.pathreplacing,calc}
+\usetikzlibrary{arrows}
+\usetikzlibrary{calc}
+\usetikzlibrary{decorations.fractals}           % Dessiner les fractales usuelles
+\usepackage{enumitem}                           % 1, 2, 3...
+\usepackage{pgffor}                             % Pour faire des boucles
+
+\usepackage{multicol}
+\usepackage{comment}
+\usepackage{array}                              % tableaux un peu plus paramétrables
+
+\usepackage{minted}
+\usepackage[makestderr]{pythontex}
+
+\usepackage{graphicx}                           % pour inclure des images
+\usepackage{xspace}                             % protection des espaces
+\usepackage{xcolor}                             % pour gérer les couleurs
+\usepackage{microtype}                          % améliorations typographiques
+\usepackage{hyperref}                           % gestion des hyperliens
+\hypersetup{
+    colorlinks = true,
+    linkcolor = blue!50!gray!100!,
+    linkbordercolor = {white},
+}
+\hypersetup{pdfstartview=XYZ}                   % Zoom hyperref
+ 
+%%%%%%%%%%%
+%% Maths %%
+%%%%%%%%%%%
+% Raccourcis pour les trucs longs à écrire. Reste d'Oxford principalement. 
+\newcommand{\Prob}[2][]{\mathbb{P}_{#1}\left( #2 \right)}
+\newcommand{\Exp}[2][]{\mathbb{E}_{#1}\left[ #2 \right]}
+\newcommand{\Lawconv}{\stackrel{\mathcal{L}}{\longrightarrow}}
+\newcommand{\Var}[1]{\mbox{Var}\left(#1 \right)}
+\newcommand{\Card}[1]{\mbox{Card}\left(#1 \right)}
+\newcommand{\Int}[4]{\int_{#1}^{#2} \! {#3} \, \mathrm{d}{#4}}
+\newcommand{\kw}{\;|\;}
+\newcommand{\im}{\textrm{Im}}
+\newcommand{\disclamer}{\textit{L’usage de toute calculatrice, téléphone portable, ordinateur est strictement interdit. Un soin tout particulier devra être porté à la qualité et à la précision de la rédaction des argument } \vspace{1.cm}}
+\newcommand{\legendeexos}{
+\paragraph{Légende des exercices.}
+\begin{center}
+\begin{tabular}{cccc}
+$\clubsuit$ : très flacile & $\varheart$ : à savoir par cœur & $\vardiamond$ : care aux calculs & $\spadesuit$ : qui s'y frotte s'y pique 
+\end{tabular}
+\end{center}
+}
+
+%%%%%%%%%%%%%%%%
+%% Structures %%
+%%%%%%%%%%%%%%%%
+
+\newcounter{dfcount}
+{\theoremstyle{definition} \newtheorem{definition}[dfcount]{Définition}}
+\newcounter{propcount}
+\newtheorem{propriete}[propcount]{Propriété}
+\newcounter{thcount}
+\newtheorem{theoreme}[thcount]{Théorème}
+\newcounter{excount}
+{\theoremstyle{definition} \newtheorem{exemple}[excount]{Exemple}}
+\renewcommand{\theexemple}{\arabic{exemple}}
+% Environnement exos
+\newcounter{exoscount}
+\newtheoremstyle{exercicestyle} % name of the style to be used
+  {20pt}                        % measure of space to leave above the theorem. E.g.: 3pt
+  {3pt}                         % measure of space to leave below the theorem. E.g.: 3pt
+  {}                            % name of font to use in the body of the theorem
+  {}                            % measure of space to indent
+  {\bfseries}                   % name of head font
+  {.}                           % punctuation between head and body
+  {.5em}                        % space after theorem head; " " = normal interword space
+  {}                            % Manually specify head
+\theoremstyle{exercicestyle}
+\newtheorem{exos}[exoscount]{Exercice}
+\newenvironment{exo}[2]
+  {
+   \begin{exos}[#1]
+   \leavevmode
+   \marginpar{\hfill $#2 $ }}
+  {\end{exos}}
+
+\newenvironment{prob}{ \begin{center}
+\Large{ \textsc{Problème}} \end{center} }{ \sepdown }
+
+ % Théorèmes/propriétés avec un retour à la ligne.
+\newtheoremstyle{break2}
+  {\topsep}%   Space before theorem
+  {\topsep}%   Space after theorem
+  {\itshape}%  Body font
+  {}%          Indent amount (empty = no indent, \parindent = para indent)
+  {\bfseries}% Thm head font   
+  {}%         Punctuation after thm head
+  {.5em }%  Space after thm head (\newline = linebreak)
+  {\thmname{#1}\thmnumber{ #2}\thmnote{ (#3)}.}% Thm head spec
+
+\theoremstyle{break2}
+\newtheorem{fbth}[thcount]{Théorème}
+\newenvironment{bth}[1][]{\begin{fbth}[#1]\item\relax}{\end{fbth}}
+
+\newtheorem{fbprop}[propcount]{Propriété}
+\newenvironment{bprop}[1][]{\begin{fbprop}[#1]\item\relax}{\end{fbprop}}
+
+ % Théorèmes/propriétés avec un retour à la ligne.
+\newtheoremstyle{break3}
+  {\topsep}%   Space before theorem
+  {\topsep}%   Space after theorem
+  {}%  Body font
+  {}%          Indent amount (empty = no indent, \parindent = para indent)
+  {\bfseries}% Thm head font   
+  {}%         Punctuation after thm head
+  {.5em }%  Space after thm head (\newline = linebreak)
+  {\thmname{#1}\thmnumber{ #2}\thmnote{ (#3)}.}% Thm head spec
+
+\theoremstyle{break3}
+\newtheorem{fbdf}[dfcount]{Définition}
+\newenvironment{bdef}[1][]{\begin{fbdf}[#1]\item\relax}{\end{fbdf}}
+
+% Répéter un exercice n fois
+\newcommand{\looped}[2]{
+	\foreach \n in {1,...,#1}{
+		#2
+	}
+}
+%%%%%%%%%%%%%%%%%%
+%% Mise en page %%
+%%%%%%%%%%%%%%%%%%
+
+\setlength{\textheight}{26.2cm}
+\setlength{\textwidth}{17.0cm}
+\setlength{\oddsidemargin}{-0.5cm}
+\setlength{\evensidemargin}{0.0cm}
+\setlength{\topmargin}{-2.0cm}
+\pagestyle{empty}
+\newif \ifnote
+\notefalse
+\reversemarginpar
+
+\usepackage{titlesec}      % Interlignes pas trop gros
+\titlespacing{\paragraph}{ %
+  0pt}{                    % left margin
+  1\baselineskip}{         % space before (vertical)
+  1em}                     % space after (horizontal)
+
+\usepackage{titlesec}
+%\titleformat
+%   {\section} % <command>
+%   {\normalfont\Large\bfseries} % <format>
+%   {\thesection} % <label>
+%   {1em} % <sep>
+%   {} % <before-code>
+%\titleformat{\section}{\bfseries\sffamily\large}{\thesection.}{\hspace{1cm}}{}%
+\titlespacing*                  % starred version: first paragraph is not indented
+    {\section}                  % <command>
+    {-22pt}                     % <left>
+    {3.5ex plus 1ex minus .2ex} % <before-sep>
+    {2.3ex plus .2ex}           % <after-sep>
+
+
+\setlength{\columnseprule}{1pt}        % Séparateur vertical dans multicol
+\def\columnseprulecolor{\color{black}} % De couleur noire.
+
+% Type de colonnes pour array
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+
+% Filtrer les messages d'erreur kisoulent 
+\WarningFilter{latex}{Marginpar on page}
+\WarningFilter{latexfont}{Size}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Faire du joli latex %% 
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Faire des cœurs et des carreaux 
+\DeclareSymbolFont{extraup}{U}{zavm}{m}{n}
+\DeclareMathSymbol{\varheart}{\mathalpha}{extraup}{86}
+\DeclareMathSymbol{\vardiamond}{\mathalpha}{extraup}{87}
+
+% Police verbatim + souligné (links)
+\usepackage[normalem]{ulem}
+\useunder{\uline}{\ulined}{}%
+\DeclareUrlCommand{\bulurl}{\def\UrlFont{\ttfamily\ulined}}
+
+
+\newcommand{\expandpyconc}[1]{\expandafter\reallyexpandpyconc\expandafter{#1}}
+\newcommand{\reallyexpandpyconc}[1]{\pyconc{exec(compile(open('#1', 'rb').read(), '#1', 'exec'))}}
+
+\newenvironment{pyconcodeblck}[1]%
+ {\newcommand{\snippetfile}{snippet-#1.py}
+  \VerbatimEnvironment
+  \begin{VerbatimOut}{\snippetfile}}%
+ {\end{VerbatimOut}%
+  \expandpyconc{\snippetfile}}
+
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%
+%% Header tout joli %%
+%%%%%%%%%%%%%%%%%%%%%% 
+\noindent\hrulefill
+\raisebox{-2.1pt}[10pt][10pt]{\quad\decoone\quad}\hrulefill 
+
+\leftline{$\textgoth{L}$ycée \hfill $\textgoth{I}$nformatique}
+\hfill $\textgoth{S}$pécialité
+ \begin{center}{\adforn{64}\quad \large{\textbf{ Représentation des données : les tableaux}}\; \adforn{36}}\end{center}
+\vspace{0.5cm}
+\noindent
+\hrulefill
+\raisebox{-16.4pt}[10pt][10pt]{\begin{tikzpicture}[decoration=Koch snowflake]
+\draw decorate{ decorate{ decorate{ decorate{ (6,-0) -- (4,0) -- (2,0) -- (0,0)  }}}};
+\end{tikzpicture}}\hrulefill
+\vspace{1cm}
+
+%%%%%%%%%%%%%%%%%%%%
+%% Corps du texte %%
+%%%%%%%%%%%%%%%%%%%%
+% \disclamer pour les examens
+% qcours<Tab> pour les colles
+% \legendeexos pour la légende
+
+\section{Définition et exemples}
+
+\begin{definition}
+Un \textbf{tableau} (le mot clé correspondant en Python est \texttt{list}) est un objet informatique (une \textbf{structure de données}) qui permet de stocker plusieurs valeurs.  
+\end{definition} 
+
+\begin{exemple}
+    \label{ex:tableau_init}
+ Au premier trimestre, Sarah a obtenu les notes suivantes : 10, 15, 11, 18, 5, et 20. Si on souhaite stocker ces notes dans des variables, on doit donc écrire :
+\inputminted[frame=single, framesep=2mm, label=Code Source,linenos=true]{python}{./pyfiles/notes.py}
+En prenant exemple sur les tableurs comme LibreOffice Calc, on pourrait plutôt décider de stocker ces variables dans un tableau :
+\begin{center}
+\begin{tabular}{|M{3cm}|c|c|c|c|c|c|c|}
+    \hline
+    Notes de Sarah & 10 & 15 & 11 & 12 & 18 & 5 & 20 \\
+    \hline
+\end{tabular}
+\end{center}
+
+En Python nous allons déclarer une variable \texttt{notes\_sarah} de type tableau qui stocke les notes de Sarah. On utilise pour cela les symboles \textbf{crochet '[' et ']'}, et on sépare les éléments du tableau par des \textbf{virgules}.
+
+\begin{pyconsole}[][frame=single, framesep=2mm, label=Console Python,linenos=true]
+notes_sarah = [10, 15, 11, 12, 18, 5, 20]
+notes_sarah[0]
+notes_sarah[3]
+\end{pyconsole}
+
+C'est beaucoup plus court ! Allons voir maintenant comment créer et manipuler les tableaux en Python.
+\end{exemple}
+
+\pagebreak
+
+\section{Création et manipulation de tableaux}
+
+\subsection{Création d'un tableau}
+
+\begin{definition}
+    Pour créer un tableau en Python, trois méthodes sont possibles :
+    \begin{itemize}[label=\textbullet]
+        \item par \textbf{énumération} : on définit le tableau par la liste de ses valeurs, comme dans l'exemple \ref{ex:tableau_init} :
+\begin{pyconsole}[][frame=single, framesep=2mm, label=Console Python,linenos=true]
+notes_sarah = [10, 15, 11, 12, 18, 5, 20]
+print(notes_sarah)
+\end{pyconsole}
+        \item par \textbf{initialisation} : on définit un tableau de \texttt{n} cases, dont tous les contenus sont nuls :
+\begin{pyconsole}[][frame=single, framesep=2mm, label=Console Python,linenos=true]
+n = 10
+tableau = [0]*n
+print(tableau)
+\end{pyconsole}
+        \item par \textbf{ajouts successifs} : on rajoute les éléments au tableau les uns après les autres (à la main ou avec une boucle) :
+\begin{pyconsole}[][frame=single, framesep=2mm, label=Console Python,linenos=true]
+tableau = []
+tableau.append(5)
+tableau.append(120)
+print(tableau)
+\end{pyconsole}
+    \end{itemize}
+\end{definition} 
+
+\paragraph{Remarques.} Il existe un objet particulier, le \textbf{tableau vide} : c'est un tableau qui ne contient aucune valeur.
+
+\textit{"append"} signifie \textit{"ajouter à la fin"}. Que se serait-il passé si on avait inversé les lignes 2 et 3 du code correspondant aux ajouts successifs ?
+
+\begin{definition}
+    La \textbf{taille} d'un tableau est le nombre d'éléments qui le composent. En Python, \texttt{len(tableau)} renvoit la taille de \texttt{tableau}.
+\end{definition} 
+
+\begin{exemple}
+   Quelle est la taille des tableaux suivants ?
+   \begin{itemize}[label=\textbullet]
+       \item \texttt{notes\_sarah = [10,15,11,12,18,5,20]} a pour taille 7.
+       \item \texttt{[4,5,2,3,8,5,65,8]} a pour taille : \dotfill
+       \item \texttt{[0]*123} a pour taille : \dotfill
+       \item  \texttt{[]} a pour taille : \dotfill
+   \end{itemize}
+\end{exemple}
+
+
+\subsection{Manipulation d'un tableau}
+
+\begin{definition}
+    Soit \texttt{t} un tableau. Les éléments du tableau sont ordonnés et chaque valeur du tableau est repérée par un unique \textbf{indice}. On accède à chaque élément du tableau par son indice.
+\end{definition} 
+
+\paragraph{ATTENTION.} En Python, les indices commencent à 0.
+
+\begin{exemple}
+    Reprenons l'exemple des notes de Sarah.
+
+\begin{center}
+\begin{tabular}{M{3cm}ccccccc}
+    \texttt{notes\_sarah =} & \texttt{[10,} & \texttt{15,} & \texttt{11,} & \texttt{12,} & \texttt{18,} & \texttt{5,} & \texttt{20]} \\
+    Indice & 0 & 1 & 2 & 3 & 4 & 5 & 6 \\
+\end{tabular}
+\end{center}
+
+Pour accéder à la cinquième note (18/20) de Sarah :
+
+\begin{pyconsole}[][frame=single, framesep=2mm, label=Console Python,linenos=true]
+notes_sarah = [10, 15, 11, 12, 18, 5, 20]
+notes_sarah[4]
+\end{pyconsole}
+\end{exemple}
+
+\begin{exo}{}{  }
+    On considère le tableau suivant :
+\begin{center}
+\begin{tabular}{M{3cm}ccccccccc}
+    \texttt{test =} & \texttt{[555,} & \texttt{951,} & \texttt{-159,} & \texttt{258,} & \texttt{852,} & \texttt{-456,} & \texttt{654,}  & \texttt{123,} & \texttt{987]}\\
+\end{tabular}
+\end{center}
+\begin{enumerate}
+    \item Quelle est la taille du tableau ? \dotfill
+    \item Quel est l'élément d'indice 2 ? \dotfill
+    \item Quel est l'indice de 852 ? \dotfill
+    \item Quel est l'indice du dernier élément ? \dotfill
+\end{enumerate}
+
+\end{exo} 
+
+\paragraph{Erreur d'indice.} Lorsque l'on demande un indice trop grand pour la taille du tableau, Python renvoie une erreur appelée \texttt{IndexError}.
+
+\begin{pyconsole}[][frame=single, framesep=2mm, label=Console Python,linenos=true]
+notes_sarah = [10, 15, 11, 12, 18, 5, 20]
+notes_sarah[10]
+\end{pyconsole}
+
+Si \texttt{t} est un tableau, alors les indices compatibles avec ce tableaux sont tous les entiers compris entre 0 et la taille du tableau moins 1.
+
+\paragraph{Remarque.} L'indice du dernier élément du tableau est la taille du tableau \textbf{moins 1}.
+
+\paragraph{Modification des éléments d'un tableau.} Si \texttt{t} est une variable de type tableau, on peut modifier les valeurs de ses éléments à l'aide de l'indice correspondant :
+
+\begin{pyconsole}[][frame=single, framesep=2mm, label=Console Python,linenos=true]
+notes_sarah = [10, 15, 11, 12, 18, 5, 20]
+notes_sarah[5]
+notes_sarah[5] = 15
+print(notes_sarah)
+\end{pyconsole}
+
+\begin{exo}{}{  }
+    Le professeur a été trop sévère avec les élèves dans sa notation. Il décide donc d'augmenter les notes des premier et troisième contrôle de 1 point. 
+
+    Écrire une fonction \texttt{mise\_a\_jour} qui prend en entrée un tableau de notes \texttt{t} de taille supérieure ou égale à 3 et renvoie en sortie le tableau des notes mises à jour. Vous testerez votre fonction :
+
+    \begin{center}
+        \texttt{mise\_a\_jour([5, 7, 6, 9, 10, 11, 10])} renvoie \texttt{[6, 7, 7, 9, 10, 11, 10]}. 
+    \end{center}
+\end{exo} 
+
+\paragraph{Correction.}
+\inputminted[frame=single, framesep=2mm, label=Code Source,linenos=true]{python}{./pyfiles/mise_a_jour.py}
+
+\end{document}
+ 

@@ -1,0 +1,70 @@
+=>PYTHONTEX#pycon#default#default#0#console#####263#
+var = 1 + 1
+var
+=>PYTHONTEX#py#default#default#0#block#####271#
+from math import *
+
+def recopie(t):
+    n = len(t)
+    tc = []*n
+    for i in range(n):
+        tc[i] = t[i]
+    return tc
+
+t = [4, 5, 8, 7]
+print('Tableau original', t)
+print('Tableau recopié', recopie(t))
+=>PYTHONTEX#py#default#default#1#block#####292#
+from math import *
+
+def recopie(t):
+    n = len(t)
+    tc = [0]*n
+    for i in range(n):
+        tc[i] = t[i]
+    return tc
+
+t = [4, 5, 8, 7]
+print('Tableau original', t)
+print('Tableau recopié', recopie(t))
+=>PYTHONTEX#pycon#default#default#1#console#####312#
+print(t)
+=>PYTHONTEX#pycon#default#default#2#c#####320#
+exec(compile(open('snippet-temp.py', 'rb').read(), 'snippet-temp.py', 'exec'))
+=>PYTHONTEX#pycon#default#default#3#c#####325#
+exec(compile(open('snippet-temp2.py', 'rb').read(), 'snippet-temp2.py', 'exec'))
+=>PYTHONTEX#pycon#default#default#4#console#####336#
+foo(10)
+foobar(10)
+foobar(foo(12))
+t
+=>PYTHONTEX#pycon#default#default#5#c#####356#
+exec(compile(open('snippet-recopier.py', 'rb').read(), 'snippet-recopier.py', 'exec'))
+=>PYTHONTEX#pycon#default#default#6#console#####363#
+print(t2)
+print(tc2)
+=>PYTHONTEX:SETTINGS#
+version=0.16
+outputdir=pythontex-files-cours
+workingdir=.
+workingdirset=false
+gobble=none
+rerun=default
+hashdependencies=default
+makestderr=true
+stderrfilename=full
+keeptemps=none
+pyfuture=default
+pyconfuture=none
+pygments=true
+pygglobal=:GLOBAL||
+fvextfile=-1
+pyconbanner=none
+pyconfilename=stdin
+depythontex=false
+pygfamily=py|python|
+pygfamily=pycon|pycon|
+pygfamily=sympy|python|
+pygfamily=sympycon|pycon|
+pygfamily=pylab|python|
+pygfamily=pylabcon|pycon|
